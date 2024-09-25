@@ -1,27 +1,67 @@
+/* Import Tailwind CSS base, components, and utilities styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Define CSS variables for light theme colors */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #ffffff; /* Light background color */
+  --foreground: #171717; /* Dark text color */
 }
 
+/* Apply dark theme colors if user's preference is dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0a0a0a; /* Dark background color */
+    --foreground: #ededed; /* Light text color */
   }
 }
 
+/* Set global body styles using CSS variables */
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Create a utility class for text balancing */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Style for header section */
+.header {
+  display: flex; 
+  align-items: center; 
+  padding: 8px 20px; 
+  background-color: #575757; 
+  width: 100%; 
+}
+
+/* Style for left button in header */
+.left-button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: auto; 
+}
+
+/* Style for center button in header */
+.center-button {
+  font-weight: bold;
+  font-size: 24px;
+  flex-shrink: 0; 
+  text-align: center; 
+}
+
+/* Style for right button in header */
+.right-button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: auto; 
 }
