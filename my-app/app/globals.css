@@ -65,3 +65,28 @@ body {
   font-size: 16px;
   margin-left: auto; 
 }
+
+/* Sidebar styles */
+.sidebar {
+  @apply fixed top-0 left-0 h-full bg-black text-white p-5 transform transition-transform ease-in-out duration-300 z-[1000];
+  background-color: #575757; 
+  width: 250px;
+  transform: translateX(-100%);
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+/* List styles inside sidebar */
+.sidebar nav ul li {
+  @apply my-5;
+}
+
+.sidebar nav ul li a {
+  @apply text-white no-underline text-lg;
+}
