@@ -2,56 +2,44 @@
 
 // Import React hook for state management
 import { useState } from "react";
+import Sidebar from "./Sidebar";
 
 // Define Header component
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false); // State to manage menu open/close
-
+  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+  
   // Toggle the menu open/close state
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    setSidebarIsOpen(!sidebarIsOpen);
+    
+  };
+  const closeMenu = () => {
+    setSidebarIsOpen(false);
   };
 
   return (
     <header className="header">
       <button className="left-button" onClick={toggleMenu}>
-        {isOpen ? (
-          // Render close icon when menu is open
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        ) : (
-          // Render hamburger icon when menu is closed
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        )}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
       </button>
       <div className="center-button">
-        <button>Bar Jumper</button>
+        <a href="./">
+          <button>Bar Jumper</button>
+        </a>
       </div>
       <button className="right-button">
         <svg
@@ -69,6 +57,11 @@ const Header = () => {
           <path d="M20 24c-4 0-7-2-7-5s3-5 7-5 7 2 7 5-3 5-7 5z" />
         </svg>
       </button>
+      
+      { sidebarIsOpen && (
+        <Sidebar isOpen={sidebarIsOpen} closeMenu={closeMenu} />
+      )}
+
     </header>
   );
 };
