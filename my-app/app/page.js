@@ -2,11 +2,15 @@
 
 "use client";
 import { useState } from "react";
+import MyMap from "./map.js";
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 export default function Home() {
   return (
     <div>
-      <p>Home Page</p>
+      <div className="map-container">
+        <MyMap />
+      </div>
     </div>
   );
 }

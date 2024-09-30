@@ -90,3 +90,17 @@ body {
 .sidebar nav ul li a {
   @apply text-white no-underline text-lg;
 }
+
+
+/* Map Stuff */
+.map-container {
+  height: calc(100vh - 60px);
+  width: 100%;
+  position: relative;
+}
+
+
+.mapboxgl-map {
+  height: 100%;
+  width: 100%;
+}
