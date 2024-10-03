@@ -1,5 +1,3 @@
-import React from "react";
-
 const Sidebar = ({ isOpen, closeMenu }) => {
   // List of buttons and references to be added to menu.
   const sidebarItems = [
@@ -31,7 +29,9 @@ const Sidebar = ({ isOpen, closeMenu }) => {
         <ul>
         {sidebarItems.map((item) => (
             <li key={item.label}>
-            <a href={item.href}>{item.label}</a>
+              <button className="sidebar-button" onClick={() => window.location.href = item.href}>
+                {item.label}
+              </button>
             </li>
         ))}
         </ul>
