@@ -9,9 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@firebasegen/default": "file:generated/javascript/default",
+    "dotenv": "^16.4.5",
+    "electron": "^32.1.2",
+    "firebase": "^10.14.0",
+    "next": "14.2.12",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.12"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "postcss": "^8",
