@@ -4,13 +4,17 @@ import { useState } from "react";
 //require('dotenv').config();
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, setDoc, collection, getDocs, query} from "firebase/firestore";
+import MyMap from "./map.js";
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 console.log(process.env);
 
 export default function Home() {
   return (
     <div>
-      <p>Home Page</p>
+      <div className="map-container">
+        <MyMap />
+      </div>
     </div>
   );
 }
