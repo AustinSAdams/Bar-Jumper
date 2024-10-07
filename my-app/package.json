@@ -13,9 +13,11 @@
     "dotenv": "^16.4.5",
     "electron": "^32.1.2",
     "firebase": "^10.14.0",
+    "mapbox-gl": "^3.7.0",
     "next": "14.2.12",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-map-gl": "^7.1.7"
   },
   "devDependencies": {
     "postcss": "^8",

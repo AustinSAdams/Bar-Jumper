@@ -185,3 +185,15 @@ body {
 .login-button:hover {
   background-color: #3e3e3e;
 }
+
+/* Map Stuff */
+.map-container {
+  height: calc(100vh - 60px);
+  width: 100%;
+  position: relative;
+}
+
+.mapboxgl-map {
+  height: 100%;
+  width: 100%;
+}
