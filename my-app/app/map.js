@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Map, NavigationControl } from 'react-map-gl';
+import React, { useState, useCallback } from 'react';
+import { Map, NavigationControl, Marker, GeolocateControl } from 'react-map-gl';
 
-const barMap = () => {
+const barMap = ({locations}) => {
   const [viewport, setViewport] = useState({
     longitude: -92.635,
     latitude: 32.529,  
@@ -18,6 +18,10 @@ const barMap = () => {
     setMapStyle(style);
   };
 
+  const onGeolocate = useCallback((e) => {
+    console.log('Current position:', e.coords);
+  }, []);
+
   return (
     <div className="relative">
       <Map
@@ -28,6 +32,20 @@ const barMap = () => {
         style={{ width: '100%', height: '100vh' }}
       >
         <NavigationControl position="top-left" />
+        <GeolocateControl position="top-left" onGeolocate={onGeolocate} showUserLocation />
+        {locations.map((location) => (
+          <Marker 
+            key={location.id}
+            longitude={location.longitude} 
+            latitude={location.latitude}
+          >
+            <div className="flex flex-col items-center">
+              <div className="text-2xl">🍺</div>
+              <div className="text-xs bg-white bg-opacity-25 px-1 rounded text-center whitespace-nowrap">{location.name}</div>
+            </div>
+          </Marker>
+        ))}
+
       </Map>
       <div className="absolute top-4 right-4 flex gap-2"> 
         <button 

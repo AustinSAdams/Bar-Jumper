@@ -1,6 +1,6 @@
 /* This is the home page. It will be the main display for the user. */
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 //require('dotenv').config();
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, setDoc, collection, getDocs, query} from "firebase/firestore";
@@ -8,18 +8,6 @@ import MyMap from "./map.js";
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 console.log(process.env);
-
-export default function Home() {
-  return (
-    <div>
-      <div className="map-container">
-        <MyMap />
-      </div>
-    </div>
-  );
-}
-
-console.log("Test");
 
 /*const {
   FIREBASE_API_KEY,
@@ -32,7 +20,6 @@ console.log("Test");
   FIREBASE_MEASUREMENT_ID
 } = process.env.local; */
 
-console.log(process.env);
 const firebaseConfig = {
   apiKey: "AIzaSyCx6y7OzvlE5ZcfNPjlJf2Xn2xRngrJoeo",
   authDomain: "bar-jumpers.firebaseapp.com",
@@ -43,6 +30,37 @@ const firebaseConfig = {
   appId: "1:831688467414:web:0b5d2f0f001ddb948dfa77",
   measurementId: "G-X12D9E9RFL"
 };
+
+export default function Home() {
+  const [locations, setLocations] = useState([]);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      const locationsRef = collection(db, 'locations');
+      try {
+        const snapshot = await getDocs(locationsRef);
+        const locationData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setLocations(locationData);
+        console.log("Fetched locations:", locationData);
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      }
+    };
+    fetchLocations();
+  }, []);
+
+  return (
+    <div>
+      <div className="map-container">
+        <MyMap locations={locations}/>
+      </div>
+    </div>
+  );
+}
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
