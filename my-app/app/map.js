@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { Map, NavigationControl, Marker, GeolocateControl } from 'react-map-gl';
+import LocationDetails from './locationPopup';
 
 const barMap = ({locations}) => {
   const [viewport, setViewport] = useState({
@@ -13,6 +14,7 @@ const barMap = ({locations}) => {
   });
 
   const [mapStyle, setMapStyle] = useState("mapbox://styles/treywb7/cm1pmlmxs004901pb6xwm60vm");
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
   const toggleMapStyle = (style) => {
     setMapStyle(style);
@@ -21,6 +23,14 @@ const barMap = ({locations}) => {
   const onGeolocate = useCallback((e) => {
     console.log('Current position:', e.coords);
   }, []);
+
+  const handleMarkerClick = (location) => {
+    setSelectedLocation(location);
+  };
+
+  const handleCloseDetails = () => {
+    setSelectedLocation(null);
+  };
 
   return (
     <div className="relative">
@@ -39,10 +49,12 @@ const barMap = ({locations}) => {
             longitude={location.longitude} 
             latitude={location.latitude}
           >
-            <div className="flex flex-col items-center">
-              <div className="text-2xl">🍺</div>
-              <div className="text-xs bg-white bg-opacity-25 px-1 rounded text-center whitespace-nowrap">{location.name}</div>
+            <div onClick={() => handleMarkerClick(location)} className="cursor-pointer">
+              <div className="flex flex-col items-center">
+                <div className="text-2xl">🍺</div>
+                <div className="text-xs bg-white bg-opacity-25 px-1 rounded text-center whitespace-nowrap">{location.name}</div>
             </div>
+          </div>
           </Marker>
         ))}
 
@@ -61,6 +73,7 @@ const barMap = ({locations}) => {
           🌙
         </button>
       </div>
+      <LocationDetails location={selectedLocation} onClose={handleCloseDetails} />
     </div>
   );
 };
