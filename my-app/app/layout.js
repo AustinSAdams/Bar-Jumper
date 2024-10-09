@@ -1,5 +1,6 @@
 // Import local font and styles
 import localFont from "next/font/local";
+import { ThemeProvider } from "./context/ThemeContext";
 import "./globals.css"; // Global CSS styles
 import Header from "./Header"; // Header component
 
@@ -28,10 +29,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Header /> {/* Render Header component */}
-        {children} {/* Render child components */}
-      </body>
+      <ThemeProvider>
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}> 
+          <Header /> {/* Render Header component */} 
+          {children} {/* Render child components */}
+        </body>
+      </ThemeProvider>
     </html>
   );
 }

@@ -1,25 +1,15 @@
 /* This is the home page. It will be the main display for the user. */
 "use client";
 import { useState } from "react";
+import { useContext } from "react";
 //require('dotenv').config();
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, setDoc, collection, getDocs, query} from "firebase/firestore";
 import MyMap from "./map.js";
 import 'mapbox-gl/dist/mapbox-gl.css';
+import './globals.css';
 
 console.log(process.env);
-
-export default function Home() {
-  return (
-    <div>
-      <div className="map-container">
-        <MyMap />
-      </div>
-    </div>
-  );
-}
-
-console.log("Test");
 
 /*const {
   FIREBASE_API_KEY,
@@ -55,3 +45,13 @@ getDocs(colRef)    //get request to pull info from firestore db
   .then((snapshot) => {
     console.log(snapshot.docs)
   })
+
+export default function Home() {
+  return (
+    <div>
+      <div className="map-container">
+        <MyMap />
+      </div>
+    </div>
+  );
+}

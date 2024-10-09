@@ -3,19 +3,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Define CSS variables for light theme colors */
-:root {
-  --background: #ffffff; /* Light background color */
-  --foreground: #171717; /* Dark text color */
+body.light {
+  background-color: white;
+  color: black;
 }
 
-/* Apply dark theme colors if user's preference is dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a; /* Dark background color */
-    --foreground: #ededed; /* Light text color */
-  }
+body.dark {
+  background-color: black;
+  color: white;
 }
+
+/* Add more themes as needed */
+
 
 /* Set global body styles using CSS variables */
 body {

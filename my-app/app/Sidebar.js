@@ -1,3 +1,4 @@
+import { ThemeSwitcher } from './ThemeSwitcher.js';
 const Sidebar = ({ isOpen, closeMenu }) => {
   // List of buttons and references to be added to menu.
   const sidebarItems = [
@@ -36,6 +37,7 @@ const Sidebar = ({ isOpen, closeMenu }) => {
         ))}
         </ul>
     </nav>
+    <ThemeSwitcher />
     </aside>
   );
 };
