@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import * as turf from '@turf/turf';
 
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-const getOpenStatus = (hours) => {
-  const now = new Date();
-  const currentDay = now.toLocaleString('en-US', { weekday: 'long' });
-  const currentTime = now.toTimeString().slice(0, 5);
-  const todayHours = hours[currentDay];
-
-  if (todayHours) {
-    const { open, close } = todayHours;
+const getOpenStatus = (hours, currentDay, currentTime) => {
+  const todaysHours = hours[currentDay];
+  if (todaysHours) {
+    const { open, close } = todaysHours;
     return currentTime >= open && currentTime <= close ? "Open" : "Closed";
   }
   return "Closed";
@@ -18,50 +17,68 @@ const formatTime = (time) => {
   const [hours, minutes] = time.split(':');
   const hour = parseInt(hours, 10);
   const ampm = hour >= 12 ? 'PM' : 'AM';
-  const formattedHour = hour % 12 || 12; 
+  const formattedHour = hour % 12 || 12;
   return `${formattedHour}:${minutes} ${ampm}`;
 };
 
-const formatWeekHours = (today) => {
-  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const todayIndex = daysOfWeek.indexOf(today);
-  return [...daysOfWeek.slice(todayIndex), ...daysOfWeek.slice(0, todayIndex)];
+const updateDayOrder = (today) => {
+  const todayIndex = WEEKDAYS.indexOf(today);
+  return [...WEEKDAYS.slice(todayIndex), ...WEEKDAYS.slice(0, todayIndex)];
 };
 
-const LocationDetails = ({ location, onClose }) => {
+const calculateDistance = (userLocation, locationCoords) => {
+  if (!userLocation || !locationCoords.longitude || !locationCoords.latitude) return null;
+  const from = turf.point([userLocation.longitude, userLocation.latitude]);
+  const to = turf.point([locationCoords.longitude, locationCoords.latitude]);
+  return turf.distance(from, to, {units: 'miles'}).toFixed(1);
+};
+
+const LocationDetails = ({ location, onClose, userLocation }) => {
   const [showWeeklyHours, setShowWeeklyHours] = useState(false);
-  if (!location) return null;
+  const [portalRoot, setPortalRoot] = useState(null);
 
-  const today = new Date().toLocaleString('en-US', { weekday: 'long' });
-  let todayHours = 'N/A';
+  useEffect(() => {
+    setPortalRoot(document.body);
+  }, []);
 
-  if (location.hours && location.hours[today]) {
-    const openTime = formatTime(location.hours[today].open);
-    const closeTime = formatTime(location.hours[today].close);
-    todayHours = `${openTime} - ${closeTime}`;
-  }
+  if (!location || !portalRoot) return null;
 
-  const openStatus = getOpenStatus(location.hours);
+  const now = new Date();
+  const today = now.toLocaleString('en-US', { weekday: 'long' });
+  const currentTime = now.toTimeString().slice(0, 5);
+
+  const todaysHours = location.hours && location.hours[today] 
+    ? `${formatTime(location.hours[today].open)} - ${formatTime(location.hours[today].close)}`
+    : 'N/A';
+
+  const openStatus = getOpenStatus(location.hours, today, currentTime);
   const statusClass = openStatus === "Open" ? "text-green-500" : "text-red-500";
+  const orderedDays = updateDayOrder(today).filter(day => day !== today);
+  const distance = calculateDistance(userLocation, location);
 
-  const toggleShowWeeklyHours = () => {
-    setShowWeeklyHours(!showWeeklyHours);
+  const dismissPopup = (e) => {
+    if (e.target === e.currentTarget) onClose();
   };
 
-  const orderedDays = formatWeekHours(today).filter(day => day !== today);
+  return createPortal(
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={dismissPopup}>
+      <div className="bg-white p-6 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-4">
 
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold text-black mb-4">{location.name}</h2>
+          <h2 className="text-2xl font-bold text-black">{location.name}</h2>
+          {distance && <span className="text-sm text-gray-500 ml-2">{distance} miles away</span>}
+        </div>
+
         <p className="mb-2 text-black"><strong>Address:</strong> {location.address || 'N/A'}</p>
         <p className="mb-2 text-black"><strong>Phone:</strong> {location.phone || 'N/A'}</p>
+
         <p className="mb-2 text-black">
-          <strong>Hours:</strong> <span className={statusClass}>{openStatus}</span> ({today}: {todayHours})
-          <button onClick={toggleShowWeeklyHours} className="ml-2">
+          <strong>Hours:</strong> <span className={statusClass}>{openStatus}</span> ({today}: {todaysHours})
+          <button onClick={() => setShowWeeklyHours(!showWeeklyHours)} className="ml-2">
             {showWeeklyHours ? '▲' : '▼'}
           </button>
         </p>
+
         {showWeeklyHours && (
           <div className="mt-2 text-black">
             {orderedDays.map((day) => (
@@ -71,15 +88,18 @@ const LocationDetails = ({ location, onClose }) => {
             ))}
           </div>
         )}
+
         <p className="mb-4 text-black"><strong>Description:</strong> {location.description || 'No description available.'}</p>
-        <button 
+        <button
           onClick={onClose}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           Close
         </button>
+        
       </div>
-    </div>
+    </div>,
+    portalRoot
   );
 };
 
