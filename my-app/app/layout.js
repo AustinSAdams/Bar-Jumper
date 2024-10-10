@@ -2,6 +2,7 @@
 import localFont from "next/font/local";
 import "./globals.css"; // Global CSS styles
 import Header from "./Header"; // Header component
+import { UsersProvider } from './context/UsersContext';
 
 // Define Geist Sans font
 const geistSans = localFont({
@@ -21,7 +22,7 @@ const geistMono = localFont({
 export const metadata = {
   title: "Bar Jumper", // Page title
   description: "The efficient way to find the next bar on your crawl.", // Page description
-  image:"/images/siteImage.jpg", // Page image
+  image:"/images/siteImage.jpg" // Page image
 };
 
 // Root layout component
@@ -29,8 +30,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Header /> {/* Render Header component */}
-        {children} {/* Render child components */}
+        <UsersProvider>
+          <Header /> {/* Render Header component */}
+          {children} {/* Render child components */}
+        </UsersProvider>
       </body>
     </html>
   );

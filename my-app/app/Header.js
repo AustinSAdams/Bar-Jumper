@@ -1,31 +1,25 @@
 "use client";
 
-// Import React hook for state management
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Login from "./Login";
 
 // Define Header component
 const Header = () => {
+  // Use states
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
   const [loginIsShown, setLoginIsShown] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Toggle the menu open/close state
   const toggleMenu = () => {
     setSidebarIsOpen(!sidebarIsOpen);
     
   };
-  const closeMenu = () => {
-    setSidebarIsOpen(false);
-  };
-
+  // Display the login component.
   const showLoginOverlay = () => {
     setLoginIsShown(true);
   };
-
-  const hideLoginOverlay = () => {
-    setLoginIsShown(false);
-  }
 
   return (
     <header className="header">
@@ -52,6 +46,11 @@ const Header = () => {
         </a>
       </div>
       <div className="header-right-button">
+        { isLoggedIn && (
+          <p
+            className="header-username"
+          >username</p>
+        )}
         <button onClick={showLoginOverlay}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +69,7 @@ const Header = () => {
         </button>
       </div>
       { sidebarIsOpen && (
-        <Sidebar isOpen={sidebarIsOpen} closeMenu={closeMenu} />
+        <Sidebar isOpen={sidebarIsOpen} closeMenu={toggleMenu} />
       )}
       { loginIsShown && (
         <Login onClose={() => setLoginIsShown(false)}/>
