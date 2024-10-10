@@ -2,15 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import * as turf from '@turf/turf';
 
-const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+// Helper Functions
 
 const getOpenStatus = (hours, currentDay, currentTime) => {
   const todaysHours = hours[currentDay];
   if (todaysHours) {
     const { open, close } = todaysHours;
-    return currentTime >= open && currentTime <= close ? "Open" : "Closed";
+    if (close === "00:00") {
+      return currentTime >= open || currentTime < close ? "Open" : "Closed"; // "..? if / else"
+    }
+    return currentTime >= open && currentTime < close ? "Open" : "Closed"; 
   }
-  return "Closed";
+  return " ";
 };
 
 const formatTime = (time) => {
@@ -21,6 +24,7 @@ const formatTime = (time) => {
   return `${formattedHour}:${minutes} ${ampm}`;
 };
 
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const updateDayOrder = (today) => {
   const todayIndex = WEEKDAYS.indexOf(today);
   return [...WEEKDAYS.slice(todayIndex), ...WEEKDAYS.slice(0, todayIndex)];
@@ -28,12 +32,17 @@ const updateDayOrder = (today) => {
 
 const calculateDistance = (userLocation, locationCoords) => {
   if (!userLocation || !locationCoords.longitude || !locationCoords.latitude) return null;
-  const from = turf.point([userLocation.longitude, userLocation.latitude]);
-  const to = turf.point([locationCoords.longitude, locationCoords.latitude]);
+  const from = turf.point([userLocation.longitude, userLocation.latitude]); // users location
+  const to = turf.point([locationCoords.longitude, locationCoords.latitude]); // targeted location (a bar)
   return turf.distance(from, to, {units: 'miles'}).toFixed(1);
 };
 
+
+
+// Popup Component
+
 const LocationDetails = ({ location, onClose, userLocation }) => {
+
   const [showWeeklyHours, setShowWeeklyHours] = useState(false);
   const [portalRoot, setPortalRoot] = useState(null);
 
@@ -42,7 +51,6 @@ const LocationDetails = ({ location, onClose, userLocation }) => {
   }, []);
 
   if (!location || !portalRoot) return null;
-
   const now = new Date();
   const today = now.toLocaleString('en-US', { weekday: 'long' });
   const currentTime = now.toTimeString().slice(0, 5);
@@ -74,11 +82,11 @@ const LocationDetails = ({ location, onClose, userLocation }) => {
 
         <p className="mb-2 text-black">
           <strong>Hours:</strong> <span className={statusClass}>{openStatus}</span> ({today}: {todaysHours})
+
           <button onClick={() => setShowWeeklyHours(!showWeeklyHours)} className="ml-2">
             {showWeeklyHours ? '▲' : '▼'}
           </button>
         </p>
-
         {showWeeklyHours && (
           <div className="mt-2 text-black">
             {orderedDays.map((day) => (
