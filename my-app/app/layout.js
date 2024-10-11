@@ -1,7 +1,7 @@
 // Import local font and styles
 import localFont from "next/font/local";
 import "./globals.css"; // Global CSS styles
-import Header from "./Header"; // Header component
+import Header from "./components/Header"; // Header component
 import { UsersProvider } from './context/UsersContext';
 
 // Define Geist Sans font

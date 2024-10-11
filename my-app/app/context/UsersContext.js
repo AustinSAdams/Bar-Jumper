@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useState, useEffect } from 'react';
-import { getAllDocuments } from '../firebase';
+import { getAllDocuments } from '../api/firebase/firebase';
 
 // Export the context
 export const UsersContext = createContext();

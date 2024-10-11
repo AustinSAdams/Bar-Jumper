@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Sidebar from "./Sidebar";
-import Login from "./Login";
+import Sidebar from "../components/Sidebar";
+import Login from "../components/Login";
 
 // Define Header component
 const Header = () => {

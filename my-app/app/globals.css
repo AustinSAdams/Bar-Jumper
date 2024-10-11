@@ -200,6 +200,52 @@ body {
   position: relative;
 }
 
+/* Rankings Page Styling */
+.rankings-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f0f0f0;
+}
+
+.rectangle {
+  width: 375px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  background-color: #000101;
+  color: rgb(255, 255, 255);
+  font-size: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.star {
+  color: gray; /* not filled in */
+  font-size: 24px; 
+  margin-left: 5px; 
+}
+
+.star.filled {
+  color: gold; 
+}
+
+.locate-button {
+  margin-left: 20px; 
+    padding: 8px 12px; 
+    background-color: #fbfffc; 
+    color: rgb(0, 0, 0); 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-size: 16px; 
+}
+
 .mapboxgl-map {
   height: 100%;
   width: 100%;
