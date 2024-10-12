@@ -1,8 +1,9 @@
-"use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 const Login = ({ onClose }) => {
     const [isLoginError, setIsLoginError] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     // function to handle login logic upon click of login button
     const handleLogin = async () => {
@@ -46,9 +47,13 @@ const Login = ({ onClose }) => {
          // FINISH LOGIC
     }
 
-    // HTML code for the login page
-    return (
-        <div className="login">
+    // Function to dismiss the modal if clicked outside
+    const dismissPopup = (e) => {
+        if (e.target === e.currentTarget) onClose();
+    };
+
+    const modalLayout = (
+        <div className="login" onClick={dismissPopup}>
             <div className="login-display">
                 <button className="close-login-button" onClick={onClose}>
                     <svg
@@ -83,29 +88,35 @@ const Login = ({ onClose }) => {
                         <path d="M20 24c-4 0-7-2-7-5s3-5 7-5 7 2 7 5-3 5-7 5z" />
                     </svg>
                     <div className="login-info">
-                        <input type="text" className="login-textbox" placeholder="USERNAME" />
-                        <input type="text" className="login-textbox" placeholder="PASSWORD" />
+                        <input type="username" className="login-textbox" placeholder="USERNAME" />
+                        <div className="password-container">
+                            <input 
+                                type={showPassword ? "text" : "password"} 
+                                className="login-textbox" 
+                                placeholder="PASSWORD" 
+                            />
+                            <button
+                                className="toggle-password-button"
+                                onClick={() => setShowPassword((prev)=>!prev)}
+                            >
+                                {showPassword ? "Hide" : "Show"}
+                            </button>
+                        </div>
+                        {isLoginError && <p className="error-message">Please fill in all fields.</p>}
                     </div>
                     <button 
                         className="login-button"
-                        onClick={() => {handleLogin()}}
+                        onClick={handleLogin}
                     >Login</button>
                 </div>
-                <div>
-                    <button 
-                        className="signup-button"
-                        onClick={() => {handleSignupClick}}
-                    >Signup</button>
-                </div>
-                <div>
-                    <button 
-                        className="forgot-password-button"
-                        onClick={() => {handleForgotPasswordClick}}
-                    >Forgot Password</button>
-                </div>
+                <button className="signup-button" onClick={handleSignupClick}>Signup</button>
+                <button className="forgot-password-button" onClick={handleForgotPasswordClick}>Forgot Password</button>
             </div>
         </div>
     );
+
+    // HTML code for the login page
+    return createPortal(modalLayout, document.body);
 };
 
 export default Login;
