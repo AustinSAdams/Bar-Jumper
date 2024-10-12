@@ -63,7 +63,14 @@ body {
   background: transparent;
   cursor: pointer;
   font-size: 16px;
-  margin-left: auto; 
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.header-username {
+  text-align: right;
+  margin-right: 5px;
 }
 
 /* Sidebar styles */
@@ -134,7 +141,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 300px;
+  height: 340px;
 }
 
 .close-login-button {
@@ -193,11 +200,6 @@ body {
   position: relative;
 }
 
-.mapboxgl-map {
-  height: 100%;
-  width: 100%;
-}
-
 /* Rankings Page Styling */
 .rankings-container {
   display: flex;
@@ -244,4 +246,27 @@ body {
     font-size: 16px; 
 }
 
+.mapboxgl-map {
+  height: 100%;
+  width: 100%;
+}
 
+.signup-button {
+  font-size: 15px;
+  margin-top: 5px;
+}
+
+.signup-button:hover {
+  color: #0096FF;
+  text-decoration: underline;
+}
+
+.forgot-password-button {
+  font-size: 15px;
+  margin-top: 5px;
+}
+
+.forgot-password-button:hover {
+  color: #0096FF;
+  text-decoration: underline;
+}
