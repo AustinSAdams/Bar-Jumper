@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import * as turf from '@turf/turf';
 import { Phone } from 'lucide-react';
+import './locationPopup.css';
 
 // Helper Functions
 
