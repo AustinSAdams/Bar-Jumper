@@ -306,22 +306,25 @@ body {
   overflow-y: auto;
 }
 
+/* Flexbox container for Image and Title */
 .location-popup-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 1rem; /* Adds space below the header */
+}
+
+.location-popup-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-right: 1rem; /* Space between image and text */
 }
 
 .location-popup-title {
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
-}
-
-.location-popup-distance {
-  font-size: 0.875rem;
-  color: #666;
+  margin-bottom: 55px;
 }
 
 .location-popup-info {
@@ -329,6 +332,7 @@ body {
   color: #333;
 }
 
+/* Status and weekly hours */
 .location-status-open {
   color: #22c55e;
 }
@@ -346,11 +350,7 @@ body {
 
 .location-popup-weekly-hours {
   margin-top: 0.5rem;
-  color:rgb(0, 0, 0);
-}
-
-.location-popup-day-hours {
-  margin-bottom: 0.25rem;
+  color: rgb(0, 0, 0);
 }
 
 .location-popup-close {

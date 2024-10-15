@@ -37,8 +37,6 @@ const calculateDistance = (userLocation, locationCoords) => {
   return turf.distance(from, to, {units: 'miles'}).toFixed(1);
 };
 
-
-
 // Popup Component
 
 const LocationDetails = ({ location, onClose, userLocation }) => {
@@ -70,20 +68,37 @@ const LocationDetails = ({ location, onClose, userLocation }) => {
   return createPortal(
     <div className="location-popup-overlay" onClick={dismissPopup}>
       <div className="location-popup-content" onClick={(e) => e.stopPropagation()}>
+        
+        {/* Flex container for image and title */}
         <div className="location-popup-header">
+          {/* Profile Image */}
+          {location['loc-profile-Image'] && (
+            <img
+              src={location['loc-profile-Image']}
+              alt={`${location.name} profile`}
+              className="location-popup-image"
+            />
+          )}
+
+          {/* Name */}
           <h2 className="location-popup-title">{location.name}</h2>
-          {distance && <span className="location-popup-distance">{distance} miles away</span>}
         </div>
 
-        <p className="location-popup-info"><strong>Address:</strong> {location.address || 'N/A'}</p>
+        {/* Other Info */}
+        <p className="location-popup-info"><strong>Address:</strong> {location.address || 'N/A'}
+        {distance && <span className="location-popup-distance"> - {distance} miles away</span>}</p>
         <p className="location-popup-info"><strong>Phone:</strong> {location.phone || 'N/A'}</p>
 
         <p className="location-popup-info">
-          <strong>Hours:</strong> <span className={statusClass}>{openStatus}</span> ({today}: {todaysHours})
+          <strong>{today}:{todaysHours}</strong> 
+          <span className={location.isOpen ? "location-status-open" : "location-status-closed"}>
+            {location.isOpen ? "Open" : "Closed"}
+          </span>
           <button onClick={() => setShowWeeklyHours(!showWeeklyHours)} className="location-popup-toggle">
             {showWeeklyHours ? '▲' : '▼'}
           </button>
         </p>
+
         {showWeeklyHours && (
           <div className="location-popup-weekly-hours">
             {orderedDays.map((day) => (
@@ -94,7 +109,6 @@ const LocationDetails = ({ location, onClose, userLocation }) => {
           </div>
         )}
 
-        <p className="location-popup-info"><strong>Description:</strong> {location.description || 'No description available.'}</p>
         <button onClick={onClose} className="location-popup-close">
           Close
         </button>
