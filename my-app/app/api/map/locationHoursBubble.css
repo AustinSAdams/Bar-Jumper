@@ -1,0 +1,62 @@
+/* Bubble container */
+.location-hours-bubble {
+    background-color: #f0f0f0;
+    border-radius: 20px; /* Rounded edges */
+    padding: 10px 15px;
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    width: auto;
+    margin-top: 1rem;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  
+
+  .bubble-header {
+    display: flex;
+    justify-content: space-between; /* Space between the status and the expand button */
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  /* Open/Closed */
+  .status-indicator {
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+  }
+  
+  .open-status {
+    color: #22c55e; 
+  }
+  
+  .closed-status {
+    color: #ef4444; 
+  }
+  
+  .today-hours {
+    font-size: 14px;
+    margin-left: 10px;
+    color: #555;
+  }
+  
+  /* Expand/Collapse icon */
+  .expand-toggle {
+    color: #333;
+  }
+  
+  /* expanded weekly hours */
+  .bubble-expanded {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd; /* divider line */
+  }
+  
+  /* weekly hours rows */
+  .bubble-expanded p {
+    font-size: 13px;
+    margin: 5px 0;
+    color: #555;
+  }
+  
