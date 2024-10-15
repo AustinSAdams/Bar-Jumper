@@ -52,9 +52,9 @@ const LocationDetails = ({ location, onClose, userLocation }) => {
   const today = now.toLocaleString('en-US', { weekday: 'long' });
   const currentTime = now.toTimeString().slice(0, 5);
 
-  const todaysHours = location.hours && location.hours[today] 
-    ? `${formatTime(location.hours[today].open)} - ${formatTime(location.hours[today].close)}`
-    : 'N/A';
+  const todaysHours = location.hours && location.hours[today] && location.hours[today].open && location.hours[today].close 
+  ? `${formatTime(location.hours[today].open)} - ${formatTime(location.hours[today].close)}`
+  : '';
 
   const openStatus = getOpenStatus(location.hours, today, currentTime);
   const statusClass = openStatus === "Open" ? "location-status-open" : "location-status-closed";
@@ -67,52 +67,60 @@ const LocationDetails = ({ location, onClose, userLocation }) => {
 
   return createPortal(
     <div className="location-popup-overlay" onClick={dismissPopup}>
-      <div className="location-popup-content" onClick={(e) => e.stopPropagation()}>
-        
-        {/* Flex container for image and title */}
-        <div className="location-popup-header">
-          {/* Profile Image */}
-          {location['loc-profile-Image'] && (
-            <img
-              src={location['loc-profile-Image']}
-              alt={`${location.name} profile`}
-              className="location-popup-image"
-            />
-          )}
 
-          {/* Name */}
-          <h2 className="location-popup-title">{location.name}</h2>
-        </div>
+<div className="location-popup-content" onClick={(e) => e.stopPropagation()}>
+  {/* Flex container for image and text (name and address) */}
+  <div className="location-popup-header">
+    {/* Profile Image */}
+    {location['loc-profile-Image'] && (
+      <img
+        src={location['loc-profile-Image']}
+        alt={`${location.name} profile`}
+        className="location-popup-image"
+      />
+    )}
+    {/* Flex column for name and address */}
+    <div className="location-popup-details">
+      <h2 className="location-popup-title">{location.name}</h2>
+      <h3 className="location-popup-address">
+        <strong></strong> {location.address || 'N/A'}
+        {distance && <span className="location-popup-distance"> - {distance} miles</span>}
+      </h3>
+    </div>
+  </div>
 
-        {/* Other Info */}
-        <p className="location-popup-info"><strong>Address:</strong> {location.address || 'N/A'}
-        {distance && <span className="location-popup-distance"> - {distance} miles away</span>}</p>
-        <p className="location-popup-info"><strong>Phone:</strong> {location.phone || 'N/A'}</p>
+  {/* Other Info */}
+  <p className="location-popup-info"><strong>Phone:</strong> {location.phone || 'N/A'}</p>
+  <p className="location-popup-info">
+    <strong>{today}:{todaysHours}</strong> 
+    <span className={openStatus === "Open" ? "location-status-open" : "location-status-closed"}>
+      {openStatus}
+    </span>
+    <button onClick={() => setShowWeeklyHours(!showWeeklyHours)} className="location-popup-toggle">
+      {showWeeklyHours ? '▲' : '▼'}
+    </button>
+  </p>
 
-        <p className="location-popup-info">
-          <strong>{today}:{todaysHours}</strong> 
-          <span className={location.isOpen ? "location-status-open" : "location-status-closed"}>
-            {location.isOpen ? "Open" : "Closed"}
-          </span>
-          <button onClick={() => setShowWeeklyHours(!showWeeklyHours)} className="location-popup-toggle">
-            {showWeeklyHours ? '▲' : '▼'}
-          </button>
+  {showWeeklyHours && (
+  <div className="location-popup-weekly-hours">
+    {orderedDays.map((day) => {
+      const dayHours = location.hours[day];
+      const isClosed = !dayHours || !dayHours.open || !dayHours.close;
+
+      return (
+        <p key={day} className="location-popup-day-hours">
+          <strong>{day}:</strong> 
+          {isClosed ? 'Closed' : `${formatTime(dayHours.open)} - ${formatTime(dayHours.close)}`}
         </p>
+      );
+    })}
+  </div>
+)}
 
-        {showWeeklyHours && (
-          <div className="location-popup-weekly-hours">
-            {orderedDays.map((day) => (
-              <p key={day} className="location-popup-day-hours">
-                <strong>{day}:</strong> {formatTime(location.hours[day].open)} - {formatTime(location.hours[day].close)}
-              </p>
-            ))}
-          </div>
-        )}
-
-        <button onClick={onClose} className="location-popup-close">
-          Close
-        </button>
-      </div>
+  <button onClick={onClose} className="location-popup-close">
+    Close
+  </button>
+</div>
     </div>,
     portalRoot
   );

@@ -309,8 +309,7 @@ body {
 /* Flexbox container for Image and Title */
 .location-popup-header {
   display: flex;
-  align-items: center;
-  margin-bottom: 1rem; /* Adds space below the header */
+  align-items: flex-start;
 }
 
 .location-popup-image {
@@ -324,7 +323,16 @@ body {
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
-  margin-bottom: 55px;
+}
+
+.location-popup-details {
+  display: flex;
+  flex-direction: column; /* Stack name and address vertically */
+}
+
+.location-popup-address {
+  font-size: 12px; /* Smaller font size */
+  color: #555; /* Slightly darker gray color */
 }
 
 .location-popup-info {
