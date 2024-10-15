@@ -283,3 +283,87 @@ body {
   color: red; 
   margin-top: 10px;
 }
+
+/* Location Popup Styles */
+
+.location-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.location-popup-content {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  max-width: 28rem;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.location-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.location-popup-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.location-popup-distance {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.location-popup-info {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.location-status-open {
+  color: #22c55e;
+}
+
+.location-status-closed {
+  color: #ef4444;
+}
+
+.location-popup-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.location-popup-weekly-hours {
+  margin-top: 0.5rem;
+  color:rgb(0, 0, 0);
+}
+
+.location-popup-day-hours {
+  margin-bottom: 0.25rem;
+}
+
+.location-popup-close {
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.location-popup-close:hover {
+  background-color: #2563eb;
+}

@@ -42,7 +42,6 @@ const calculateDistance = (userLocation, locationCoords) => {
 // Popup Component
 
 const LocationDetails = ({ location, onClose, userLocation }) => {
-
   const [showWeeklyHours, setShowWeeklyHours] = useState(false);
   const [portalRoot, setPortalRoot] = useState(null);
 
@@ -60,7 +59,7 @@ const LocationDetails = ({ location, onClose, userLocation }) => {
     : 'N/A';
 
   const openStatus = getOpenStatus(location.hours, today, currentTime);
-  const statusClass = openStatus === "Open" ? "text-green-500" : "text-red-500";
+  const statusClass = openStatus === "Open" ? "location-status-open" : "location-status-closed";
   const orderedDays = updateDayOrder(today).filter(day => day !== today);
   const distance = calculateDistance(userLocation, location);
 
@@ -69,42 +68,36 @@ const LocationDetails = ({ location, onClose, userLocation }) => {
   };
 
   return createPortal(
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={dismissPopup}>
-      <div className="bg-white p-6 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between mb-4">
-
-          <h2 className="text-2xl font-bold text-black">{location.name}</h2>
-          {distance && <span className="text-sm text-gray-500 ml-2">{distance} miles away</span>}
+    <div className="location-popup-overlay" onClick={dismissPopup}>
+      <div className="location-popup-content" onClick={(e) => e.stopPropagation()}>
+        <div className="location-popup-header">
+          <h2 className="location-popup-title">{location.name}</h2>
+          {distance && <span className="location-popup-distance">{distance} miles away</span>}
         </div>
 
-        <p className="mb-2 text-black"><strong>Address:</strong> {location.address || 'N/A'}</p>
-        <p className="mb-2 text-black"><strong>Phone:</strong> {location.phone || 'N/A'}</p>
+        <p className="location-popup-info"><strong>Address:</strong> {location.address || 'N/A'}</p>
+        <p className="location-popup-info"><strong>Phone:</strong> {location.phone || 'N/A'}</p>
 
-        <p className="mb-2 text-black">
+        <p className="location-popup-info">
           <strong>Hours:</strong> <span className={statusClass}>{openStatus}</span> ({today}: {todaysHours})
-
-          <button onClick={() => setShowWeeklyHours(!showWeeklyHours)} className="ml-2">
+          <button onClick={() => setShowWeeklyHours(!showWeeklyHours)} className="location-popup-toggle">
             {showWeeklyHours ? '▲' : '▼'}
           </button>
         </p>
         {showWeeklyHours && (
-          <div className="mt-2 text-black">
+          <div className="location-popup-weekly-hours">
             {orderedDays.map((day) => (
-              <p key={day}>
+              <p key={day} className="location-popup-day-hours">
                 <strong>{day}:</strong> {formatTime(location.hours[day].open)} - {formatTime(location.hours[day].close)}
               </p>
             ))}
           </div>
         )}
 
-        <p className="mb-4 text-black"><strong>Description:</strong> {location.description || 'No description available.'}</p>
-        <button
-          onClick={onClose}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
+        <p className="location-popup-info"><strong>Description:</strong> {location.description || 'No description available.'}</p>
+        <button onClick={onClose} className="location-popup-close">
           Close
         </button>
-        
       </div>
     </div>,
     portalRoot
