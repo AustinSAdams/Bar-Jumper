@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import * as turf from '@turf/turf';
+import { Phone } from 'lucide-react';
 
 // Helper Functions
 
@@ -84,13 +85,13 @@ const LocationDetails = ({ location, onClose, userLocation }) => {
       <h2 className="location-popup-title">{location.name}</h2>
       <h3 className="location-popup-address">
         <strong></strong> {location.address || 'N/A'}
-        {distance && <span className="location-popup-distance"> - {distance} miles</span>}
+        {distance && <span className="location-popup-address"> - {distance} miles</span>}
       </h3>
+      <h4 className="location-popup-address"> <Phone size={17} style={{ verticalAlign: 'middle', marginRight: '5px' }} /> {location.phone || 'N/A'}</h4>
     </div>
   </div>
 
   {/* Other Info */}
-  <p className="location-popup-info"><strong>Phone:</strong> {location.phone || 'N/A'}</p>
   <p className="location-popup-info">
     <strong>{today}:{todaysHours}</strong> 
     <span className={openStatus === "Open" ? "location-status-open" : "location-status-closed"}>

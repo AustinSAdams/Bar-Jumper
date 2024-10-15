@@ -313,6 +313,7 @@ body {
 }
 
 .location-popup-image {
+  display: flex;
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -331,6 +332,7 @@ body {
 }
 
 .location-popup-address {
+  display: flex;
   font-size: 12px; /* Smaller font size */
   color: #555; /* Slightly darker gray color */
 }
