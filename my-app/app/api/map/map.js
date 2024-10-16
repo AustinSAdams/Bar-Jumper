@@ -13,7 +13,7 @@ const BarMap = ({ locations }) => {
   });
 
   const [mapStyle, setMapStyle] = useState("mapbox://styles/treywb7/cm1pmlmxs004901pb6xwm60vm");
-  const [theme, setTheme] = useState('dark'); // Add theme state (default: dark mode)
+  const [theme, setTheme] = useState('dark');
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const mapRef = useRef();
@@ -21,7 +21,7 @@ const BarMap = ({ locations }) => {
 
   const toggleMapStyle = (style) => {
     setMapStyle(style);
-    setTheme(style.includes('light') ? 'light' : 'dark'); // Automatically set theme based on map style
+    setTheme(style.includes('light') ? 'light' : 'dark');
   };
 
   const onGeolocate = useCallback((e) => {
