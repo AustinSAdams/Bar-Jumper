@@ -3,16 +3,17 @@ import React, { useState, useCallback, useRef } from 'react';
 import { Map, NavigationControl, Marker, GeolocateControl } from 'react-map-gl';
 import LocationDetails from './locationPopup';
 
-const BarMap = ({locations}) => {
+const BarMap = ({ locations }) => {
   const [viewport, setViewport] = useState({
     longitude: -92.635,
-    latitude: 32.529,  
+    latitude: 32.529,
     zoom: 15.5,
     pitch: 30,
     bearing: 0,
   });
 
   const [mapStyle, setMapStyle] = useState("mapbox://styles/treywb7/cm1pmlmxs004901pb6xwm60vm");
+  const [theme, setTheme] = useState('dark');
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const mapRef = useRef();
@@ -20,6 +21,7 @@ const BarMap = ({locations}) => {
 
   const toggleMapStyle = (style) => {
     setMapStyle(style);
+    setTheme(style.includes('light') ? 'light' : 'dark');
   };
 
   const onGeolocate = useCallback((e) => {
@@ -40,8 +42,6 @@ const BarMap = ({locations}) => {
     setSelectedLocation(null);
   };
 
-
-
   return (
     <div className="relative">
       <Map
@@ -51,7 +51,8 @@ const BarMap = ({locations}) => {
         mapStyle={mapStyle}
         onMove={(evt) => setViewport(evt.viewState)}
         style={{ width: '100%', height: '100vh' }}
-      > <NavigationControl position="top-left" />
+      >
+        <NavigationControl position="top-left" />
         <GeolocateControl
           ref={geolocateControlRef}
           position="top-left"
@@ -59,7 +60,7 @@ const BarMap = ({locations}) => {
           trackUserLocation={true}
           showAccuracyCircle={false}
           showUserLocation={true}
-          positionOptions={{enableHighAccuracy: true, timeout: 600}}
+          positionOptions={{ enableHighAccuracy: true, timeout: 600 }}
         />
         {locations.map((location) => (
           <Marker
@@ -91,10 +92,12 @@ const BarMap = ({locations}) => {
           🌙
         </button>
       </div>
+
       <LocationDetails 
         location={selectedLocation} 
         onClose={closeLocationPopup} 
         userLocation={userLocation}
+        theme={theme}
       />
     </div>
   );
