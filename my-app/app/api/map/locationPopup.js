@@ -12,7 +12,7 @@ const calculateDistance = (userLocation, locationCoords) => {
   return turf.distance(from, to, { units: 'miles' }).toFixed(1);
 };
 
-const LocationDetails = ({ location, onClose, userLocation }) => {
+const LocationDetails = ({ location, onClose, userLocation, theme }) => {
   const [portalRoot, setPortalRoot] = useState(null);
 
   useEffect(() => {
@@ -31,33 +31,33 @@ const LocationDetails = ({ location, onClose, userLocation }) => {
 
   return createPortal(
     <div className="location-popup-overlay" onClick={dismissPopup}>
-      <div className="location-popup-content" onClick={(e) => e.stopPropagation()}>
+      <div className={`location-popup-content ${theme === 'dark' ? 'dark-mode' : ''}`} onClick={(e) => e.stopPropagation()}>
         <div className="location-popup-header">
           <div className="location-popup-header-left">
             {profileImage && (
               <img
                 src={profileImage}
-                alt={`${name} profile`}
+                alt={`${name} image`}
                 className="location-popup-image"
               />
             )}
             <div className="location-popup-details">
-              <h2 className="location-popup-title">{name}</h2>
-              <h3 className="location-popup-address">
+            <h2 className={`location-popup-title ${theme === 'dark' ? 'dark-mode' : ''}`}>{name}</h2>
+            <h3 className={`location-popup-address ${theme === 'dark' ? 'dark-mode' : ''}`}>
                 {address || 'N/A'}
                 {distance && ` - ${distance} miles`}
               </h3>
-              <h4 className="location-popup-phone">
-                <Phone size={17} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
+              <h4 className={`location-popup-phone ${theme === 'dark' ? 'dark-mode' : ''}`}>
+                <Phone size={17} strokeWidth={3} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
                 <a href={`tel:${phone}`}>{phone || 'N/A'}</a>
               </h4>
             </div>
           </div>
-          <button onClick={onClose} className="location-popup-close">
+          <button onClick={onClose} className={`location-popup-close ${theme === 'dark' ? 'dark-mode' : ''}`}>
             <X size={24} />
           </button>
         </div>
-        <LocationHoursBubble location={location} />
+        <LocationHoursBubble location={location} theme ={theme} />
       </div>
     </div>,
     portalRoot

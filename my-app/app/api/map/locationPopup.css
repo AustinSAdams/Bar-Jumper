@@ -4,21 +4,26 @@
 .location-popup-overlay {
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(87, 87, 87, 0.301);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
   }
-  
+  /* Light mode */
   .location-popup-content {
     background-color: rgb(255, 255, 255);
     padding: 1.5rem;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     max-width: 28rem;
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
+  }
+
+  /* Dark mode */
+  .location-popup-content.dark-mode {
+    background-color: #2a2a2b; 
   }
   
   
@@ -42,72 +47,93 @@
     border-radius: 50%;
     margin-right: 1rem;
   }
-  
+
+
+  /* Light mode */
   .location-popup-title {
     font-size: 1.5rem;
     font-weight: bold;
     color: #333;
   }
+
+  /* Dark mode */
+  .location-popup-title.dark-mode {
+    color: #ffffff; 
+  }
   
+
   .location-popup-details {
     display: flex;
     flex-direction: column;
   }
-  
+
+
+  /* Light mode */
   .location-popup-address {
     display: flex;
-    font-size: 12px;
+    font-size: .75rem;
+    font-weight: bold;
     color: #555; 
   }
+  /* Dark mode */
+  .location-popup-address.dark-mode {
+    color: #e6e2e2;
+  }
 
+
+  /* Light mode */
   .location-popup-phone {
     display: flex;
-    font-size: 12px;
+    font-size: .75rem;
+    font-weight: bold;
     color: #555;
     text-decoration: none;
   }
-  
+  /* Light mode */
   .location-popup-phone:hover {
     color: #2b6eff;
     text-decoration: underline;
   }
-  
-  .location-popup-info {
-    margin-bottom: 0.5rem;
-    color: #333;
+
+  /* Dark mode */
+  .location-popup-phone.dark-mode {
+    color: #e6e2e2; 
+  }
+  /* Dark mode */
+  .location-popup-phone:hover.dark-mode {
+    color: #4a90e2; 
   }
   
-  .location-status-open {
-    color: #22c55e;
-  }
+
   
-  .location-status-closed {
-    color: #ef4444;
-  }
-  
-  .location-popup-toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-left: 0.5rem;
-  }
-  
-  .location-popup-weekly-hours {
-    margin-top: 0.5rem;
-    color: rgb(0, 0, 0);
-  }
-  
+  /* Light mode */
   .location-popup-close {
     background: none;
     border: none;
     cursor: pointer;
-    color: #333; 
+    color: #555; 
     padding: 0;
     position: absolute;
     top: -0.8rem;
     right: -0.8rem;
   }
-  
+  /* Light mode */
   .location-popup-close:hover {
-    color: #000;
+    color: #a7a7a7bd;
+  }
+
+  /* Dark mode */
+  .location-popup-close.dark-mode {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ffffff; 
+    padding: 0;
+    position: absolute;
+    top: -0.8rem;
+    right: -0.8rem;
+  }
+  /* Dark mode */
+  .location-popup-close:hover.dark-mode {
+    color: #e6e2e2;
   }
