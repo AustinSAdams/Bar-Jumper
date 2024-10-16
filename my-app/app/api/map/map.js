@@ -4,6 +4,7 @@ import { Map, NavigationControl, Marker, GeolocateControl, Source, Layer } from 
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import LocationDetails from './locationPopup';
+import Navbar from './Navbar.js';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoidHJleXdiNyIsImEiOiJjbHdhYTVzeDAwY243MnFwcTZpZWtsMTA4In0.eM4pw4c2u-UgM0baq2IjQg';
 
