@@ -12,7 +12,7 @@ const calculateDistance = (userLocation, locationCoords) => {
   return turf.distance(from, to, { units: 'miles' }).toFixed(1);
 };
 
-const LocationDetails = ({ location, onClose, userLocation, theme, onGetDirections, isLoadingDirections }) => {
+const LocationDetails = ({ location, onClose, userLocation, theme, onGetDirections, isLoadingDirections, isOpen }) => {
   const [portalRoot, setPortalRoot] = useState(null);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const LocationDetails = ({ location, onClose, userLocation, theme, onGetDirectio
   };
 
   return createPortal(
-    <div className="location-popup-overlay" onClick={dismissPopup}>
+    <div className={`location-popup ${isOpen ? 'open' : ''}`} onClick={dismissPopup}>
       <div className={`location-popup-content ${theme === 'dark' ? 'dark-mode' : ''}`} onClick={(e) => e.stopPropagation()}>
         <div className="location-popup-header">
           <div className="location-popup-header-left">
@@ -62,7 +62,7 @@ const LocationDetails = ({ location, onClose, userLocation, theme, onGetDirectio
           </button>
         </div>
         <LocationHoursBubble location={location} theme={theme} />
-        <button 
+        <button
           onClick={handleGetDirections}
           className={`location-popup-directions ${theme === 'dark' ? 'dark-mode' : ''}`}
           disabled={isLoadingDirections}

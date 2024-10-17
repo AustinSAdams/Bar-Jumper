@@ -24,6 +24,7 @@ const BarMap = ({ locations }) => {
   const [isLoadingDirections, setIsLoadingDirections] = useState(false);
   const mapRef = useRef();
   const geolocateControlRef = useRef();
+  const [activeNavItem, setActiveNavItem] = useState(null);
 
   useEffect(() => {
     mapboxgl.accessToken = MAPBOX_TOKEN;
@@ -52,6 +53,7 @@ const BarMap = ({ locations }) => {
   const closeLocationPopup = () => {
     setSelectedLocation(null);
     setDirectionsRoute(null);
+    setActiveNavItem(null);
   };
 
   const getDirections = async (destination) => {
@@ -167,9 +169,10 @@ const BarMap = ({ locations }) => {
         theme={theme}
         onGetDirections={getDirections}
         isLoadingDirections={isLoadingDirections}
+        isOpen={!!selectedLocation}
       />
 
-      <NavBar theme={theme} />
+      <NavBar theme={theme} activeItem={activeNavItem} onItemClick={setActiveNavItem} />
     </div>
   );
 };
