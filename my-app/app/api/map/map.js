@@ -4,7 +4,7 @@ import { Map, NavigationControl, Marker, GeolocateControl, Source, Layer } from 
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import LocationDetails from './locationPopup';
-import Navbar from './Navbar.js';
+import NavBar from './Navbar';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoidHJleXdiNyIsImEiOiJjbHdhYTVzeDAwY243MnFwcTZpZWtsMTA4In0.eM4pw4c2u-UgM0baq2IjQg';
 
@@ -98,7 +98,7 @@ const BarMap = ({ locations }) => {
         mapboxAccessToken={MAPBOX_TOKEN}
         mapStyle={mapStyle}
         onMove={(evt) => setViewport(evt.viewState)}
-        style={{ width: '100%', height: '100vh' }}
+        style={{ width: '100%', height: 'calc(100vh - 64px)' }} // use calc to keep framze size
       >
         <NavigationControl position="top-left" />
         <GeolocateControl
@@ -168,6 +168,8 @@ const BarMap = ({ locations }) => {
         onGetDirections={getDirections}
         isLoadingDirections={isLoadingDirections}
       />
+
+      <NavBar theme={theme} />
     </div>
   );
 };
