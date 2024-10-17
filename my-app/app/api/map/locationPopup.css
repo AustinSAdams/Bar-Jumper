@@ -170,7 +170,11 @@
 }
 
 @media (min-width: 768px) {
-  .location-popup.open {
+  .location-popup {
     bottom: 84px; 
+  }
+  
+  .location-popup-content {
+    max-height: calc(100vh - 84px);
   }
 }

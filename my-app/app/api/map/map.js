@@ -25,6 +25,7 @@ const BarMap = ({ locations }) => {
   const mapRef = useRef();
   const geolocateControlRef = useRef();
   const [activeNavItem, setActiveNavItem] = useState(null);
+  const [popupView, setPopupView] = useState('list');
 
   useEffect(() => {
     mapboxgl.accessToken = MAPBOX_TOKEN;
@@ -45,9 +46,16 @@ const BarMap = ({ locations }) => {
     });
   }, []);
 
+  const openLocationsList = () => {
+    setSelectedLocation(null);
+    setPopupView('list');
+    setActiveNavItem('bars');
+  };
+
   const openLocationPopup = (location) => {
     setSelectedLocation(location);
     setDirectionsRoute(null);
+    setPopupView('details');
     setActiveNavItem('bars');
   };
 
@@ -55,6 +63,7 @@ const BarMap = ({ locations }) => {
     setSelectedLocation(null);
     setDirectionsRoute(null);
     setActiveNavItem(null);
+    setPopupView('list');
   };
 
   const getDirections = async (destination) => {
@@ -101,7 +110,7 @@ const BarMap = ({ locations }) => {
         mapboxAccessToken={MAPBOX_TOKEN}
         mapStyle={mapStyle}
         onMove={(evt) => setViewport(evt.viewState)}
-        style={{ width: '100%', height: 'calc(100vh - 64px)' }} // use calc to keep framze size
+        style={{ width: '100%', height: 'calc(100vh - 64px)' }}
       >
         <NavigationControl position="top-left" />
         <GeolocateControl
@@ -164,16 +173,28 @@ const BarMap = ({ locations }) => {
       </div>
 
       <LocationDetails 
+        locations={locations}
         location={selectedLocation} 
         onClose={closeLocationPopup} 
         userLocation={userLocation}
         theme={theme}
         onGetDirections={getDirections}
         isLoadingDirections={isLoadingDirections}
-        isOpen={!!selectedLocation}
+        isOpen={activeNavItem === 'bars'}
+        onSelectLocation={openLocationPopup}
+        view={popupView}
+        onChangeView={setPopupView}
       />
 
-      <NavBar theme={theme} activeItem={activeNavItem} onItemClick={setActiveNavItem} isLocationSelected={!!selectedLocation} />
+      <NavBar 
+        theme={theme} 
+        activeItem={activeNavItem} 
+        onItemClick={(item) => {
+          setActiveNavItem(item);
+          if (item === 'bars') openLocationsList();
+          else closeLocationPopup();
+        }}
+      />
     </div>
   );
 };
