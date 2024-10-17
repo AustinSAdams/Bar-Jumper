@@ -1,13 +1,13 @@
 "use client";
 
 import { createContext, useState, useEffect, useCallback, useContext } from 'react';
-import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence } from 'firebase/auth';
+import { onAuthStateChanged, setPersistence, browserLocalPersistence } from 'firebase/auth';
+import { auth } from '../api/firebase/firebaseConfig';
 
 export const UserContext = createContext();
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
-  const auth = getAuth();
 
   useEffect(() => {
     const setUserPersistence = async () => {

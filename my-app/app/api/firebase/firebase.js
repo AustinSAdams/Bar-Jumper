@@ -1,23 +1,6 @@
-import { collection, getDocs, getFirestore } from "firebase/firestore"; 
-import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { initializeApp } from "firebase/app";
-
-// Set up firebase configuration
-const firebaseConfig = {
-  apiKey: 'AIzaSyCx6y7OzvlE5ZcfNPjlJf2Xn2xRngrJoeo',
-  authDomain: "bar-jumpers.firebaseapp.com",
-  databaseURL: "DATABASE_NAME.firebaseio.com",
-  projectId: "bar-jumpers",
-  storageBucket: "bar-jumpers.appspot.com",
-  messagingSenderId: '831688467414',
-  appId: '1:831688467414:web:0b5d2f0f001ddb948dfa77',
-  measurementId: "G-X12D9E9RFL"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+import { db, auth } from "./firebaseConfig";
+import { collection, getDocs, doc, setDoc, query } from "firebase/firestore"; 
+import { createUserWithEmailAndPassword, updateProfile, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 // Function used to retrieve and return all documents. Takes a collection name as a parameter
 export async function getAllDocuments(colName) {
