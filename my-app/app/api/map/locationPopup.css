@@ -1,4 +1,4 @@
-/* Location Popup Styles */
+/* Light Mode Styles */
 .location-popup {
   position: fixed;
   opacity: 0;
@@ -16,8 +16,6 @@
   opacity: 1;
 }
 
-
-
 .location-popup-content {
   background-color: #ffffff;
   border-radius: 15px;
@@ -25,11 +23,6 @@
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
   max-height: 80vh;
   overflow-y: auto;
-}
-
-/* Dark mode */
-.location-popup-content.dark-mode {
-  background-color: #2a2a2b;
 }
 
 .location-popup-header {
@@ -56,19 +49,8 @@
   left: -14px;
 }
 
-
 .location-popup-arrow:hover {
   color: #a7a7a7bd;
-}
-
-/* Dark mode */
-.location-popup-arrow.dark-mode {
-  color: #ffffff;
-}
-
-/* Dark mode */
-.location-popup-arrow:hover.dark-mode {
-  color: #e6e2e2;
 }
 
 .location-popup-image {
@@ -79,16 +61,10 @@
   margin-right: 1rem;
 }
 
-
 .location-popup-title {
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
-}
-
-/* Dark mode */
-.location-popup-title.dark-mode {
-  color: #ffffff;
 }
 
 .location-popup-details {
@@ -96,44 +72,25 @@
   flex-direction: column;
 }
 
-
 .location-popup-address {
   display: flex;
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-weight: bold;
   color: #555;
 }
 
-/* Dark mode */
-.location-popup-address.dark-mode {
-  color: #e6e2e2;
-}
-
-
 .location-popup-phone {
   display: flex;
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-weight: bold;
   color: #555;
   text-decoration: none;
 }
 
-
 .location-popup-phone:hover {
   color: #2b6eff;
   text-decoration: underline;
 }
-
-/* Dark mode */
-.location-popup-phone.dark-mode {
-  color: #e6e2e2;
-}
-
-/* Dark mode */
-.location-popup-phone:hover.dark-mode {
-  color: #4a90e2;
-}
-
 
 .location-popup-close {
   background: none;
@@ -146,26 +103,9 @@
   right: -14px;
 }
 
-
 .location-popup-close:hover {
   color: #a7a7a7bd;
 }
-
-/* Dark mode */
-.location-popup-close.dark-mode {
-  color: #ffffff;
-}
-
-/* Dark mode */
-.location-popup-close:hover.dark-mode {
-  color: #e6e2e2;
-}
-
-
-
-
-
-
 
 .location-popup-directions {
   display: flex;
@@ -192,6 +132,55 @@
   cursor: not-allowed;
 }
 
+/*  Dont remove - Formats UI with screen size */
+@media (min-width: 768px) {
+  .location-popup {
+    bottom: 84px;
+  }
+  
+  .location-popup-content {
+    max-height: calc(100vh - 84px);
+  }
+}
+
+
+/* Dark Mode Styles */
+.location-popup-content.dark-mode {
+  background-color: #2a2a2b;
+}
+
+.location-popup-arrow.dark-mode {
+  color: #ffffff;
+}
+
+.location-popup-arrow:hover.dark-mode {
+  color: #e6e2e2;
+}
+
+.location-popup-title.dark-mode {
+  color: #ffffff;
+}
+
+.location-popup-address.dark-mode {
+  color: #e6e2e2;
+}
+
+.location-popup-phone.dark-mode {
+  color: #e6e2e2;
+}
+
+.location-popup-phone:hover.dark-mode {
+  color: #4a90e2;
+}
+
+.location-popup-close.dark-mode {
+  color: #ffffff;
+}
+
+.location-popup-close:hover.dark-mode {
+  color: #e6e2e2;
+}
+
 .location-popup-directions.dark-mode {
   background-color: #2c3e50;
 }
@@ -202,14 +191,4 @@
 
 .location-popup-directions.dark-mode:disabled {
   background-color: #7f8c8d;
-}
-
-@media (min-width: 768px) {
-  .location-popup {
-    bottom: 84px; 
-  }
-  
-  .location-popup-content {
-    max-height: calc(100vh - 84px);
-  }
 }
