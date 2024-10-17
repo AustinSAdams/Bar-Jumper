@@ -24,7 +24,7 @@ const BarMap = ({ locations }) => {
   const [isLoadingDirections, setIsLoadingDirections] = useState(false);
   const mapRef = useRef();
   const geolocateControlRef = useRef();
-  const [activeNavItem, setActiveNavItem] = useState(null);
+  const [activeNavItem, setActiveNavItem] = useState('map');
   const [popupView, setPopupView] = useState('list');
 
   useEffect(() => {
@@ -188,11 +188,13 @@ const BarMap = ({ locations }) => {
 
       <NavBar 
         theme={theme} 
-        activeItem={activeNavItem} 
+        activeItem={activeNavItem || 'map'}
         onItemClick={(item) => {
           setActiveNavItem(item);
           if (item === 'bars') openLocationsList();
-          else closeLocationPopup();
+          else if (item === 'map'){
+            closeLocationPopup();
+          }
         }}
       />
     </div>
