@@ -2,6 +2,7 @@
 import localFont from "next/font/local";
 import "./globals.css"; // Global CSS styles
 import Header from "./components/Header.js"; // Header component
+import { UserProvider } from "./context/UserContext";
 
 // Define Geist Sans font
 const geistSans = localFont({
@@ -29,8 +30,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Header /> {/* Render Header component */}
-        {children} {/* Render child components */}
+        <UserProvider>
+          <Header /> {/* Render Header component */}
+          {children} {/* Render child components */}
+        </UserProvider>
       </body>
     </html>
   );
