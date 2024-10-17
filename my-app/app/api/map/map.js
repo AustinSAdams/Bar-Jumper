@@ -67,28 +67,28 @@ const BarMap = ({ locations }) => {
     setPopupView('list');
   };
 
-  const getDirections = async (destination) => {
+  const getDirections = async (destination, travelMode = 'driving') => {
     if (!userLocation) {
       alert("Please enable location services to get directions.");
       return;
     }
-
+  
     setIsLoadingDirections(true);
     const start = `${userLocation.longitude},${userLocation.latitude}`;
     const end = `${destination.longitude},${destination.latitude}`;
-    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start};${end}?steps=true&geometries=geojson&access_token=${MAPBOX_TOKEN}`;
-
+    const url = `https://api.mapbox.com/directions/v5/mapbox/${travelMode}/${start};${end}?steps=true&geometries=geojson&access_token=${MAPBOX_TOKEN}`;
+  
     try {
       const response = await fetch(url);
       const data = await response.json();
-
+  
       if (data.routes && data.routes.length > 0) {
         setDirectionsRoute(data.routes[0].geometry);
         const coordinates = data.routes[0].geometry.coordinates;
         const bounds = coordinates.reduce((bounds, coord) => {
           return bounds.extend(coord);
         }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
-
+  
         mapRef.current.getMap().fitBounds(bounds, {
           padding: 80
         });

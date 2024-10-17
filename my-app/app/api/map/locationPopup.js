@@ -59,7 +59,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
   // Function to trigger fetching directions on button click
   const handleGetDirections = () => {
     if (directionsRoute) {
-      onGetDirections(directionsRoute); // Pass the route for the map to show
+      onGetDirections(location, travelMode);
     }
   };
 
