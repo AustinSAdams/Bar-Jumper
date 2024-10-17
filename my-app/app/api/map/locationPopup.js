@@ -101,24 +101,27 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
                   <Phone size={17} strokeWidth={3} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
                   <a href={`tel:${phone}`}>{phone || 'N/A'}</a>
                 </h4>
-                {/* Replace Directions Button with Travel Info */}
-                {travelTime !== null && (
-                  <button 
-                    className={`travel-info-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}
-                    onClick={handleGetDirections}
-                    disabled={!directionsRoute}  // Disable if no route is available
-                  >
-                    {travelMode === 'walking' ? <Footprints /> : <Car />}
-                    <span>{travelTime} min</span>
-                  </button>
-                )}
+
+                {/* Flexbox container for LocationHoursBubble and Travel Info Button */}
+                <div className="location-details-wrapper">
+                  <LocationHoursBubble location={location} theme={theme} />
+                  {travelTime !== null && (
+                    <button 
+                      className={`travel-info-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}
+                      onClick={handleGetDirections}
+                      disabled={!directionsRoute}
+                    >
+                      {travelMode === 'walking' ? <Footprints /> : <Car />}
+                      <span>{travelTime} min</span>
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
             <button onClick={onClose} className={`location-popup-close ${theme === 'dark' ? 'dark-mode' : ''}`}>
               <X size={24} />
             </button>
           </div>
-          <LocationHoursBubble location={location} theme={theme} />
         </div>
       );
     }
