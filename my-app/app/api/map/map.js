@@ -1,7 +1,13 @@
 'use client';
-import React, { useState, useCallback, useRef } from 'react';
-import { Map, NavigationControl, Marker, GeolocateControl } from 'react-map-gl';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { Map, NavigationControl, Marker, GeolocateControl, Source, Layer } from 'react-map-gl';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import LocationDetails from './locationPopup';
+import NavBar from './Navbar';
+
+
+export const MAPBOX_TOKEN = 'pk.eyJ1IjoidHJleXdiNyIsImEiOiJjbHdhYTVzeDAwY243MnFwcTZpZWtsMTA4In0.eM4pw4c2u-UgM0baq2IjQg';
 
 const BarMap = ({ locations }) => {
   const [viewport, setViewport] = useState({
@@ -11,13 +17,20 @@ const BarMap = ({ locations }) => {
     pitch: 30,
     bearing: 0,
   });
-
   const [mapStyle, setMapStyle] = useState("mapbox://styles/treywb7/cm1pmlmxs004901pb6xwm60vm");
   const [theme, setTheme] = useState('dark');
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
+  const [directionsRoute, setDirectionsRoute] = useState(null);
+  const [isLoadingDirections, setIsLoadingDirections] = useState(false);
   const mapRef = useRef();
   const geolocateControlRef = useRef();
+  const [activeNavItem, setActiveNavItem] = useState('map');
+  const [popupView, setPopupView] = useState('list');
+
+  useEffect(() => {
+    mapboxgl.accessToken = MAPBOX_TOKEN;
+  }, []);
 
   const toggleMapStyle = (style) => {
     setMapStyle(style);
@@ -34,12 +47,60 @@ const BarMap = ({ locations }) => {
     });
   }, []);
 
+  const openLocationsList = () => {
+    setSelectedLocation(null);
+    setPopupView('list');
+    setActiveNavItem('bars');
+  };
+
   const openLocationPopup = (location) => {
     setSelectedLocation(location);
+    setDirectionsRoute(null);
+    setPopupView('details');
+    setActiveNavItem('bars');
   };
 
   const closeLocationPopup = () => {
     setSelectedLocation(null);
+    setDirectionsRoute(null);
+    setActiveNavItem(null);
+    setPopupView('list');
+  };
+
+  const getDirections = async (destination, travelMode = 'driving') => {
+    if (!userLocation) {
+      alert("Please enable location services to get directions.");
+      return;
+    }
+  
+    setIsLoadingDirections(true);
+    const start = `${userLocation.longitude},${userLocation.latitude}`;
+    const end = `${destination.longitude},${destination.latitude}`;
+    const url = `https://api.mapbox.com/directions/v5/mapbox/${travelMode}/${start};${end}?steps=true&geometries=geojson&access_token=${MAPBOX_TOKEN}`;
+  
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+  
+      if (data.routes && data.routes.length > 0) {
+        setDirectionsRoute(data.routes[0].geometry);
+        const coordinates = data.routes[0].geometry.coordinates;
+        const bounds = coordinates.reduce((bounds, coord) => {
+          return bounds.extend(coord);
+        }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+  
+        mapRef.current.getMap().fitBounds(bounds, {
+          padding: 80
+        });
+      } else {
+        alert("No route found.");
+      }
+    } catch (error) {
+      console.error("Error fetching directions:", error);
+      alert("Error fetching directions. Please try again.");
+    } finally {
+      setIsLoadingDirections(false);
+    }
   };
 
   return (
@@ -47,10 +108,10 @@ const BarMap = ({ locations }) => {
       <Map
         ref={mapRef}
         {...viewport}
-        mapboxAccessToken='pk.eyJ1IjoidHJleXdiNyIsImEiOiJjbHdhYTVzeDAwY243MnFwcTZpZWtsMTA4In0.eM4pw4c2u-UgM0baq2IjQg'
+        mapboxAccessToken={MAPBOX_TOKEN}
         mapStyle={mapStyle}
         onMove={(evt) => setViewport(evt.viewState)}
-        style={{ width: '100%', height: '100vh' }}
+        style={{ width: '100%', height: 'calc(100vh - 64px)' }}
       >
         <NavigationControl position="top-left" />
         <GeolocateControl
@@ -76,6 +137,25 @@ const BarMap = ({ locations }) => {
             </div>
           </Marker>
         ))}
+
+        {directionsRoute && (
+          <Source id="route" type="geojson" data={directionsRoute}>
+            <Layer
+              id="route"
+              type="line"
+              source="route"
+              layout={{
+                "line-join": "round",
+                "line-cap": "round"
+              }}
+              paint={{
+                "line-color": "#3b9ddd",
+                "line-width": 8,
+                "line-opacity": 0.8
+              }}
+            />
+          </Source>
+        )}
       </Map>
 
       <div className="absolute top-4 right-4 flex gap-2">
@@ -94,10 +174,29 @@ const BarMap = ({ locations }) => {
       </div>
 
       <LocationDetails 
+        locations={locations}
         location={selectedLocation} 
         onClose={closeLocationPopup} 
         userLocation={userLocation}
         theme={theme}
+        onGetDirections={getDirections}
+        isLoadingDirections={isLoadingDirections}
+        isOpen={activeNavItem === 'bars'}
+        onSelectLocation={openLocationPopup}
+        view={popupView}
+        onChangeView={setPopupView}
+      />
+
+      <NavBar 
+        theme={theme} 
+        activeItem={activeNavItem || 'map'}
+        onItemClick={(item) => {
+          setActiveNavItem(item);
+          if (item === 'bars') openLocationsList();
+          else if (item === 'map'){
+            closeLocationPopup();
+          }
+        }}
       />
     </div>
   );

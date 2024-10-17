@@ -1,139 +1,240 @@
+/* Light Mode Styles */
+.location-popup {
+  position: fixed;
+  opacity: 0;
+  bottom: 64px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  width: 100%;
+  max-width: 600px;
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
 
-/* Location Popup Styles */
+.location-popup.open {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
 
-.location-popup-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(87, 87, 87, 0.301);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+.location-popup-content {
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.location-popup-header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.location-popup-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.location-popup-arrow {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  padding: 0;
+  position: absolute;
+  top: -14px;
+  left: -14px;
+}
+
+.location-popup-arrow:hover {
+  color: #a7a7a7bd;
+}
+
+.location-popup-image {
+  display: flex;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.location-popup-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.location-popup-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.location-popup-address {
+  display: flex;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #555;
+}
+
+.location-popup-phone {
+  display: flex;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #555;
+  text-decoration: none;
+}
+
+.location-popup-phone:hover {
+  color: #2b6eff;
+  text-decoration: underline;
+}
+
+.location-popup-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  padding: 0;
+  position: absolute;
+  top: -14px;
+  right: -14px;
+}
+
+.location-popup-close:hover {
+  color: #a7a7a7bd;
+}
+
+.location-popup-directions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #3b9ddd;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.location-popup-directions:hover {
+  background-color: #2980b9;
+}
+
+.location-popup-directions:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+
+
+.location-details-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  margin-top: 10px; 
+}
+
+/* Light Mode */
+.travel-info-bubble {
+  background-color: #e0e0e0;
+  border-radius: 20px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.travel-info-bubble span {
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.travel-info-bubble svg {
+  color: #2b6eff;
+}
+
+.travel-info-bubble:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Dark Mode */
+.dark-mode .travel-info-bubble {
+  background-color: #3c434e;
+  color: #f0f0f0;
+}
+
+.dark-mode .travel-info-bubble:disabled {
+  background-color: #7f8c8d;
+}
+
+
+/*  Dont remove - Formats UI with screen size */
+@media (min-width: 768px) {
+  .location-popup {
+    bottom: 84px;
   }
-  /* Light mode */
+  
   .location-popup-content {
-    background-color: rgb(255, 255, 255);
-    padding: 1.5rem;
-    border-radius: 1rem;
-    max-width: 28rem;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
+    max-height: calc(100vh - 84px);
   }
-
-  /* Dark mode */
-  .location-popup-content.dark-mode {
-    background-color: #2a2a2b; 
-  }
-  
-  
-  .location-popup-header {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-
-  .location-popup-header-left {
-    display: flex;
-    align-items: center;
-  }
-  
-  .location-popup-image {
-    display: flex;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin-right: 1rem;
-  }
+}
 
 
-  /* Light mode */
-  .location-popup-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
-  }
+/* Dark Mode Styles */
+.location-popup-content.dark-mode {
+  background-color: #2a2a2b;
+}
 
-  /* Dark mode */
-  .location-popup-title.dark-mode {
-    color: #ffffff; 
-  }
-  
+.location-popup-arrow.dark-mode {
+  color: #ffffff;
+}
 
-  .location-popup-details {
-    display: flex;
-    flex-direction: column;
-  }
+.location-popup-arrow:hover.dark-mode {
+  color: #e6e2e2;
+}
 
+.location-popup-title.dark-mode {
+  color: #ffffff;
+}
 
-  /* Light mode */
-  .location-popup-address {
-    display: flex;
-    font-size: .75rem;
-    font-weight: bold;
-    color: #555; 
-  }
-  /* Dark mode */
-  .location-popup-address.dark-mode {
-    color: #e6e2e2;
-  }
+.location-popup-address.dark-mode {
+  color: #e6e2e2;
+}
 
+.location-popup-phone.dark-mode {
+  color: #e6e2e2;
+}
 
-  /* Light mode */
-  .location-popup-phone {
-    display: flex;
-    font-size: .75rem;
-    font-weight: bold;
-    color: #555;
-    text-decoration: none;
-  }
-  /* Light mode */
-  .location-popup-phone:hover {
-    color: #2b6eff;
-    text-decoration: underline;
-  }
+.location-popup-phone:hover.dark-mode {
+  color: #4a90e2;
+}
 
-  /* Dark mode */
-  .location-popup-phone.dark-mode {
-    color: #e6e2e2; 
-  }
-  /* Dark mode */
-  .location-popup-phone:hover.dark-mode {
-    color: #4a90e2; 
-  }
-  
+.location-popup-close.dark-mode {
+  color: #ffffff;
+}
 
-  
-  /* Light mode */
-  .location-popup-close {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #555; 
-    padding: 0;
-    position: absolute;
-    top: -0.8rem;
-    right: -0.8rem;
-  }
-  /* Light mode */
-  .location-popup-close:hover {
-    color: #a7a7a7bd;
-  }
+.location-popup-close:hover.dark-mode {
+  color: #e6e2e2;
+}
 
-  /* Dark mode */
-  .location-popup-close.dark-mode {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #ffffff; 
-    padding: 0;
-    position: absolute;
-    top: -0.8rem;
-    right: -0.8rem;
-  }
-  /* Dark mode */
-  .location-popup-close:hover.dark-mode {
-    color: #e6e2e2;
-  }
+.location-popup-directions.dark-mode {
+  background-color: #2c3e50;
+}
+
+.location-popup-directions.dark-mode:hover {
+  background-color: #34495e;
+}
+
+.location-popup-directions.dark-mode:disabled {
+  background-color: #7f8c8d;
+}
