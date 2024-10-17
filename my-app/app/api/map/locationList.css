@@ -1,5 +1,6 @@
 
-/* LocationList.css */
+
+/* Light Mode Styles */
 
 .location-list-container {
     background: linear-gradient(135deg, #2c3e50, #34495e);
@@ -45,7 +46,7 @@
   }
   
   .location-list-item {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(129, 129, 129, 0.459);
     margin: 10px 0;
     padding: 15px;
     border-radius: 10px;
@@ -88,7 +89,33 @@
     color: #bdc3c7;
   }
   
-  /* Customized scrollbar */
+  /* star styles */
+  .star {
+    color: gray;
+    font-size: 18px;
+    margin-left: 5px;
+    display: inline-block;
+    position: relative;
+  }
+  
+  .star.filled {
+    color: gold;
+  }
+  
+  /*  linear gradient to show a partlially filled stars */
+  .star.half {
+    background: linear-gradient(to right, gold 50%, gray 50%);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  .location-rating {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+  }
+  
+  /*  scrollbar */
   .location-list::-webkit-scrollbar {
     width: 10px;
   }
@@ -102,7 +129,8 @@
     border-radius: 5px;
   }
   
-  /* Dark mode tweaks */
+  
+  /* Dark Mode Styles */
   .dark-mode .location-list-container {
     background: linear-gradient(135deg, #1a1a2e, #16213e);
   }
@@ -122,5 +150,18 @@
   .dark-mode .location-address {
     color: #95a5a6;
   }
-
+  
+  .dark-mode .star {
+    color: #555;
+  }
+  
+  .dark-mode .star.filled {
+    color: #f1c40f;
+  }
+  
+  .dark-mode .star.half {
+    background: linear-gradient(to right, #f1c40f 50%, #555 50%);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
   
