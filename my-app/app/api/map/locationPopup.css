@@ -137,8 +137,8 @@
 .location-details-wrapper {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Ensures button stays to the right */
-  margin-top: 10px; /* Adjust spacing between the wrapper and other elements */
+  justify-content: space-between; 
+  margin-top: 10px; 
 }
 
 /* Light Mode */
