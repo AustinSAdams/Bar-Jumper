@@ -48,6 +48,7 @@ const BarMap = ({ locations }) => {
   const openLocationPopup = (location) => {
     setSelectedLocation(location);
     setDirectionsRoute(null);
+    setActiveNavItem('bars');
   };
 
   const closeLocationPopup = () => {
@@ -172,7 +173,7 @@ const BarMap = ({ locations }) => {
         isOpen={!!selectedLocation}
       />
 
-      <NavBar theme={theme} activeItem={activeNavItem} onItemClick={setActiveNavItem} />
+      <NavBar theme={theme} activeItem={activeNavItem} onItemClick={setActiveNavItem} isLocationSelected={!!selectedLocation} />
     </div>
   );
 };
