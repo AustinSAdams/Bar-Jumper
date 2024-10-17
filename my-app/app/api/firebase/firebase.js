@@ -1,21 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc, collection, getDocs, query} from "firebase/firestore";
-
-// Set up firebase configuration
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: "bar-jumpers.firebaseapp.com",
-  databaseURL: "DATABASE_NAME.firebaseio.com",
-  projectId: "bar-jumpers",
-  storageBucket: "bar-jumpers.appspot.com",
-  messagingSenderId: process.env.FIREBASE_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-  measurementId: "G-X12D9E9RFL"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import { db, auth } from "./firebaseConfig";
+import { collection, getDocs, doc, setDoc, query } from "firebase/firestore"; 
+import { createUserWithEmailAndPassword, updateProfile, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 // Function used to retrieve and return all documents. Takes a collection name as a parameter
 export async function getAllDocuments(colName) {
@@ -32,5 +17,39 @@ export async function getAllDocuments(colName) {
     // if documents don't exist, throw an error.
     console.error("Error:",err);
     throw new Error('Failed to fetch documents');
+  }
+}
+
+export async function createAccount(email, password, username) {
+  try{
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    await updateProfile(user, {
+      displayName: username,
+    });
+
+    return user;
+  } catch(err) {
+    console.error("Error Creating Account", err);
+    throw new Error(err.message);
+  }
+}
+
+export async function loginWithCredentials(email, password) {
+  try{
+    await signInWithEmailAndPassword(auth, email, password);
+
+    console.log("USER:", auth.currentUser);
+  }catch (err){
+    console.error("Error Logging Into Account", err);
+  }
+}
+
+export async function logUserOut() {
+  try{
+    await signOut(auth);
+  }catch(err){
+    console.error("Error signing out:",err);
   }
 }

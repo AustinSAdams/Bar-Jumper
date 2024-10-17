@@ -1,31 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { loginWithCredentials } from '../api/firebase/firebase';
+import { X, CircleUser } from 'lucide-react';
 
-const Login = ({ onClose }) => {
-    const [isLoginError, setIsLoginError] = useState(false);
+const Login = ({ onClose, onSignupClick }) => {
+    const [isLoginError, setIsLoginError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-
-    // function to handle login logic upon click of login button
-    const handleLogin = async () => {
-        // Retrieve textbox references
-        let passwordInput = document.querySelector('.login-textbox[placeholder="PASSWORD"]');
-        let usernameInput = document.querySelector('.login-textbox[placeholder="USERNAME"]');
-        // Retrieve values of textboxes
-        const username = usernameInput.value;
-        const password = await hash(passwordInput.value);
-        //console.log(`USER: ${username}\nPASS: ${password}`);
-        passwordInput.value = '';
-        usernameInput.value = '';
-        if(username == '' || password == ''){
-            setIsLoginError(true);
-            // LOGIN HAS EMPTY COMPONENTS.
-            // logic needs completion
-        } else {
-            setIsLoginError(false);
-            // LOGIN IS FILLED OUT.
-            // logic needs completion
-        }
-    };
 
     // Function used to hash a string, then return it's hash
     async function hash(string) {
@@ -36,59 +16,53 @@ const Login = ({ onClose }) => {
           .map((bytes) => bytes.toString(16).padStart(2, '0'))
           .join('');
         return hashHex;
-    }
+    };
 
-    // LOGIC FOR SIGNUP BUTTON
-    const handleSignupClick = async () => {
-         // FINISH LOGIC
-    }
+    // function to handle login logic upon click of login button
+    const handleLogin = async () => {
+        let emailInput = document.querySelector('.login-textbox[placeholder="EMAIL"]');
+        let passwordInput = document.querySelector('.login-textbox[placeholder="PASSWORD"]');
+        
+        const email = emailInput.value;
+        const password = await hash(passwordInput.value);
+        
+        if(email == '' || password == ''){
+            setIsLoginError('Please fill in all fields.');
+            return;
+        }
+        setIsLoginError('');
+        try{
+            await loginWithCredentials(email, password);
+            emailInput.value = '';
+            passwordInput.value = '';
+            onClose();
+        }catch (err) {
+            console.error(err.message);
+            setIsLoginError('Login failed. Please check your credentials.');
+        }
+    };
+
     // LOGIC FOR "FORGOT PASSWORD" BUTTON
     const handleForgotPasswordClick = async () => {
          // FINISH LOGIC
-    }
+    };
 
-    // Function to dismiss the modal if clicked outside
     const dismissPopup = (e) => {
         if (e.target === e.currentTarget) onClose();
     };
 
-    const modalLayout = (
+    const loginLayout = (
         <div className="login" onClick={dismissPopup}>
             <div className="login-display">
                 <button className="close-login-button" onClick={onClose}>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    >
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
+                    <X />
                 </button>
                 <div className="login-content">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="80"
-                        height="80"
-                        viewBox="0 0 40 40"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="login-picture"
-                    >
-                        <circle cx="20" cy="20" r="18" fill="lightgray" />
-                        <path d="M20 24c-4 0-7-2-7-5s3-5 7-5 7 2 7 5-3 5-7 5z" />
-                    </svg>
+                    
+                    <CircleUser className='login-picture' />
+                    
                     <div className="login-info">
-                        <input type="username" className="login-textbox" placeholder="USERNAME" />
+                        <input type="email" className="login-textbox" placeholder="EMAIL" />
                         <div className="password-container">
                             <input 
                                 type={showPassword ? "text" : "password"} 
@@ -102,21 +76,21 @@ const Login = ({ onClose }) => {
                                 {showPassword ? "Hide" : "Show"}
                             </button>
                         </div>
-                        {isLoginError && <p className="error-message">Please fill in all fields.</p>}
+                        {isLoginError && <p className="error-message">{isLoginError}</p>}
                     </div>
                     <button 
                         className="login-button"
                         onClick={handleLogin}
                     >Login</button>
                 </div>
-                <button className="signup-button" onClick={handleSignupClick}>Signup</button>
+                <button className="signup-button" onClick={onSignupClick}>Signup</button>
                 <button className="forgot-password-button" onClick={handleForgotPasswordClick}>Forgot Password</button>
             </div>
         </div>
     );
 
     // HTML code for the login page
-    return createPortal(modalLayout, document.body);
+    return createPortal(loginLayout, document.body);
 };
 
 export default Login;

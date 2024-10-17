@@ -1,30 +1,44 @@
 "use client";
 
 // Import React hook for state management
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useUser } from "../context/UserContext";
+import { logUserOut } from "../api/firebase/firebase"
 import Sidebar from "./Sidebar";
 import Login from "./Login";
+import Signup from "./Signup";
 
 // Define Header component
 const Header = () => {
+  const user = useUser();
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
-  const [loginIsShown, setLoginIsShown] = useState(false);
+  const [authView, setAuthView] = useState("none");
+
+  useEffect(()=>{
+    if(user){
+      console.log(user.displayName);
+    }
+    else{
+      console.log("No User Detected");
+    }
+  },[user]);
 
   // Toggle the menu open/close state
   const toggleMenu = () => {
     setSidebarIsOpen(!sidebarIsOpen);
-    
   };
   const closeMenu = () => {
     setSidebarIsOpen(false);
   };
 
   const showLoginOverlay = () => {
-    setLoginIsShown(true);
+    setAuthView("login");
   };
-
-  const hideLoginOverlay = () => {
-    setLoginIsShown(false);
+  const showSignupOverlay = () => {
+    setAuthView("signup");
+  };
+  const hideAuthOverlay = () => {
+    setAuthView("none");
   }
 
   return (
@@ -52,28 +66,37 @@ const Header = () => {
         </a>
       </div>
       <div className="header-right-button">
-        <button onClick={showLoginOverlay}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="40"
-            height="40"
-            viewBox="0 0 40 40"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="20" cy="20" r="18" fill="lightgray" />
-            <path d="M20 24c-4 0-7-2-7-5s3-5 7-5 7 2 7 5-3 5-7 5z" />
-          </svg>
-        </button>
+        {user ? (
+          <button
+            onClick={() => {logUserOut()}}
+          >Log {user.displayName} Out</button>
+        ) : (
+          <button onClick={showLoginOverlay}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="40"
+              height="40"
+              viewBox="0 0 40 40"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="20" cy="20" r="18" fill="lightgray" />
+              <path d="M20 24c-4 0-7-2-7-5s3-5 7-5 7 2 7 5-3 5-7 5z" />
+            </svg>
+          </button>
+        )}
       </div>
       { sidebarIsOpen && (
         <Sidebar isOpen={sidebarIsOpen} closeMenu={closeMenu} />
       )}
-      { loginIsShown && (
-        <Login onClose={() => setLoginIsShown(false)}/>
+      { authView === "login" && (
+        <Login onClose={hideAuthOverlay} onSignupClick={showSignupOverlay} />
+      )}
+      { authView === "signup" && (
+        <Signup onClose={hideAuthOverlay} onLoginClick={showLoginOverlay} />
       )}
 
     </header>
