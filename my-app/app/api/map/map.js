@@ -6,7 +6,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import LocationDetails from './locationPopup';
 import NavBar from './Navbar';
 
-const MAPBOX_TOKEN = 'pk.eyJ1IjoidHJleXdiNyIsImEiOiJjbHdhYTVzeDAwY243MnFwcTZpZWtsMTA4In0.eM4pw4c2u-UgM0baq2IjQg';
+
+export const MAPBOX_TOKEN = 'pk.eyJ1IjoidHJleXdiNyIsImEiOiJjbHdhYTVzeDAwY243MnFwcTZpZWtsMTA4In0.eM4pw4c2u-UgM0baq2IjQg';
 
 const BarMap = ({ locations }) => {
   const [viewport, setViewport] = useState({

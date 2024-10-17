@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import * as turf from '@turf/turf';
-import { Phone, X, Navigation, ArrowLeft } from 'lucide-react';
+import { Phone, X, ArrowLeft, Footprints, Car } from 'lucide-react';
 import './locationPopup.css';
 import LocationHoursBubble from './locationHoursBubble';
 import LocationList from './locationList';
+import { MAPBOX_TOKEN } from './map';
 
 const calculateDistance = (userLocation, locationCoords) => {
   if (!userLocation || !locationCoords.longitude || !locationCoords.latitude) return null;
@@ -13,17 +14,53 @@ const calculateDistance = (userLocation, locationCoords) => {
   return turf.distance(from, to, { units: 'miles' }).toFixed(1);
 };
 
-const LocationDetails = ({ locations, location, onClose, userLocation, theme, onGetDirections, isLoadingDirections, isOpen, onSelectLocation, view, onChangeView }) => {
+const getTravelTimeAndMode = async (userLocation, locationCoords) => {
+  const distance = calculateDistance(userLocation, locationCoords);
+  const travelMode = distance <= 1 ? 'walking' : 'driving';
+  
+  const url = `https://api.mapbox.com/directions/v5/mapbox/${travelMode}/${userLocation.longitude},${userLocation.latitude};${locationCoords.longitude},${locationCoords.latitude}?access_token=${MAPBOX_TOKEN}&geometries=geojson`;
+  
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    const travelTime = data.routes[0].duration / 60; // Convert seconds to minutes
+    return { travelTime: Math.round(travelTime), travelMode, route: data.routes[0].geometry };
+  } catch (err) {
+    console.error('Error fetching directions:', err);
+    return { travelTime: null, travelMode, route: null };
+  }
+};
+
+const LocationDetails = ({ locations, location, onClose, userLocation, theme, onGetDirections, isOpen, onSelectLocation, view, onChangeView }) => {
   const [portalRoot, setPortalRoot] = useState(null);
+  const [travelTime, setTravelTime] = useState(null);
+  const [travelMode, setTravelMode] = useState('walking');
+  const [directionsRoute, setDirectionsRoute] = useState(null); // To store the route
 
   useEffect(() => {
     setPortalRoot(document.body);
-  }, []);
+
+    if (userLocation && location) {
+      // Fetch travel time and mode (walking or driving)
+      getTravelTimeAndMode(userLocation, location).then(({ travelTime, travelMode, route }) => {
+        setTravelTime(travelTime);
+        setTravelMode(travelMode);
+        setDirectionsRoute(route); // Store the route
+      });
+    }
+  }, [userLocation, location]);
 
   if (!portalRoot) return null;
 
   const dismissPopup = (e) => {
     if (e.target === e.currentTarget) onClose();
+  };
+
+  // Function to trigger fetching directions on button click
+  const handleGetDirections = () => {
+    if (directionsRoute) {
+      onGetDirections(directionsRoute); // Pass the route for the map to show
+    }
   };
 
   const renderContent = () => {
@@ -64,6 +101,17 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
                   <Phone size={17} strokeWidth={3} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
                   <a href={`tel:${phone}`}>{phone || 'N/A'}</a>
                 </h4>
+                {/* Replace Directions Button with Travel Info */}
+                {travelTime !== null && (
+                  <button 
+                    className={`travel-info-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}
+                    onClick={handleGetDirections}
+                    disabled={!directionsRoute}  // Disable if no route is available
+                  >
+                    {travelMode === 'walking' ? <Footprints /> : <Car />}
+                    <span>{travelTime} min</span>
+                  </button>
+                )}
               </div>
             </div>
             <button onClick={onClose} className={`location-popup-close ${theme === 'dark' ? 'dark-mode' : ''}`}>
@@ -71,14 +119,6 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
             </button>
           </div>
           <LocationHoursBubble location={location} theme={theme} />
-          <button
-            onClick={() => onGetDirections(location)}
-            className={`location-popup-directions ${theme === 'dark' ? 'dark-mode' : ''}`}
-            disabled={isLoadingDirections}
-          >
-            <Navigation size={17} strokeWidth={3} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
-            {isLoadingDirections ? 'Loading...' : 'Directions'}
-          </button>
         </div>
       );
     }

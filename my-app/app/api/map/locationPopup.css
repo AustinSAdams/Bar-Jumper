@@ -132,6 +132,47 @@
   cursor: not-allowed;
 }
 
+
+
+
+
+/* Light Mode */
+.travel-info-bubble {
+  background-color: #e0e0e0;
+  border-radius: 20px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.travel-info-bubble span {
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.travel-info-bubble svg {
+  color: #2b6eff;
+}
+
+.travel-info-bubble:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Dark Mode */
+.dark-mode .travel-info-bubble {
+  background-color: #3c434e;
+  color: #f0f0f0;
+}
+
+.dark-mode .travel-info-bubble:disabled {
+  background-color: #7f8c8d;
+}
+
+
 /*  Dont remove - Formats UI with screen size */
 @media (min-width: 768px) {
   .location-popup {
