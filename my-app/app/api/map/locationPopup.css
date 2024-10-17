@@ -1,6 +1,7 @@
 /* Location Popup Styles */
 .location-popup {
   position: fixed;
+  opacity: 0;
   bottom: 64px;
   left: 50%;
   transform: translateX(-50%) translateY(100%);
@@ -12,7 +13,9 @@
 
 .location-popup.open {
   transform: translateX(-50%) translateY(0);
+  opacity: 1;
 }
+
 
 /* Light mode */
 .location-popup-content {
