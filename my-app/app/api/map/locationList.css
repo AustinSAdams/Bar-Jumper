@@ -1,0 +1,167 @@
+
+
+/* Light Mode Styles */
+
+.location-list-container {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    border-radius: 15px 15px 0 0;
+    overflow: hidden;
+    box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .location-list-header {
+    background: linear-gradient(90deg, #e74c3c, #c0392b);
+    padding: 20px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+  }
+  
+  .location-list-close {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .location-list-close:hover {
+    transform: translateY(-50%) rotate(90deg);
+  }
+  
+  .location-list {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 10px;
+  }
+  
+  .location-list-item {
+    background: rgba(129, 129, 129, 0.459);
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .location-list-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .location-list-item::before {
+    content: '🍻';
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 48px;
+    opacity: 0.2;
+    transition: all 0.3s ease;
+  }
+  
+  .location-list-item:hover::before {
+    right: 10px;
+    opacity: 0.6;
+  }
+  
+  .location-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ecf0f1;
+    margin-bottom: 5px;
+  }
+  
+  .location-address {
+    font-size: 14px;
+    color: #bdc3c7;
+  }
+  
+  /* star styles */
+  .star {
+    color: gray;
+    font-size: 18px;
+    margin-left: 5px;
+    display: inline-block;
+    position: relative;
+  }
+  
+  .star.filled {
+    color: gold;
+  }
+  
+  /*  linear gradient to show a partlially filled stars */
+  .star.half {
+    background: linear-gradient(to right, gold 50%, gray 50%);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  .location-rating {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+  }
+  
+  /*  scrollbar */
+  .location-list::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .location-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  
+  .location-list::-webkit-scrollbar-thumb {
+    background: #e74c3c;
+    border-radius: 5px;
+  }
+  
+  
+  /* Dark Mode Styles */
+  .dark-mode .location-list-container {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+  }
+  
+  .dark-mode .location-list-header {
+    background: linear-gradient(90deg, #d35400, #e67e22);
+  }
+  
+  .dark-mode .location-list-item {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  .dark-mode .location-name {
+    color: #f39c12;
+  }
+  
+  .dark-mode .location-address {
+    color: #95a5a6;
+  }
+  
+  .dark-mode .star {
+    color: #555;
+  }
+  
+  .dark-mode .star.filled {
+    color: #f1c40f;
+  }
+  
+  .dark-mode .star.half {
+    background: linear-gradient(to right, #f1c40f 50%, #555 50%);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  

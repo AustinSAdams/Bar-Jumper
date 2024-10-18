@@ -1,100 +1,84 @@
-/* Bubble container */
+
+/* Light Mode Styles */
 
 .location-hours-bubble {
-    background-color: #e0e0e0a2;
-    border-radius: 20px;
-    padding: 10px 15px;
-    display: inline-block;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: auto;
-    margin-top: 1rem;
-    font-family: Arial, sans-serif;
-    color: #333;
-  }
-
-  .location-hours-bubble:hover{
-    background-color: #e0e0e0;
-  }
-  .location-hours-bubble:hover.dark-mode {
-    background-color: #4e545f;
-  }
-
-    /* Dark Mode */
-  .location-hours-bubble.dark-mode {
-    background-color: #3c434e;
-    color: #f0f0f0;
-}
-  
-
-  .bubble-header {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    cursor: pointer;
-  }
-  
-  /* Open/Closed */
-  .status-indicator {
-    font-size: 14px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-  }
-  
-  .open-status {
-    color: #22c55e; 
-  }
-  
-  .closed-status {
-    color: #ef4444; 
-  }
-
-
-  /* Light Mode */
-  .today-hours {
-    font-size: 14px;
-    margin-left: 10px;
-    color: #3f3f3f;
-  }
-  /* Dark Mode */
-    .today-hours.dark-mode {
-    color: #ffffff;
+  background-color: #e0e0e0a2;
+  border-radius: 20px;
+  padding: 10px 15px;
+  display: inline-block;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: auto;
+  margin-top: 1rem;
+  font-family: Arial, sans-serif;
+  color: #333;
 }
 
-
-  
-  /* Light Mode */
-  .expand-toggle {
-    color: #333;
-  }
-  /* Dark Mode */
-  .expand-toggle.dark-mode {
-    color: #f0f0f0;
+.location-hours-bubble:hover {
+  background-color: #e0e0e0;
 }
 
-  
-  /* expanded weekly hours */
-  .bubble-expanded {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #ddd; /* divider line */
-  }
-  /* Dark Mode */
-  .expand-toggle.dark-mode {
-    color: #f0f0f0;
+.bubble-header {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  cursor: pointer;
 }
 
-
-  
-  /* Light Mode -- weekly hours rows */
-  .bubble-expanded {
-    font-size: 13px;
-    margin: 5px 0;
-    color: #555;
-  }
-
-  /* Dark Mode */
-  .bubble-expanded.dark-mode {
-    color: #d8d8d8;
+/* Open/Closed Status */
+.status-indicator {
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
 }
-  
+
+.open-status {
+  color: #22c55e; 
+}
+
+.closed-status {
+  color: #ef4444; 
+}
+
+.today-hours {
+  font-size: 14px;
+  margin-left: 10px;
+  color: #3f3f3f;
+}
+
+.expand-toggle {
+  color: #333;
+}
+
+/* Weekly hours - expanded */
+.bubble-expanded {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+  font-size: 13px;
+  margin: 5px 0;
+  color: #555;
+}
+
+/* Dark Mode Styles */
+
+.location-hours-bubble.dark-mode {
+  background-color: #3c434e;
+  color: #f0f0f0;
+}
+
+.location-hours-bubble:hover.dark-mode {
+  background-color: #4e545f;
+}
+
+.today-hours.dark-mode {
+  color: #ffffff;
+}
+
+.expand-toggle.dark-mode {
+  color: #f0f0f0;
+}
+
+.bubble-expanded.dark-mode {
+  color: #d8d8d8;
+}
