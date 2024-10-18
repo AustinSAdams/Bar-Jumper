@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { createAccount } from '../api/firebase/firebase';
+import { createAccount, CustomError } from '../api/firebase/firebase';
+import { X } from 'lucide-react';
+import './Signup.css';
 
 const Signup = ({ onClose, onLoginClick }) => {
-    const [isSignupError, setIsSignupError] = useState(false);
+    const [isSignupError, setIsSignupError] = useState('');
     const [currentUser, setCurrentUser] = useState();
-    const [isSignedUp, setIsSignedUp] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
 
     // Function used to hash a string, then return it's hash
     async function hash(string) {
@@ -19,16 +22,24 @@ const Signup = ({ onClose, onLoginClick }) => {
     };
 
     const handleSignupClick = async () => {
-        let usernameInput = document.querySelector('.login-textbox[placeholder="USERNAME"]');
-        let emailInput = document.querySelector('.login-textbox[placeholder="EMAIL"]');
-        let passwordInput = document.querySelector('.login-textbox[placeholder="PASSWORD"]');
+        let usernameInput = document.querySelector('.signup-textbox[placeholder="USERNAME"]');
+        let emailInput = document.querySelector('.signup-textbox[placeholder="EMAIL"]');
+        let passwordInput = document.querySelector('.signup-textbox[placeholder="PASSWORD"]');
 
         const username = usernameInput.value;
         const email = emailInput.value;
         const password = await hash(passwordInput.value);
-        
-        const user = await createAccount(email, password, username);
-        setCurrentUser(user);
+        try{
+            const user = await createAccount(email, password, username);
+            onClose();
+        }catch(err) {
+            if(err instanceof CustomError){
+                setIsSignupError(err.message);
+            }
+            else{
+                setIsSignupError("An unexpected error");
+            }
+        }
     };
 
     // Function to dismiss the modal if clicked outside
@@ -37,51 +48,36 @@ const Signup = ({ onClose, onLoginClick }) => {
     };
 
     const signupLayout = (
-        <div className="login" onClick={dismissPopup}>
-            <div className="login-display">
-                <button className="close-login-button" onClick={onClose}>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    >
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
+        <div className="signup" onClick={dismissPopup}>
+            <div className="signup-display">
+                <button className="close-signup-button" onClick={onClose}>
+                    <X />
                 </button>
-                <div className="login-content">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="80"
-                        height="80"
-                        viewBox="0 0 40 40"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="login-picture"
-                    >
-                        <circle cx="20" cy="20" r="18" fill="lightgray" />
-                        <path d="M20 24c-4 0-7-2-7-5s3-5 7-5 7 2 7 5-3 5-7 5z" />
-                    </svg>
-                    <div className="login-info">
-                        <input type="username" className="login-textbox" placeholder="USERNAME" />
-                        <input type="email" className="login-textbox" placeholder="EMAIL" />
-                        <input type="password" className="login-textbox" placeholder="PASSWORD" />
+                <div className="signup-content">                    
+                    <div className="signup-info">
+                        <input type="username" className="signup-textbox" placeholder="USERNAME" />
+                        <div className="password-container">
+                            <input 
+                                type={showPassword ? "text" : "password"} 
+                                className="signup-textbox" 
+                                placeholder="PASSWORD" 
+                            />
+                            <button
+                                className="toggle-password-button"
+                                onClick={() => setShowPassword((prev)=>!prev)}
+                            >
+                                {showPassword ? "Hide" : "Show"}
+                            </button>
+                        </div>
+                        <input type="email" className="signup-textbox" placeholder="EMAIL" />
+                        {isSignupError && <p className="error-message">{isSignupError}</p>}
                     </div>
                     <button 
-                        className="login-button"
+                        className="signup-button"
                         onClick={handleSignupClick}
                     >Signup</button>
                 </div>
-                <button className="signup-button" onClick={onLoginClick}>Back to Login</button>
+                <button className="login-return-button" onClick={onLoginClick}>Back To Login</button>
             </div>
         </div>
     );

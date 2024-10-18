@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { loginWithCredentials } from '../api/firebase/firebase';
+import { loginWithCredentials, CustomError } from '../api/firebase/firebase';
 import { X, CircleUser } from 'lucide-react';
+import './Login.css';
 
 const Login = ({ onClose, onSignupClick }) => {
     const [isLoginError, setIsLoginError] = useState('');
@@ -37,8 +38,12 @@ const Login = ({ onClose, onSignupClick }) => {
             passwordInput.value = '';
             onClose();
         }catch (err) {
-            console.error(err.message);
-            setIsLoginError('Login failed. Please check your credentials.');
+            if(err instanceof CustomError){
+                setIsLoginError(err.message);
+            }
+            else{
+                setIsLoginError("An unexpected error occurred.");
+            }
         }
     };
 
@@ -58,9 +63,7 @@ const Login = ({ onClose, onSignupClick }) => {
                     <X />
                 </button>
                 <div className="login-content">
-                    
                     <CircleUser className='login-picture' />
-                    
                     <div className="login-info">
                         <input type="email" className="login-textbox" placeholder="EMAIL" />
                         <div className="password-container">
@@ -83,7 +86,7 @@ const Login = ({ onClose, onSignupClick }) => {
                         onClick={handleLogin}
                     >Login</button>
                 </div>
-                <button className="signup-button" onClick={onSignupClick}>Signup</button>
+                <button className="signup-btn" onClick={onSignupClick}>Signup</button>
                 <button className="forgot-password-button" onClick={handleForgotPasswordClick}>Forgot Password</button>
             </div>
         </div>

@@ -1,0 +1,41 @@
+/* Style for header component */
+.header {
+    background: linear-gradient(to bottom, #575757, #000000);
+    display: flex; 
+    align-items: center; 
+    padding: 10px 20px; 
+    width: 100%; 
+  }
+  
+  /* Style for left button in header */
+.header-left-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: auto; 
+}
+  
+  /* Style for center button in header */
+.header-center-button {
+    font-weight: bold;
+    font-size: 24px;
+    flex-shrink: 0; 
+    text-align: center; 
+}
+  
+  /* Style for right button in header */
+.header-right-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+  
+.header-username {
+    text-align: right;
+    margin-right: 5px;
+}

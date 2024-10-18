@@ -2,6 +2,14 @@ import { db, auth } from "./firebaseConfig";
 import { collection, getDocs, doc, setDoc, query } from "firebase/firestore"; 
 import { createUserWithEmailAndPassword, updateProfile, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
+class CustomError extends Error {
+  constructor(message){
+    super(message);
+    this.name = "Error"
+  }
+}
+export { CustomError };
+
 // Function used to retrieve and return all documents. Takes a collection name as a parameter
 export async function getAllDocuments(colName) {
   try{
@@ -16,7 +24,7 @@ export async function getAllDocuments(colName) {
   } catch(err){
     // if documents don't exist, throw an error.
     console.error("Error:",err);
-    throw new Error('Failed to fetch documents');
+    throw new CustomError('Failed to fetch documents.');
   }
 }
 
@@ -31,18 +39,17 @@ export async function createAccount(email, password, username) {
 
     return user;
   } catch(err) {
-    console.error("Error Creating Account", err);
-    throw new Error(err.message);
+    console.error("Error Creating Account:", err);
+    throw new CustomError("Email Already In Use");
   }
 }
 
 export async function loginWithCredentials(email, password) {
   try{
     await signInWithEmailAndPassword(auth, email, password);
-
-    console.log("USER:", auth.currentUser);
   }catch (err){
-    console.error("Error Logging Into Account", err);
+    console.error("Error Logging Into Account:", err);
+    throw new CustomError("Invalid Credentials");
   }
 }
 
@@ -51,5 +58,6 @@ export async function logUserOut() {
     await signOut(auth);
   }catch(err){
     console.error("Error signing out:",err);
+    throw new CustomError("Could Not Safely Logout.");
   }
 }
