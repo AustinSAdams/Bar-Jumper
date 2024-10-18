@@ -31,13 +31,13 @@ const Signup = ({ onClose, onLoginClick }) => {
         const password = await hash(passwordInput.value);
         try{
             const user = await createAccount(email, password, username);
-            setCurrentUser(user);
+            onClose();
         }catch(err) {
             if(err instanceof CustomError){
                 setIsSignupError(err.message);
             }
             else{
-                setIsSignupError("An unexpected error occurred.");
+                setIsSignupError("An unexpected error");
             }
         }
     };
