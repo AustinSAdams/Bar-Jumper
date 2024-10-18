@@ -7,19 +7,21 @@ import { logUserOut } from "../api/firebase/firebase"
 import Sidebar from "./Sidebar";
 import Login from "./Login";
 import Signup from "./Signup";
+import './Header.css';
 
 // Define Header component
 const Header = () => {
   const user = useUser();
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
   const [authView, setAuthView] = useState("none");
+  const [userIsLoggedIn, setUserIsLoggedIn] = useState(false);
 
   useEffect(()=>{
-    if(user){
-      console.log(user.displayName);
+    if(user !== null){
+      setUserIsLoggedIn(true);
     }
     else{
-      console.log("No User Detected");
+      setUserIsLoggedIn(false);
     }
   },[user]);
 
@@ -39,7 +41,12 @@ const Header = () => {
   };
   const hideAuthOverlay = () => {
     setAuthView("none");
-  }
+  };
+
+  const onLogoutClick = () => {
+    setUserIsLoggedIn(!userIsLoggedIn);
+    logUserOut();
+  };
 
   return (
     <header className="header">
@@ -66,11 +73,13 @@ const Header = () => {
         </a>
       </div>
       <div className="header-right-button">
-        {user ? (
+        {userIsLoggedIn && (
           <button
-            onClick={() => {logUserOut()}}
-          >Log {user.displayName} Out</button>
-        ) : (
+            className="header-username"
+            onClick={() => {onLogoutClick()}}
+          >Welcome, {user.displayName}</button>
+        )}
+        {!userIsLoggedIn && (
           <button onClick={showLoginOverlay}>
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -1,4 +1,5 @@
 import React from 'react';
+import './Sidebar.css';
 import { Home, Beer, MessageCircle, Award } from 'lucide-react';
 
 const Sidebar = ({ isOpen, closeMenu }) => {
