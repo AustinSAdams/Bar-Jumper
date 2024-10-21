@@ -6,6 +6,7 @@ import './locationPopup.css';
 import LocationHoursBubble from './locationHoursBubble';
 import LocationList from './locationList';
 import { MAPBOX_TOKEN } from './map';
+import FavoriteButton from './FavoriteButton';
 
 const calculateDistance = (userLocation, locationCoords) => {
   if (!userLocation || !locationCoords.longitude || !locationCoords.latitude) return null;
@@ -114,6 +115,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
                       <span>{travelTime} min</span>
                     </button>
                   )}
+                  <FavoriteButton locationId={location.id} initialFavoritesCount={location.favoritesCount} />
                 </div>
               </div>
             </div>

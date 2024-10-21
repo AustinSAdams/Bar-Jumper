@@ -1,0 +1,18 @@
+
+
+.favorite-button {
+    background-color: #3c434e;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .favorite-button:hover {
+    background-color: #ff3b4a;
+  }
+  
