@@ -101,8 +101,8 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
                   <a href={`tel:${phone}`}>{phone || 'N/A'}</a>
                 </h4>
 
-                <div className="location-details-wrapper">
-                  <LocationHoursBubble location={location} theme={theme} />
+                <div className="location-actions">
+                  <FavoriteButton locationId={location.id} initialFavoritesCount={location.favoritesCount || 0} />
                   {travelTime !== null && (
                     <button 
                       className={`travel-info-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}
@@ -113,7 +113,10 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
                       <span>{travelTime} min</span>
                     </button>
                   )}
-                  <FavoriteButton locationId={location.id} initialFavoritesCount={location.favoritesCount || 0} />
+                </div>
+                
+                <div className="hours-section">
+                  <LocationHoursBubble location={location} theme={theme} />
                 </div>
               </div>
             </div>
