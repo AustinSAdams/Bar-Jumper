@@ -6,11 +6,11 @@ import { Heart } from 'lucide-react';
 
 
 const FavoriteButton = ({ locationId, initialFavoritesCount }) => {
-  const { currentUser } = useContext(UserContext); // gets the current signed in user 
+  const user = useContext(UserContext); // Access the current user as provided by UserContext
   const [favoritesCount, setFavoritesCount] = useState(initialFavoritesCount);
 
   const handleFavorite = async () => {
-    if (currentUser) {
+    if (user) { // Check if a user is signed in
       try {
         // Increment the favorite count in Firestore
         const locationRef = doc(db, 'locations', locationId);
@@ -27,7 +27,8 @@ const FavoriteButton = ({ locationId, initialFavoritesCount }) => {
   };
 
   return (
-    <button onClick={handleFavorite} className="favorite-button"> <Heart size={15}/> ({favoritesCount})
+    <button onClick={handleFavorite} className="favorite-button">
+      <Heart size={15} /> ({favoritesCount})
     </button>
   );
 };
