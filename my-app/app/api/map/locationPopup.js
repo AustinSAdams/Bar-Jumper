@@ -42,7 +42,6 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
     setPortalRoot(document.body);
 
     if (userLocation && location) {
-      // Fetch travel time and mode (walking or driving)
       getTravelTimeAndMode(userLocation, location).then(({ travelTime, travelMode, route }) => {
         setTravelTime(travelTime);
         setTravelMode(travelMode);
@@ -57,7 +56,6 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
     if (e.target === e.currentTarget) onClose();
   };
 
-  // Function to trigger fetching directions on button click
   const handleGetDirections = () => {
     if (directionsRoute) {
       onGetDirections(location, travelMode);
@@ -115,7 +113,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
                       <span>{travelTime} min</span>
                     </button>
                   )}
-                  <FavoriteButton locationId={location.id} initialFavoritesCount={location.favoritesCount} />
+                  <FavoriteButton locationId={location.id} initialFavoritesCount={location.favoritesCount || 0} />
                 </div>
               </div>
             </div>
