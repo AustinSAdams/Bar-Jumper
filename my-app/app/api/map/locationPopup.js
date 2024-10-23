@@ -6,6 +6,7 @@ import './locationPopup.css';
 import LocationHoursBubble from './locationHoursBubble';
 import LocationList from './locationList';
 import { MAPBOX_TOKEN } from './map';
+import FavoriteButton from './FavoriteButton';
 
 const calculateDistance = (userLocation, locationCoords) => {
   if (!userLocation || !locationCoords.longitude || !locationCoords.latitude) return null;
@@ -23,7 +24,7 @@ const getTravelTimeAndMode = async (userLocation, locationCoords) => {
   try {
     const response = await fetch(url);
     const data = await response.json();
-    const travelTime = data.routes[0].duration / 60; // Convert seconds to minutes
+    const travelTime = data.routes[0].duration / 60; 
     return { travelTime: Math.round(travelTime), travelMode, route: data.routes[0].geometry };
   } catch (err) {
     console.error('Error fetching directions:', err);
@@ -35,17 +36,16 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
   const [portalRoot, setPortalRoot] = useState(null);
   const [travelTime, setTravelTime] = useState(null);
   const [travelMode, setTravelMode] = useState('walking');
-  const [directionsRoute, setDirectionsRoute] = useState(null); // To store the route
+  const [directionsRoute, setDirectionsRoute] = useState(null); 
 
   useEffect(() => {
     setPortalRoot(document.body);
 
     if (userLocation && location) {
-      // Fetch travel time and mode (walking or driving)
       getTravelTimeAndMode(userLocation, location).then(({ travelTime, travelMode, route }) => {
         setTravelTime(travelTime);
         setTravelMode(travelMode);
-        setDirectionsRoute(route); // Store the route
+        setDirectionsRoute(route); 
       });
     }
   }, [userLocation, location]);
@@ -56,7 +56,6 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
     if (e.target === e.currentTarget) onClose();
   };
 
-  // Function to trigger fetching directions on button click
   const handleGetDirections = () => {
     if (directionsRoute) {
       onGetDirections(location, travelMode);
@@ -102,7 +101,6 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
                   <a href={`tel:${phone}`}>{phone || 'N/A'}</a>
                 </h4>
 
-                {/* Flexbox container for LocationHoursBubble and Travel Info Button */}
                 <div className="location-details-wrapper">
                   <LocationHoursBubble location={location} theme={theme} />
                   {travelTime !== null && (
@@ -115,6 +113,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
                       <span>{travelTime} min</span>
                     </button>
                   )}
+                  <FavoriteButton locationId={location.id} initialFavoritesCount={location.favoritesCount || 0} />
                 </div>
               </div>
             </div>

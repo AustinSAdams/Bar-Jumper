@@ -38,7 +38,7 @@ const BarMap = ({ locations }) => {
   };
 
   const onGeolocate = useCallback((e) => {
-    console.log('Fetched user location:', e.coords);
+    console.log('user location:', e.coords);
     const { longitude, latitude } = e.coords;
     setUserLocation({ longitude, latitude });
     mapRef.current.getMap().flyTo({
@@ -96,8 +96,7 @@ const BarMap = ({ locations }) => {
         alert("No route found.");
       }
     } catch (error) {
-      console.error("Error fetching directions:", error);
-      alert("Error fetching directions. Please try again.");
+      alert("Error fetching directions. Try again.");
     } finally {
       setIsLoadingDirections(false);
     }
@@ -123,6 +122,7 @@ const BarMap = ({ locations }) => {
           showUserLocation={true}
           positionOptions={{ enableHighAccuracy: true, timeout: 600 }}
         />
+
         {locations.map((location) => (
           <Marker
             key={location.id}
