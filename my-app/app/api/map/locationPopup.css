@@ -107,38 +107,14 @@
   color: #a7a7a7bd;
 }
 
-.location-popup-directions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 10px;
-  margin-top: 15px;
-  border: none;
-  border-radius: 5px;
-  background-color: #3b9ddd;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.location-popup-directions:hover {
-  background-color: #2980b9;
-}
-
-.location-popup-directions:disabled {
-  background-color: #bdc3c7;
-  cursor: not-allowed;
-}
-
 
 
 .location-details-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between; 
-  margin-top: 10px; 
+  margin-top: 10px;
+  gap : 10px;
 }
 
 /* Light Mode */
@@ -149,7 +125,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 10px;
   cursor: pointer;
 }
 
