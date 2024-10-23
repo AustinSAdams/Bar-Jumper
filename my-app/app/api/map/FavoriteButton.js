@@ -7,33 +7,31 @@ import { useUser } from '@/app/context/UserContext';
 
 const FavoriteButton = ({ locationId }) => {
   const user = useUser();
-  const [locationData, setLocationData] = useState({ count: 0, isFavorited: false });
-  const [isProcessing, setIsProcessing] = useState(false);
-
+  const [locationData, setLocationData] = useState({ count: 0, isFavorited: false }); // tracks locations fav count, and if the current users has it favorited 
+  const [isLoading, setIsLoading] = useState(false);  // state for location click<-> database processing, stops bugs
 
   const fetchLocationData = async () => {
     if (!locationId) return;
     try {
       const locationRef = doc(db, 'locations', locationId); // get current selected location with document id
       const locationDoc = await getDoc(locationRef); 
-      const count = locationDoc.exists() ? (locationDoc.data().favoritesCount || 0) : 0;
+      const count = locationDoc.exists() ? (locationDoc.data().favoritesCount || 0) : 0; // get fav count - 0 if none
       let isFavorited = false;
-
-      if (user) {
-        const userFavRef = doc(db, 'userFavorites', user.uid);
+      if (user) {                                               // if user logged in- see if they favorited location
+        const userFavRef = doc(db, 'userFavorites', user.uid); 
         const userFavDoc = await getDoc(userFavRef);
-        if (userFavDoc.exists()) {
+        if (userFavDoc.exists()) { 
           const favorites = userFavDoc.data().favoriteLocations || [];
           isFavorited = favorites.includes(locationId);
         }
       }
-      setLocationData({ count, isFavorited });
+      setLocationData({ count, isFavorited }); // updates output with new count/favorited status
     } catch (error) {
-      console.error('Error fetching location data:', error);
+      console.error('Error-location data:', error);
     }
   };
 
-  useEffect(() => {
+  useEffect(() => { // updates locations data when new user or new location selected
     fetchLocationData();
   }, [locationId, user]);
 
@@ -42,29 +40,24 @@ const FavoriteButton = ({ locationId }) => {
       alert("Please sign in to favorite this location.");
       return;
     }
-    setIsProcessing(true);
+    setIsLoading(true);
     
     try {
       const locationRef = doc(db, 'locations', locationId);
       const userFavRef = doc(db, 'userFavorites', user.uid);
       const userFavDoc = await getDoc(userFavRef);        // get current user favorites document
-      
+
       if (!locationData.isFavorited) {        // adding/syncing favorites to location document
-        await updateDoc(locationRef, {
-          favoritesCount: locationData.count + 1 // adds 1 to a locations favoritesCount when 'favorited' <- this is the state to use to track if a user favorites location
-        });
+        await updateDoc(locationRef, {favoritesCount: locationData.count + 1}); // adds 1 to a locations favoritesCount when 'favorited' <- this is the state to use to track if a user favorites location
+
         if (!userFavDoc.exists()) {           // when a user favorites a doc for the first time, it will create a doc with their UID and an array with their favorited locations
-          await setDoc(userFavRef, {
-            favoriteLocations: [locationId]
-          });
-        } else {
-          const currentFavorites = userFavDoc.data().favoriteLocations || []; // if a user has already favorited a location it will add the location to the array of their favorited locations
-          await setDoc(userFavRef, {      
-            favoriteLocations: [...currentFavorites, locationId]  // adds the location to the array of their favorited locations
-          });
+          await setDoc(userFavRef, {favoriteLocations: [locationId]});
+
+        } else {const currentFavorites = userFavDoc.data().favoriteLocations || []; // if a user has already favorited a location it will add the location to the array of their favorited locations
+          await setDoc(userFavRef, {favoriteLocations: [...currentFavorites, locationId]});       // adds the location to the array of their favorited locations
         }
       } else {
-       
+
         await updateDoc(locationRef, {                      // remove favorite from location document
           favoritesCount: Math.max(0, locationData.count - 1)
         });
@@ -81,7 +74,7 @@ const FavoriteButton = ({ locationId }) => {
     } catch (error) {
       console.error('Error-favorites:', error);
     } finally {
-      setIsProcessing(false);
+      setIsLoading(false);
     }
   };
 
@@ -89,7 +82,7 @@ const FavoriteButton = ({ locationId }) => {
     <button
       onClick={handleFavorite}
       className={`favorite-button ${locationData.isFavorited ? 'favorited' : ''}`}
-      disabled={isProcessing}
+      disabled={isLoading}
     >
       <Heart size={15} /> {locationData.count}
     </button>
