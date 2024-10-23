@@ -79,9 +79,11 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
       return (
         <div className={`location-popup-content ${theme === 'dark' ? 'dark-mode' : ''}`} onClick={(e) => e.stopPropagation()}>
           <div className="location-popup-header">
+
             <button onClick={() => onChangeView('list')} className={`location-popup-arrow ${theme === 'dark' ? 'dark-mode' : ''}`}>
               <ArrowLeft size={24} />
             </button>
+            
             <div className="location-popup-header-left">
               {profileImage && (
                 <img
