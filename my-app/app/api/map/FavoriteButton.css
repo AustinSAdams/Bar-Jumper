@@ -10,7 +10,8 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    width: 80px;
+    width: 25%;
+    height: 25%;
   }
   
   .favorite-button:hover {

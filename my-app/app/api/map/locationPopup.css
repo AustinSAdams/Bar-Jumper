@@ -27,11 +27,11 @@
 
 /* Header and Navigation */
 .location-popup-header {
-  position: relative;
+  position: sticky;
   display: grid;
   grid-template-columns: 100px 1fr;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .location-popup-arrow {
@@ -64,6 +64,45 @@
 
 .location-popup-close:hover {
   color: #a7a7a7bd;
+}
+
+/* Expand/Collapse Arrow */
+.expand-arrow {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  z-index: 10;
+  padding: 0.3rem;
+}
+
+.expand-arrow svg {
+  color: #555;
+}
+
+/* Adjusted Expanded State */
+.location-popup.expanded .location-popup-content {
+  display: block;
+}
+
+.location-popup.collapsed .location-popup-content {
+  display: none;
+}
+
+/* Optional Transition for Height */
+.location-popup {
+  transition: height 0.3s ease, transform 0.3s ease;
+}
+
+/* Adjust max-height for expanded content */
+.location-popup-content.expanded {
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 /* Image and Details */
@@ -113,7 +152,7 @@
 .location-actions {
   display: flex;
   gap: 10px;
-  margin-bottom: 1rem;
+  margin-bottom: 0.7rem;
   width: 100%;
 }
 
@@ -125,6 +164,8 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  width: 25%;
+  height: 25%;
 }
 
 .travel-info-bubble span {
