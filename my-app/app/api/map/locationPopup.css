@@ -7,7 +7,7 @@
   transform: translateX(-50%) translateY(100%);
   width: 100%;
   max-width: 500px;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3 ease;
   z-index: 1000;
 }
 
@@ -21,17 +21,22 @@
   border-radius: 15px;
   padding: 1.5rem;
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
-  max-height: 80vh;
-  overflow-y: auto;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
 }
 
 /* Header and Navigation */
 .location-popup-header {
   position: sticky;
+  top: 0;
   display: grid;
   grid-template-columns: 100px 1fr;
   gap: 1rem;
   margin-bottom: 1rem;
+  z-index: 10;
+  background-color: inherit;
 }
 
 .location-popup-arrow {
