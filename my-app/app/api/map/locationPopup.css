@@ -1,4 +1,4 @@
-/* Base Layout */
+/* Layout */
 .location-popup {
   position: fixed;
   opacity: 0;
@@ -25,18 +25,13 @@
   overflow-y: auto;
 }
 
-/* Header Styles */
+/* Header and Navigation */
 .location-popup-header {
   position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  width: 100%;
-}
-
-.location-popup-header-left {
-  display: flex;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .location-popup-arrow {
@@ -48,25 +43,41 @@
   position: absolute;
   top: -14px;
   left: -14px;
+  z-index: 2;
 }
 
 .location-popup-arrow:hover {
   color: #a7a7a7bd;
 }
 
-/* Content Styles */
+.location-popup-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  padding: 0;
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  z-index: 2;
+}
+
+.location-popup-close:hover {
+  color: #a7a7a7bd;
+}
+
+/* Image and Details */
 .location-popup-image {
-  display: flex;
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  margin-right: 1rem;
+  object-fit: cover;
 }
 
 .location-popup-details {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  min-width: 0; /* prevents text overflow */
 }
 
 .location-popup-title {
@@ -77,7 +88,6 @@
 }
 
 .location-popup-address {
-  display: flex;
   font-size: 0.75rem;
   font-weight: bold;
   color: #555;
@@ -86,6 +96,7 @@
 
 .location-popup-phone {
   display: flex;
+  align-items: center;
   font-size: 0.75rem;
   font-weight: bold;
   color: #555;
@@ -98,17 +109,12 @@
   text-decoration: underline;
 }
 
-/* New Action Buttons Layout */
+/* Action Buttons */
 .location-actions {
   display: flex;
   gap: 10px;
-  margin-top: 1rem;
-}
-
-.location-actions, .hours-section {
-  margin-left: -116px;  
-  margin-top: 1rem;
-  width: calc(100% + 116px); 
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
 .travel-info-bubble {
@@ -135,65 +141,41 @@
   cursor: not-allowed;
 }
 
-/* Hours Section */
-.hours-section {
+/* Content Sections */
+.hours-section, 
+.gallery-section {
   width: 100%;
+  margin-bottom: 1rem;
 }
 
-/* Close Button */
-.location-popup-close {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #555;
-  padding: 0;
-  position: absolute;
-  top: -14px;
-  right: -14px;
-}
-
-.location-popup-close:hover {
-  color: #a7a7a7bd;
-}
-
-/* Dark Mode Styles */
+/* Dark Mode */
 .location-popup-content.dark-mode {
   background-color: #2a2a2b;
 }
 
-.location-popup-arrow.dark-mode {
+.dark-mode .location-popup-arrow,
+.dark-mode .location-popup-close {
   color: #ffffff;
 }
 
-.location-popup-arrow.dark-mode:hover {
+.dark-mode .location-popup-arrow:hover,
+.dark-mode .location-popup-close:hover {
   color: #e6e2e2;
 }
 
-.location-popup-title.dark-mode {
+.dark-mode .location-popup-title {
   color: #ffffff;
 }
 
-.location-popup-address.dark-mode {
+.dark-mode .location-popup-address,
+.dark-mode .location-popup-phone {
   color: #e6e2e2;
 }
 
-.location-popup-phone.dark-mode {
-  color: #e6e2e2;
-}
-
-.location-popup-phone.dark-mode:hover {
+.dark-mode .location-popup-phone:hover {
   color: #4a90e2;
 }
 
-.location-popup-close.dark-mode {
-  color: #ffffff;
-}
-
-.location-popup-close.dark-mode:hover {
-  color: #e6e2e2;
-}
-
-/* Dark Mode Action Buttons */
 .dark-mode .travel-info-bubble {
   background-color: #3c434e;
   color: #f0f0f0;
@@ -207,7 +189,26 @@
   color: #4a90e2;
 }
 
-/* Responsive Design */
+/* Scrollbar */
+.location-popup-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+}
+
+.location-popup-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.location-popup-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.location-popup-content::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.5);
+  border-radius: 3px;
+}
+
+
 @media (min-width: 768px) {
   .location-popup {
     bottom: 84px;
