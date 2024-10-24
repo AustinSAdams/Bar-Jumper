@@ -92,7 +92,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
               <ArrowLeft size={24} />
             </button>
 
-            {/* Profile image container */}
+            {/* profile image  */}
             <div className="profile-image-container">
               {profileImage && (
                 <img
@@ -103,7 +103,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
               )}
             </div>
 
-            {/* Location details container */}
+            {/* location details container */}
             <div className="location-details-container">
               <h2 className={`location-popup-title ${theme === 'dark' ? 'dark-mode' : ''}`}>{name}</h2>
               <h3 className={`location-popup-address ${theme === 'dark' ? 'dark-mode' : ''}`}>
@@ -121,7 +121,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
             </button>
           </div>
 
-          {/* Action buttons container */}
+          {/* 'action' buttons container */}
           <div className="location-actions">
             <FavoriteButton locationId={location.id} initialFavoritesCount={location.favoritesCount || 0} />
             {travelTime !== null && (
@@ -132,7 +132,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
             )}
           </div>
 
-          {/* Additional content (only visible when expanded) */}
+          {/* only visible when expanded */}
           {isExpanded && (
             <>
               <div className="hours-section">
