@@ -23,8 +23,8 @@
   }
   
   .image-wrapper {
-    flex: 0 0 300px;
-    height: 400px;
+    flex: 0 0 150px;
+    height: 280px;
     position: relative;
     scroll-snap-align: start;
     border-radius: 12px;
@@ -49,8 +49,8 @@
   }
   
   .upload-wrapper {
-    flex: 0 0 300px;
-    height: 400px;
+    flex: 0 0 150px;
+    height: 280px;
     scroll-snap-align: start;
   }
   
