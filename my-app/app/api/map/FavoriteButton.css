@@ -10,10 +10,17 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    width: 25%;
+    height: 25%;
+    gap: 6px;
+    font-weight: bold;
   }
+
+  
   
   .favorite-button:hover {
     background-color: #ff3b4a;
+    box-shadow: 0 0 3px rgb(255, 59, 74);
   }
 
   .favorite-button.favorited {

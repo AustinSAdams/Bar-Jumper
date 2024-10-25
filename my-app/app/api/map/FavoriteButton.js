@@ -84,7 +84,7 @@ const FavoriteButton = ({ locationId }) => {
       className={`favorite-button ${locationData.isFavorited ? 'favorited' : ''}`}
       disabled={isLoading}
     >
-      <Heart size={15} /> {locationData.count}
+      <Heart size={24} /> {locationData.count}
     </button>
   );
 };

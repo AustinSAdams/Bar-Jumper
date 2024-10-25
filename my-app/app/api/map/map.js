@@ -6,10 +6,10 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import LocationDetails from './locationPopup';
 import NavBar from './Navbar';
 
-
 export const MAPBOX_TOKEN = 'pk.eyJ1IjoidHJleXdiNyIsImEiOiJjbHdhYTVzeDAwY243MnFwcTZpZWtsMTA4In0.eM4pw4c2u-UgM0baq2IjQg';
 
 const BarMap = ({ locations }) => {
+  // Map states
   const [viewport, setViewport] = useState({
     longitude: -92.635,
     latitude: 32.529,
@@ -19,17 +19,30 @@ const BarMap = ({ locations }) => {
   });
   const [mapStyle, setMapStyle] = useState("mapbox://styles/treywb7/cm1pmlmxs004901pb6xwm60vm");
   const [theme, setTheme] = useState('dark');
+
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
+
   const [directionsRoute, setDirectionsRoute] = useState(null);
   const [isLoadingDirections, setIsLoadingDirections] = useState(false);
+
   const mapRef = useRef();
   const geolocateControlRef = useRef();
+
   const [activeNavItem, setActiveNavItem] = useState('map');
   const [popupView, setPopupView] = useState('list');
+  
+  const [hasInitialLocation, setHasInitialLocation] = useState(false);
 
   useEffect(() => {
     mapboxgl.accessToken = MAPBOX_TOKEN;
+    const timer = setTimeout(() => {
+      if (geolocateControlRef.current) {
+        geolocateControlRef.current.trigger();
+      }
+    }, 2000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const toggleMapStyle = (style) => {
@@ -41,11 +54,14 @@ const BarMap = ({ locations }) => {
     console.log('user location:', e.coords);
     const { longitude, latitude } = e.coords;
     setUserLocation({ longitude, latitude });
-    mapRef.current.getMap().flyTo({
-      center: [longitude, latitude],
-      zoom: 18
-    });
-  }, []);
+    if (!hasInitialLocation) {
+      mapRef.current.getMap().flyTo({
+        center: [longitude, latitude],
+        zoom: 18
+      });
+      setHasInitialLocation(true);
+    }
+  }, [hasInitialLocation]);
 
   const openLocationsList = () => {
     setSelectedLocation(null);
