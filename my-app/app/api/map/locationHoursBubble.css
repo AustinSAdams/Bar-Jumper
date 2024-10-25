@@ -27,6 +27,7 @@
   cursor: pointer;
   width: 100%;
   gap: 10px;
+  position: relative;
 }
 
 .header-info {
@@ -64,9 +65,10 @@
 .today-hours {
   font-size: 14px;
   position: absolute;
-  right: 13%;
+  right: 5%;
   font-weight: bold;
   color: #3f3f3f;
+
 }
 
 .expand-toggle {
