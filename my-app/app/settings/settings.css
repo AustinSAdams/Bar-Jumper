@@ -126,7 +126,7 @@ form {
 }
 
 .update-textbox {
-    margin-left: 5px;
+    margin: 5px;
     color: rgb(83, 83, 83);
 }
 
@@ -146,6 +146,29 @@ form {
 }
 
 .logout-button:hover {
+    background-color: rgb(139, 0, 0);
+    color: rgb(46, 249, 0);
+}
+
+.account-deletion-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+}
+
+.deletion-button {
+    background-color: red;
+    border: 2px solid black;
+    border-radius: 5px;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px 10px;
+}
+
+.deletion-button:hover {
     background-color: rgb(139, 0, 0);
     color: rgb(46, 249, 0);
 }

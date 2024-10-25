@@ -1,16 +1,22 @@
 "use client";
 import './settings.css';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useUser } from '../context/UserContext';
-import { uploadImage, updateUserDisplayName, updateUserPassword, logUserOut } from '../api/firebase/firebase';
+import { uploadImage, updateUserDisplayName, updateUserPassword, logUserOut, deleteAuthAccount } from '../api/firebase/firebase';
 
 export default function Page(){
     const user = useUser();
+    const router = useRouter();
+
     const [authView, setAuthView] = useState("user");
     const [isNotLoggedIn, setIsNotLoggedIn] = useState(true);
+    const [confirmAuthDeletion, setConfirmAuthDeletion] = useState(false);
+
     const [selectedFile, setSelectedFile] = useState(null);
     const [newDisplayName, setNewDisplayName] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         if(user == null){
@@ -42,8 +48,9 @@ export default function Page(){
         if(selectedFile){
             try{
                 await uploadImage(selectedFile);
+                window.location.reload()
             }catch(err){
-                console.error("Upload failed",err);
+                setErrorMessage(err);
             }
         }
     };
@@ -52,9 +59,10 @@ export default function Page(){
         e.preventDefault();
         try {
             await updateUserDisplayName(newDisplayName);
+            window.location.reload()
             alert("Username Updated Successfully!");
         }catch(err) {
-            console.log(err);
+            setErrorMessage(err);
         }
     };
 
@@ -65,12 +73,26 @@ export default function Page(){
             await updateUserPassword(hashedPassword);
             alert("Password Updated Successfully!");
         }catch(err) {
-            console.log(err);
+            setErrorMessage(err);
         }
     };
 
-    const handleLogoutClick = () => {
-        logUserOut();
+    const handleLogoutClick = async () => {
+        await logUserOut();
+        window.location.reload();
+    };
+
+    const toggleDeletionConfirmation = () => {
+        setConfirmAuthDeletion(!confirmAuthDeletion);
+    };
+
+    const handleRemoveAccount = async () => {
+        try{
+            await deleteAuthAccount(user.uid);
+            window.location.reload();
+        }catch(err){
+            setErrorMessage(err);
+        }
     };
 
     const handleToggleView = () => {
@@ -139,6 +161,29 @@ export default function Page(){
                     onClick={handleLogoutClick}
                     className='logout-button'
                 >Logout</button>
+    
+                <button
+                    onClick={toggleDeletionConfirmation}
+                    className='logout-button'
+                >Delete Account</button>
+                {confirmAuthDeletion && (
+                    <div>
+                        <p>Are you sure you want to delete your account?</p>
+                        <div className="account-deletion-container">
+                            <button
+                                className='deletion-button'
+                                onClick={handleRemoveAccount}
+                            >Yes</button>
+                            <button
+                                onClick={toggleDeletionConfirmation}
+                                className='deletion-button'
+                            >No</button>
+                        </div>
+                    </div>
+                )}
+                {errorMessage && (
+                    <p>{errorMessage}</p>
+                )}
             </div>
         )}
         { authView == 'global' && user && (
