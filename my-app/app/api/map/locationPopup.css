@@ -74,20 +74,16 @@
 /* Expand/Collapse Arrow */
 .expand-arrow {
   position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #fff;
+  top: 8px;
+  left: 48%;
+  rotate: 90deg;
   border: none;
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  z-index: 10;
-  padding: 0.3rem;
+  z-index: 20;
 }
 
 .expand-arrow svg {
-  color: #555;
+  color: #e6e2e2;
 }
 
 /* Adjusted Expanded State */
@@ -99,7 +95,7 @@
   display: none;
 }
 
-/* Optional Transition for Height */
+/* transition animation */
 .location-popup {
   transition: height 0.3s ease, transform 0.3s ease;
 }
@@ -162,7 +158,7 @@
 }
 
 .travel-info-bubble {
-  background-color: #e0e0e0;
+  background-color: #49d7fa;
   border-radius: 20px;
   padding: 10px;
   display: flex;
@@ -173,13 +169,22 @@
   height: 25%;
 }
 
+.travel-info-bubble:hover{
+  background-color: #73ddf8;
+  box-shadow: 0 0 3px rgba(255, 255, 255, 0.589);
+}
+
+.travel-info-bubble.dark-mode:hover{
+  background-color: #73ddf8;
+}
+
 .travel-info-bubble span {
   font-weight: bold;
-  margin-left: 8px;
+  margin-left: 6px;
 }
 
 .travel-info-bubble svg {
-  color: #2b6eff;
+  color: #ffffff;
 }
 
 .travel-info-bubble:disabled {
@@ -227,12 +232,12 @@
   color: #f0f0f0;
 }
 
-.dark-mode .travel-info-bubble:disabled {
-  background-color: #7f8c8d;
+.dark-mode .travel-info-bubble {
+  background-color: #49d7fa;
 }
 
 .dark-mode .travel-info-bubble svg {
-  color: #4a90e2;
+  color: #ffffff;
 }
 
 /* Scrollbar */
@@ -252,6 +257,32 @@
 .location-popup-content::-webkit-scrollbar-thumb {
   background-color: rgba(155, 155, 155, 0.5);
   border-radius: 3px;
+}
+
+.chat-bubble {
+  background-color: #47c75c;
+  border-radius: 20px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 25%;
+  height: 25%;
+}
+
+.chat-bubble:hover {
+  background-color: #d0d0d0;
+}
+
+.chat-bubble.dark-mode {
+  background-color: #47c75c;
+  color: #e0e0e0;
+}
+
+.chat-bubble.dark-mode:hover {
+  background-color: #4be765;
+  box-shadow: 0 0 3px rgba(255, 255, 255, 0.589);
 }
 
 

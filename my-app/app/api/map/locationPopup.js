@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import * as turf from '@turf/turf';
-import { Phone, X, ArrowLeft, Footprints, Car, ArrowUp, ArrowDown } from 'lucide-react';
+import { Phone, X, ArrowLeft, Footprints, Car, MessageSquare, Tally2 } from 'lucide-react';
 import './locationPopup.css';
 import LocationHoursBubble from './locationHoursBubble';
 import LocationList from './locationList';
@@ -130,6 +130,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
                 <span>{travelTime} min</span>
               </button>
             )}
+            <button className={`chat-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}> <MessageSquare size={24} strokeWidth={2} /> </button>
           </div>
 
           {/* only visible when expanded */}
@@ -153,7 +154,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
     <div className={`location-popup ${isOpen ? 'open' : ''}`} onClick={dismissPopup} ref={popupRef}>
       {/* Expand/Collapse Arrow */}
       <button className="expand-arrow" onClick={toggleExpand}>
-        {isExpanded ? <ArrowDown size={24} /> : <ArrowUp size={24} />}
+        {isExpanded ? <Tally2 size={24} /> : <Tally2 size={24} />}
       </button>
 
       {renderContent()}
