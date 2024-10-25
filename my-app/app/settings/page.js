@@ -60,7 +60,6 @@ export default function Page(){
         try {
             await updateUserDisplayName(newDisplayName);
             window.location.reload()
-            alert("Username Updated Successfully!");
         }catch(err) {
             setErrorMessage(err);
         }
@@ -71,7 +70,6 @@ export default function Page(){
         try{
             const hashedPassword = hash(newPassword);
             await updateUserPassword(hashedPassword);
-            alert("Password Updated Successfully!");
         }catch(err) {
             setErrorMessage(err);
         }
