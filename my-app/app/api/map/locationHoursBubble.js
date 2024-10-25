@@ -3,7 +3,7 @@ import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import './locationHoursBubble.css';
 
 // Helper functions
-const getOpenStatus = (hours, currentDay, currentTime) => {
+export const getOpenStatus = (hours, currentDay, currentTime) => {
   const todaysHours = hours[currentDay];
   if (todaysHours) {
     const { open, close } = todaysHours;

@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import * as turf from '@turf/turf';
-import { Phone, X, ArrowLeft, Footprints, Car, MessageSquare, Tally2, Beer } from 'lucide-react';
+import { Phone, X, ArrowLeft, Footprints, Car, MessageSquare, Tally2, Beer, Clock } from 'lucide-react';
 import './locationPopup.css';
 import LocationHoursBubble from './locationHoursBubble';
 import LocationList from './locationList';
 import { MAPBOX_TOKEN } from './map';
 import FavoriteButton from './FavoriteButton';
 import LocationImageGallery from './locationImageGallery';
+import { getOpenStatus } from './locationHoursBubble';
+import { renderStars } from './locationList';
 
 const calculateDistance = (userLocation, locationCoords) => {
   if (!userLocation || !locationCoords.longitude || !locationCoords.latitude) return null;    // null if any cords missing
@@ -42,6 +44,13 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
   const [selectedImage, setSelectedImage] = useState(null);                         // For future image preview functionality
   const [isExpanded, setIsExpanded] = useState(false);                             // state to track if popup is expanded
   const popupRef = useRef(null);                                                  // ref to the popup element
+  
+  const currentDay = new Date().toLocaleString('en-US', { weekday: 'long' });
+  const now = new Date();
+  const currentTime = now.toTimeString().slice(0, 5);
+
+  const openStatus = location && location.hours 
+    ? getOpenStatus(location.hours, currentDay, currentTime) : 'Closed';
 
   useEffect(() => {
     setPortalRoot(document.body);                     // sets root of the portal to doc for render (allows it to visually appear)
@@ -106,14 +115,19 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
             {/* location details container */}
             <div className="location-details-container">
               <h2 className={`location-popup-title ${theme === 'dark' ? 'dark-mode' : ''}`}>{name}</h2>
+              <div className={`status-indicator ${openStatus === "Open Now" ? 'open-status' : 'closed-status'}`}>
+                <Clock size={16} /> {openStatus} {distance && ` - ${distance} miles away`}
+              </div>
               <h3 className={`location-popup-address ${theme === 'dark' ? 'dark-mode' : ''}`}>
                 {address || 'N/A'}
-                {distance && ` - ${distance} miles`}
               </h3>
               <h4 className={`location-popup-phone ${theme === 'dark' ? 'dark-mode' : ''}`}>
                 <Phone size={17} strokeWidth={3} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
                 <a href={`tel:${phone}`}>{phone || 'N/A'}</a>
               </h4>
+              <h5 className='location-review-stars'>
+              {renderStars(location.starCount || 0)}
+              </h5>
             </div>
 
             <button onClick={onClose} className={`location-popup-close ${theme === 'dark' ? 'dark-mode' : ''}`}>

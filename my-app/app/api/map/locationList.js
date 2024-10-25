@@ -2,7 +2,7 @@ import React from 'react';
 import { X } from 'lucide-react';
 import './locationList.css';
 
-const renderStars = (starCount) => {
+export const renderStars = (starCount) => {
     return Array.from({ length: 5 }, (_, index) => {
       const fullStarThreshold = index + 1;
       
