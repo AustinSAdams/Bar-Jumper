@@ -9,10 +9,10 @@ const getOpenStatus = (hours, currentDay, currentTime) => {
     const { open, close } = todaysHours;
     
     if (close === "00:00") {
-      return currentTime >= open || currentTime < close ? "Open" : "Closed";
+      return currentTime >= open || currentTime < close ? "Open Now" : "Closed";
     }
 
-    return currentTime >= open && currentTime < close ? "Open" : "Closed";
+    return currentTime >= open && currentTime < close ? "Open Now" : "Closed";
   }
 
   return "Closed";
@@ -48,31 +48,40 @@ const LocationHoursBubble = ({ location, theme }) => {
   return (
     <div className={`location-hours-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}>
 
-      <div className="bubble-header" onClick={toggleExpand}>
-        <span className={`status-indicator ${openStatus === "Open" ? 'open-status' : 'closed-status'}`}>
-          <Clock size={16} /> {openStatus}
-        </span>
-
-        <span className={`today-hours ${theme === 'dark' ? 'dark-mode' : ''}`}>{todaysFormattedHours}</span>
-
-        <span className={`expand-toggle ${theme === 'dark' ? 'dark-mode' : ''}`}>
-          {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </span>
-        
-      </div>
-      {isExpanded && (
-        <div className={`bubble-expanded ${theme === 'dark' ? 'dark-mode' : ''}`}>
-          {orderedDays.map(day => (
-            <p key={day} className={`${theme === 'dark' ? 'dark-mode' : ''}`}>
-              <strong>{day}: </strong>
-              {location.hours[day]?.open
-                ? `${formatTime(location.hours[day].open)} - ${formatTime(location.hours[day].close)}`
-                : 'Closed'}
-            </p>
-          ))}
-        </div>
-      )}
+  <div className="bubble-header" onClick={toggleExpand}>
+    <div className="header-info">
+      <span className={`status-indicator ${openStatus === "Open Now" ? 'open-status' : 'closed-status'}`}>
+        <Clock size={16} /> {openStatus}
+      </span>
+      <span className={`current-day ${theme === 'dark' ? 'dark-mode' : ''}`} >
+        {currentDay}
+      </span>
     </div>
+
+    <span className={`today-hours ${theme === 'dark' ? 'dark-mode' : ''}`}>{todaysFormattedHours}</span>
+
+    <span className={`expand-toggle ${theme === 'dark' ? 'dark-mode' : ''}`}>
+      {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+    </span>
+  </div>
+
+  {isExpanded && (
+    <div className={`bubble-expanded ${theme === 'dark' ? 'dark-mode' : ''}`}>
+      {orderedDays.filter(day => day !== currentDay).map(day => (
+        <div key={day} className="day-hours">
+          <span className={`day ${theme === 'dark' ? 'dark-mode' : ''}`}>
+            {day}:
+          </span>
+          <span className={`hours ${theme === 'dark' ? 'dark-mode' : ''}`}>
+            {location.hours[day]?.open
+              ? `${formatTime(location.hours[day].open)} - ${formatTime(location.hours[day].close)}`
+              : 'Closed'}
+          </span>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
   );
 };
 

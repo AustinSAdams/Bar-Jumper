@@ -121,7 +121,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
             </button>
           </div>
 
-          {/* 'action' buttons container */}
+          {/* 'action' buttons */}
           <div className="location-actions">
             <FavoriteButton locationId={location.id} initialFavoritesCount={location.favoritesCount || 0} />
             {travelTime !== null && (

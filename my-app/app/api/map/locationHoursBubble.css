@@ -1,14 +1,17 @@
 
-/* Light Mode Styles */
+.hours-section {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
 
 .location-hours-bubble {
   background-color: #e0e0e0a2;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 10px 15px;
   display: inline-block;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: auto;
-  font-family: Arial, sans-serif;
+  width: 100%;
   color: #333;
   margin-top: 10px;
 }
@@ -19,17 +22,35 @@
 
 .bubble-header {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  width: 100%;
+  gap: 10px;
 }
 
-/* Open/Closed Status */
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
 .status-indicator {
   font-size: 14px;
   font-weight: bold;
   display: flex;
   align-items: center;
+}
+
+.current-day {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.current-day.dark-mode {
+  color: #ffffff;
 }
 
 .open-status {
@@ -42,15 +63,19 @@
 
 .today-hours {
   font-size: 14px;
-  margin-left: 10px;
+  position: absolute;
+  right: 13%;
+  font-weight: bold;
   color: #3f3f3f;
 }
 
 .expand-toggle {
   color: #333;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
 }
 
-/* Weekly hours - expanded */
 .bubble-expanded {
   margin-top: 10px;
   padding-top: 10px;
@@ -58,9 +83,27 @@
   font-size: 13px;
   margin: 5px 0;
   color: #555;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Dark Mode Styles */
+.bubble-expanded .day-hours {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+}
+
+.bubble-expanded .day {
+  font-weight: bold;
+  color: #444;
+}
+
+.bubble-expanded .hours {
+  color: #666;
+  font-weight: bold;
+}
+
+/* Dark Modes */
 
 .location-hours-bubble.dark-mode {
   background-color: #3c434e;
@@ -81,4 +124,45 @@
 
 .bubble-expanded.dark-mode {
   color: #d8d8d8;
+  margin-top: 7px;
+  border-top: 1px solid #d8d8d8;
+}
+
+.bubble-expanded.dark-mode .day {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.bubble-expanded.dark-mode .hours {
+  color: #f0f0f0;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+@media (max-width: 200px) {
+  .bubble-header {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .header-info {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .status-indicator,
+  .current-day {
+    font-size: 12px; 
+  }
+
+  .today-hours {
+    font-size: 12px; 
+    margin-left: 0;
+  }
+
+  .expand-toggle {
+    margin-left: 0; 
+  }
 }
