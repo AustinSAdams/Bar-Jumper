@@ -1,7 +1,7 @@
 import { db, auth, storage } from "./firebaseConfig";
 import { collection, getDocs } from "firebase/firestore"; 
-import { createUserWithEmailAndPassword, updateProfile, updatePassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { createUserWithEmailAndPassword, updateProfile, updatePassword, signInWithEmailAndPassword, signOut, deleteUser } from "firebase/auth";
+import { ref, uploadBytes, getDownloadURL, deleteObject, listAll } from "firebase/storage";
 
 class CustomError extends Error {
   constructor(message){
@@ -24,7 +24,6 @@ export async function getAllDocuments(colName) {
     return documents;
   } catch(err){
     // if documents don't exist, throw an error.
-    console.error("Error:",err);
     throw new CustomError('Failed to fetch documents.');
   }
 }
@@ -44,8 +43,29 @@ export async function createAccount(email, password, username) {
 
     return user;
   } catch(err) {
-    console.error("Error Creating Account:", err);
     throw new CustomError("Email Already In Use");
+  }
+}
+
+export async function deleteAuthAccount(uid) {
+  const user = auth.currentUser;
+  try{
+    await deleteFolderContents(`ProfilePics/${uid}`);
+    await deleteUser(user);
+  }catch(err) {
+    throw new CustomError("Cannot delete account.");
+  }
+}
+
+async function deleteFolderContents(path){
+  const folderRef = ref(storage, path);
+  try{
+    const listResult = await listAll(folderRef);
+
+    const deletePromises = listResult.items.map((fileRef) => deleteObject(fileRef));
+    await Promise.all(deletePromises);
+  }catch(err) {
+    throw new CustomError("Cannot delete folder contents.");
   }
 }
 
@@ -53,7 +73,6 @@ export async function loginWithCredentials(email, password) {
   try{
     await signInWithEmailAndPassword(auth, email, password);
   }catch (err){
-    console.error("Error Logging Into Account:", err);
     throw new CustomError("Invalid Credentials");
   }
 }
@@ -62,7 +81,6 @@ export async function logUserOut() {
   try{
     await signOut(auth);
   }catch(err){
-    console.error("Error signing out:",err);
     throw new CustomError("Could Not Safely Logout.");
   }
 }
@@ -72,7 +90,7 @@ export async function uploadImage(file) {
   if(!file){
     return null;
   }
-  const storageRef = ref(storage, `images/${file.name}`);
+  const storageRef = ref(storage, `ProfilePics/${user.uid}/${file.name}`);
   try{
     await uploadBytes(storageRef, file);
     const downloadUrl = await getDownloadURL(storageRef);
@@ -81,7 +99,6 @@ export async function uploadImage(file) {
       photoURL: downloadUrl
     });
   } catch(err){
-    console.error("Error Uploading File:",err);
     throw new CustomError("Could Not Upload Photo");
   }
 }
@@ -93,7 +110,6 @@ export async function updateUserDisplayName(newDisplayName){
       displayName: newDisplayName
     });
   }catch(err){
-    console.error(err);
     throw new CustomError("Error updating username.");
   }
 }
@@ -103,7 +119,6 @@ export async function updateUserPassword(newPassword){
   try{
     await updatePassword(user, newPassword);
   }catch(err){
-    console.error(err);
     throw new CustomError("Error updating password.");
   }
 }

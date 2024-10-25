@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { createPortal } from 'react-dom';
 import { createAccount, CustomError } from '../api/firebase/firebase';
 import { X } from 'lucide-react';
 import './Signup.css';
 
 const Signup = ({ onClose, onLoginClick }) => {
+    const router = useRouter();
+
     const [isSignupError, setIsSignupError] = useState('');
     const [currentUser, setCurrentUser] = useState();
     const [showPassword, setShowPassword] = useState(false);
@@ -31,6 +34,7 @@ const Signup = ({ onClose, onLoginClick }) => {
         const password = await hash(passwordInput.value);
         try{
             const user = await createAccount(email, password, username);
+            router.push('/');
             onClose();
         }catch(err) {
             if(err instanceof CustomError){
