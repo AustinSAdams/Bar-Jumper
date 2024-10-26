@@ -10,6 +10,7 @@ import FavoriteButton from './FavoriteButton';
 import LocationImageGallery from './locationImageGallery';
 import { getOpenStatus } from './locationHoursBubble';
 import { renderStars } from './locationList';
+import LocationReviews from './locationReviews';
 
 const calculateDistance = (userLocation, locationCoords) => {
   if (!userLocation || !locationCoords.longitude || !locationCoords.latitude) return null;    // null if any cords missing
@@ -156,6 +157,9 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
               </div>
               <div className="gallery-section">
                 <LocationImageGallery location={location} theme={theme} onImageSelect={setSelectedImage} />
+              </div>
+              <div className="reviews-section">
+              <LocationReviews location={location} theme={theme} />
               </div>
             </>
           )}
