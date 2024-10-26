@@ -9,6 +9,7 @@
   max-width: 500px;
   transition: transform 0.3s ease, opacity 0.3 ease;
   z-index: 1000;
+  
 }
 
 .location-popup.open {
@@ -30,7 +31,7 @@
 
 /* Header and Navigation */
 .location-popup-header {
-  position: sticky;
+  position: relative;
   top: 0;
   display: grid;
   grid-template-columns: 100px 1fr;
@@ -105,6 +106,8 @@
 
 
 .location-popup-content.expanded {
+  overflow-y: scroll;
+  z-index: 10;
   max-height: 80vh;
   overflow-y: auto;
 }
