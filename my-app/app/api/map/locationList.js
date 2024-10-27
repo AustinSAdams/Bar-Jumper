@@ -85,7 +85,7 @@ export function SearchBar({ locations, onSuggestionClick }) {
             <li 
               key={index} 
               onClick={() => onSuggestionClick(suggestion)}
-              className="px-2 py-1 cursor-pointer hover:bg-gray-100 rounded-[10px]"
+              className="px-2 py-1 cursor-pointer hover:bg-gray-100 hover:text-black rounded-[10px]"
             >
               {suggestion.name}
             </li>
