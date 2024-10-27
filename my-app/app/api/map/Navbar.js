@@ -8,14 +8,19 @@ const NavBar = ({ theme, activeItem, onItemClick }) => {
     <nav className={`navbar ${theme === 'dark' ? 'dark-mode' : ''}`}>
       <div className="navbar-content">
         <NavItem icon={<Map size={24} />} label="Map" isActive={activeItem === 'map'} onClick={() => onItemClick('map')} />
-        <NavItem icon={<Search size={24} />} label="Search" isActive={activeItem === 'search'} onClick={() => onItemClick('search')} />
+        {/* <NavItem icon={<Search size={24} />} label="Search" isActive={activeItem === 'search'} onClick={() => onItemClick('search')} /> */}
         <NavItem
           icon={<List size={24} />}
           label="Bars"
           isActive={activeItem === 'bars'}
           onClick={() => onItemClick('bars')}
         />
-        <NavItem icon={<MessageSquare size={24} />} label="Chat" isActive={activeItem === 'chat'} onClick={() => onItemClick('chat')} />
+        <Link href="/chats" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <div className={`nav-item ${activeItem === 'chat' ? 'active' : ''}`}>
+            <MessageSquare size={24} />
+            <span>Chat</span>
+          </div>
+        </Link>
         <Link href="/settings" style={{ textDecoration: 'none', color: 'inherit' }}>
           <div className={`nav-item ${activeItem === 'profile' ? 'active' : ''}`}>
             <User size={24} />
