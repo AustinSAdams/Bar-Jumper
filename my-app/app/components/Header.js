@@ -61,9 +61,12 @@ const Header = () => {
 
   return (
     <header className="header">
-      <a className="header-center-button" href="./">
-        <button>Bar Jumper</button>
-      </a>
+      <span className="header-center-wrapper">
+        <button
+          className="header-center-button"
+          onClick={() => router.push("/")}
+        >Bar Jumper</button>
+      </span>
       <span className="header-right-button" onClick={toggleDropdown}>
         {userIsLoggedIn ? (
           <span className="header-user-wrapper">

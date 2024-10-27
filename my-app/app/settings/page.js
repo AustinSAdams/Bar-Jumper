@@ -16,7 +16,9 @@ export default function Page(){
     const [selectedFile, setSelectedFile] = useState(null);
     const [newDisplayName, setNewDisplayName] = useState('');
     const [newPassword, setNewPassword] = useState('');
+
     const [errorMessage, setErrorMessage] = useState('');
+    const [userErrorMessage, setUserErrorMessage] = useState('');
 
     useEffect(() => {
         if(user == null){
@@ -57,11 +59,15 @@ export default function Page(){
 
     const handleUsernameUpdate = async (e) => {
         e.preventDefault();
+        const username = newDisplayName.trim();
         try {
-            await updateUserDisplayName(newDisplayName);
+            if(username === '' || username.length === 0){
+                throw new Error("Cannot Have An Empty Username!");
+            }
+            await updateUserDisplayName(newDisplayName.trim());
             window.location.reload()
         }catch(err) {
-            setErrorMessage(err);
+            setUserErrorMessage(err.message);
         }
     };
 
@@ -136,6 +142,9 @@ export default function Page(){
                     </label>
                     <button type="submit" className='upload-button'>Update Username</button>
                 </form>
+                {userErrorMessage && (
+                    <p className="error-message">{userErrorMessage}</p>
+                )}
 
                 <p className='user-label'>Email:</p>
                 <p className='user-info'>{user.email}</p>
