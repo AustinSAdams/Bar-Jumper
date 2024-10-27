@@ -1,20 +1,28 @@
 "use client";
 
 // Import React hook for state management
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useUser } from "../context/UserContext";
 import { logUserOut } from "../api/firebase/firebase"
-import Sidebar from "./Sidebar";
 import Login from "./Login";
 import Signup from "./Signup";
 import './Header.css';
 
 // Define Header component
 const Header = () => {
+  const router = useRouter();
   const user = useUser();
-  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const [authView, setAuthView] = useState("none");
   const [userIsLoggedIn, setUserIsLoggedIn] = useState(false);
+  const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
+
+  const dropDownOptions = [
+    { label: "Home", className: "dropdown-item", onClick: () => {navigateTo("/")} },
+    { label: "Settings", className: "dropdown-item", onClick: () => {navigateTo("settings")} },
+    { label: "Logout", className: "dropdown-logout", onClick: () => {onLogoutClick()} },
+  ];
 
   useEffect(()=>{
     if(user !== null){
@@ -25,61 +33,47 @@ const Header = () => {
     }
   },[user]);
 
-  // Toggle the menu open/close state
-  const toggleMenu = () => {
-    setSidebarIsOpen(!sidebarIsOpen);
-  };
-  const closeMenu = () => {
-    setSidebarIsOpen(false);
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  const showLoginOverlay = () => {
-    setAuthView("login");
-  };
-  const showSignupOverlay = () => {
-    setAuthView("signup");
-  };
-  const hideAuthOverlay = () => {
-    setAuthView("none");
-  };
+  const showLoginOverlay = () => setAuthView("login");
+  const showSignupOverlay = () => setAuthView("signup");
+  const hideAuthOverlay = () => setAuthView("none");
+
+  const toggleDropdown = () => setDropdownIsOpen((prev) => !prev);
 
   const onLogoutClick = () => {
     setUserIsLoggedIn(!userIsLoggedIn);
     logUserOut();
   };
 
+  const navigateTo = (page) => {
+    router.push(page);
+    toggleDropdown();
+  };
+
   return (
     <header className="header">
-      <button className="header-left-button" onClick={toggleMenu}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <line x1="3" y1="12" x2="21" y2="12" />
-          <line x1="3" y1="6" x2="21" y2="6" />
-          <line x1="3" y1="18" x2="21" y2="18" />
-        </svg>
-      </button>
-      <div className="header-center-button">
-        <a href="./">
-          <button>Bar Jumper</button>
-        </a>
-      </div>
-      <div className="header-right-button">
-        {userIsLoggedIn && (
-          <button
-            className="header-username"
-            onClick={() => {onLogoutClick()}}
-          >Welcome, {user.displayName}</button>
-        )}
-        {!userIsLoggedIn && (
+      <a className="header-center-button" href="./">
+        <button>Bar Jumper</button>
+      </a>
+      <span className="header-right-button" onClick={toggleDropdown}>
+        {userIsLoggedIn ? (
+          <span className="header-user-wrapper">
+            <p className="header-username">{user.displayName}</p>
+            <img
+              className="header-user-image"
+              src={user.photoURL}
+            />
+          </span>
+        ) : (
           <button onClick={showLoginOverlay}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -97,9 +91,16 @@ const Header = () => {
             </svg>
           </button>
         )}
-      </div>
-      { sidebarIsOpen && (
-        <Sidebar isOpen={sidebarIsOpen} closeMenu={closeMenu} />
+      </span>
+      
+      {userIsLoggedIn && dropdownIsOpen && (
+        <div className="dropdown-menu" ref={dropdownRef}>
+          {dropDownOptions.map((option, index) => (
+            <button key={index} onClick={option.onClick} className={option.className}>
+              {option.label}
+            </button>
+          ))}
+        </div>
       )}
       { authView === "login" && (
         <Login onClose={hideAuthOverlay} onSignupClick={showSignupOverlay} />
@@ -107,7 +108,6 @@ const Header = () => {
       { authView === "signup" && (
         <Signup onClose={hideAuthOverlay} onLoginClick={showLoginOverlay} />
       )}
-
     </header>
   );
 };
