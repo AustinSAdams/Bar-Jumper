@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import * as turf from '@turf/turf';
-import { Phone, X, ArrowLeft, Footprints, Car, MessageSquare, Tally2, Beer, Clock } from 'lucide-react';
+import { Phone, X, ArrowLeft, Footprints, Car, MessageSquare, Tally2, BookOpenText, Clock } from 'lucide-react';
 import './locationPopup.css';
 import LocationHoursBubble from './locationHoursBubble';
 import LocationList from './locationList';
@@ -146,7 +146,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
               </button>
             )}
             <button className={`chat-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}> <MessageSquare size={24} strokeWidth={2} /> </button>
-            <button className={`menu-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}> <Beer size={24} strokeWidth={2} /> </button>
+            <button className={`menu-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}> <BookOpenText size={24} strokeWidth={2} /> </button>
           </div>
 
           {/* only visible when expanded */}
