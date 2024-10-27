@@ -51,7 +51,7 @@ const BarMap = ({ locations }) => {
   };
 
   const onGeolocate = useCallback((e) => {
-    console.log('user location:', e.coords);
+    //console.log('user location:', e.coords);
     const { longitude, latitude } = e.coords;
     setUserLocation({ longitude, latitude });
     if (!hasInitialLocation) {
