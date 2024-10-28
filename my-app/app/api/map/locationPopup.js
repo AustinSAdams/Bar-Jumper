@@ -146,7 +146,16 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
               </button>
             )}
             <button className={`chat-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}> <MessageSquare size={24} strokeWidth={2} /> </button>
-            <button className={`menu-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}> <BookOpenText size={24} strokeWidth={2} /> </button>
+            <button 
+            className={`menu-bubble ${theme === 'dark' ? 'dark-mode' : ''}`} 
+            onClick={() => {
+              if (location.menuLink) {
+                window.open(location.menuLink, '_blank');
+              }
+            }}
+          > 
+            <BookOpenText size={24} strokeWidth={2} /> 
+          </button>
           </div>
 
           {/* only visible when expanded */}
