@@ -3,6 +3,8 @@ import { useUser } from '@/app/context/UserContext';
 import './locationReviews.css';
 import { db, serverTimestamp } from '@/app/api/firebase/firebaseConfig.js';
 import { collection, doc, getDocs, orderBy, query, addDoc, updateDoc } from 'firebase/firestore';
+import { renderStars } from './locationList';
+
 
 const LocationReviews = ({ location, theme }) => {
   const [reviews, setReviews] = useState([]);
@@ -80,49 +82,51 @@ const LocationReviews = ({ location, theme }) => {
   return (
     <div className={`location-reviews ${theme === 'dark' ? 'dark-mode' : ''}`}>
       {reviews.map((review, index) => (
-        <div key={index} className="review">
+        <div key={index} className={`review ${theme === 'dark' ? 'dark-mode' : ''}`}>
           <div className="review-header">
-            <span className="review-username">{review.username}</span>
-            <span className="review-timestamp">
+            <span className={`review-username ${theme === 'dark' ? 'dark-mode' : ''}`}>{review.username}</span>
+            <span className={`review-timestamp ${theme === 'dark' ? 'dark-mode' : ''}`}>
               {new Date(review.timestamp.toDate ? review.timestamp.toDate() : review.timestamp).toLocaleString()}
             </span>
           </div>
-          <div className="review-text">{review.text}</div>
+          <div className={`review-text ${theme === 'dark' ? 'dark-mode' : ''}`}>{review.text}</div>
           <div className="review-stars">
-            
-            {Array.from({ length: 5 }, (_, i) => (
-              <span key={i} className={`star ${i < review.starRating ? 'filled' : ''}`}>★</span>
-            ))}
+            {renderStars(review.starRating)}
           </div>
         </div>
       ))}
-      
-      <div className="add-review">
+  
+      <div className={`add-review ${theme === 'dark' ? 'dark-mode' : ''}`}>
         <textarea
           value={newReview}
           onChange={(e) => setNewReview(e.target.value)}
           placeholder="Add your review..."
           disabled={!user}
+          className={`${theme === 'dark' ? 'dark-mode' : ''}`}
         />
         <div className="star-rating-input">
           {Array.from({ length: 5 }, (_, i) => (
             <span
               key={i}
-              className={`star ${i < starRating ? 'filled' : ''}`}
+              className={`star ${i < starRating ? 'filled' : ''} ${theme === 'dark' ? 'dark-mode' : ''}`}
               onClick={() => handleStarClick(i + 1)}
             >
               ★
             </span>
           ))}
         </div>
-        
-        <button onClick={handleAddReview} disabled={!user || !newReview.trim() || starRating === 0}>
+  
+        <button
+          onClick={handleAddReview}
+          disabled={!user || !newReview.trim() || starRating === 0}
+          className={`${theme === 'dark' ? 'dark-mode' : ''}`}
+        >
           Add Review
         </button>
-
       </div>
     </div>
   );
+  
 };
 
 export default LocationReviews;

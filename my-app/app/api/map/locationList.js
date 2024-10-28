@@ -3,20 +3,20 @@ import { X } from 'lucide-react';
 import './locationList.css';
 
 export const renderStars = (starCount) => {
-    return Array.from({ length: 5 }, (_, index) => {
-      const fullStarThreshold = index + 1;
-      
-      if (starCount >= fullStarThreshold) {
-        return <span key={index} className="star filled">★</span>;
+  return Array.from({ length: 5 }, (_, index) => {
+    const fullStarThreshold = index + 1;
 
-      } else if (starCount > index && starCount < fullStarThreshold) {
-        return <span key={index} className="star half">★</span>;
+    if (starCount >= fullStarThreshold) {
+      return <span key={index} className="star filled">★</span>;
 
-      } else {
-        return <span key={index} className="star">★</span>;
-      }
-    });
-  };
+    } else if (starCount > index && starCount < fullStarThreshold) {
+      return <span key={index} className="star half-filled">★</span>;
+
+    } else {
+      return <span key={index} className="star">★</span>;
+    }
+  });
+}
 
 const LocationList = ({ locations, onSelectLocation, onClose, theme }) => {
   return (
