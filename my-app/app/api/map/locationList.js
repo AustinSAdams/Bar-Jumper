@@ -5,16 +5,18 @@ import './locationList.css';
 export const renderStars = (starCount) => {
   return Array.from({ length: 5 }, (_, index) => {
     const fullStarThreshold = index + 1;
-    
+
     if (starCount >= fullStarThreshold) {
       return <span key={index} className="star filled">★</span>;
+
     } else if (starCount > index && starCount < fullStarThreshold) {
-      return <span key={index} className="star half">★</span>;
+      return <span key={index} className="star half-filled">★</span>;
+
     } else {
       return <span key={index} className="star">★</span>;
     }
   });
-};
+}
 
 const LocationList = ({ locations, onSelectLocation, onClose, theme }) => {
   return (
@@ -77,7 +79,7 @@ export function SearchBar({ locations, onSuggestionClick }) {
         type="text"
         value={searchQuery}
         onChange={handleSearch}
-        placeholder="Search Bars"
+        placeholder="Search Locations..."
       />
       {suggestions.length > 0 && (
         <ul className="absolute top-[26.5px] left-0 w-[140px] bg-black border-3 border-[#001681] rounded-[10px] list-none p-0 m-0 z-50">

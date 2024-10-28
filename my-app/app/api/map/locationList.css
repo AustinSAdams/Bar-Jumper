@@ -103,8 +103,8 @@
   }
   
   /*  linear gradient to show a partlially filled stars */
-  .star.half {
-    background: linear-gradient(to right, '#f39c12' 50%, gray 50%);
+  .star.half-filled {
+    background-color: linear-gradient(to right, '#f39c12' 50%, gray 50%);
     background-clip: content-box;
     -webkit-background-clip: text;
     color: transparent;
