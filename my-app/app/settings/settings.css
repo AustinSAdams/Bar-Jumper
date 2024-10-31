@@ -5,68 +5,6 @@
     margin: 10px;
 }
 
-.nav-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-}
-
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider-label {
-    margin: 0 10px;
-    font-weight: bold;
-    color: white;
-    transition: color 0.4s;
-}
-
-.slider-label-inactive {
-    margin: 0 10px;
-    font-weight: bold;
-    color: rgb(66, 66, 66);
-    transition: color 0.4s;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #3a3a3a;
-    transition: .4s;
-    border-radius: 34px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
-}
-
-input:checked + .slider:before {
-    transform: translateX(26px);
-}
-
 .user-settings {
     display: flex;
     flex-direction: column;
@@ -85,7 +23,6 @@ input:checked + .slider:before {
     border-radius: 50%;
     margin-bottom: 15px;
 }
-
 
 form {
     display: flex;
@@ -180,9 +117,33 @@ form {
     font-size: 24px;
 }
 
+.error-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
 .error-message {
     text-align: center;
     justify-content: center;
     color: red;
     font-size: 20px;
+}
+
+.err-home-btn {
+    width: fit-content;
+    background-color: red;
+    border: 2px solid black;
+    border-radius: 5px;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px 10px;
+}
+
+.err-home-btn:hover {
+    background-color: rgb(139, 0, 0);
+    color: rgb(46, 249, 0);
 }
