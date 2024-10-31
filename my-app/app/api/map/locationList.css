@@ -99,12 +99,13 @@
   }
   
   .star.filled {
-    color: gold;
+    color: f39c12;
   }
   
   /*  linear gradient to show a partlially filled stars */
-  .star.half {
-    background: linear-gradient(to right, gold 50%, gray 50%);
+  .star.half-filled {
+    background-color: linear-gradient(to right, '#f39c12' 50%, gray 50%);
+    background-clip: content-box;
     -webkit-background-clip: text;
     color: transparent;
   }
@@ -156,12 +157,13 @@
   }
   
   .dark-mode .star.filled {
-    color: #f1c40f;
+    color: #f39c12;
   }
   
   .dark-mode .star.half {
     background: linear-gradient(to right, #f1c40f 50%, #555 50%);
     -webkit-background-clip: text;
+    background-clip: inherit;
     color: transparent;
   }
   

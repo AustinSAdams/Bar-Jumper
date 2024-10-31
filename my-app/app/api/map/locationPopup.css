@@ -7,8 +7,9 @@
   transform: translateX(-50%) translateY(100%);
   width: 100%;
   max-width: 500px;
-  transition: transform 0.3s ease, opacity 0.3 ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
   z-index: 1000;
+  height: auto;
 }
 
 .location-popup.open {
@@ -30,7 +31,7 @@
 
 /* Header and Navigation */
 .location-popup-header {
-  position: sticky;
+  position: relative;
   top: 0;
   display: grid;
   grid-template-columns: 100px 1fr;
@@ -74,7 +75,7 @@
   color: #a7a7a7bd;
 }
 
-
+/* Expand Arrow */
 .expand-arrow {
   position: absolute;
   top: 8px;
@@ -98,18 +99,18 @@
   display: none;
 }
 
-/* transition animation */
 .location-popup {
   transition: height 0.3s ease, transform 0.3s ease;
 }
 
-
 .location-popup-content.expanded {
+  overflow-y: scroll;
+  z-index: 10;
   max-height: 80vh;
   overflow-y: auto;
 }
 
-/* Image and Details */
+
 .location-popup-image {
   width: 100px;
   height: 100px;
@@ -134,14 +135,12 @@
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
-  
 }
 
 .location-popup-address {
   font-size: 0.75rem;
   font-weight: bold;
   color: #555;
-  
 }
 
 .location-popup-phone {
@@ -151,7 +150,6 @@
   font-weight: bold;
   color: #555;
   text-decoration: none;
-  
 }
 
 .location-popup-phone:hover {
@@ -159,7 +157,7 @@
   text-decoration: underline;
 }
 
-/* Action Buttons */
+
 .location-actions {
   display: flex;
   gap: 10px;
@@ -180,12 +178,12 @@
   height: 25%;
 }
 
-.travel-info-bubble:hover{
+.travel-info-bubble:hover {
   background-color: #73ddf8;
   box-shadow: 0 0 3px rgba(255, 255, 255, 0.589);
 }
 
-.travel-info-bubble.dark-mode:hover{
+.travel-info-bubble.dark-mode:hover {
   background-color: #73ddf8;
 }
 
@@ -197,9 +195,7 @@
   color: #ffffff;
 }
 
-
-
-.hours-section, 
+.hours-section,
 .gallery-section {
   width: 100%;
   margin-bottom: 1rem;
@@ -265,6 +261,7 @@
   border-radius: 3px;
 }
 
+/* Chat Bubble */
 .chat-bubble {
   background-color: #47c75c;
   border-radius: 20px;
@@ -291,6 +288,7 @@
   box-shadow: 0 0 3px rgba(255, 255, 255, 0.589);
 }
 
+/* Menu Bubble */
 .menu-bubble {
   background-color: #e9ba3a;
   border-radius: 20px;

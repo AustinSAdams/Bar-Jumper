@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import * as turf from '@turf/turf';
-import { Phone, X, ArrowLeft, Footprints, Car, MessageSquare, Tally2, Beer, Clock } from 'lucide-react';
+import { Phone, X, ArrowLeft, Footprints, Car, MessageSquare, Tally2, BookOpenText, Clock } from 'lucide-react';
 import './locationPopup.css';
 import LocationHoursBubble from './locationHoursBubble';
 import LocationList from './locationList';
@@ -10,6 +10,7 @@ import FavoriteButton from './FavoriteButton';
 import LocationImageGallery from './locationImageGallery';
 import { getOpenStatus } from './locationHoursBubble';
 import { renderStars } from './locationList';
+import LocationReviews from './locationReviews';
 
 const calculateDistance = (userLocation, locationCoords) => {
   if (!userLocation || !locationCoords.longitude || !locationCoords.latitude) return null;    // null if any cords missing
@@ -145,7 +146,16 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
               </button>
             )}
             <button className={`chat-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}> <MessageSquare size={24} strokeWidth={2} /> </button>
-            <button className={`menu-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}> <Beer size={24} strokeWidth={2} /> </button>
+            <button 
+            className={`menu-bubble ${theme === 'dark' ? 'dark-mode' : ''}`} 
+            onClick={() => {
+              if (location.menuLink) {
+                window.open(location.menuLink, '_blank');
+              }
+            }}
+          > 
+            <BookOpenText size={24} strokeWidth={2} /> 
+          </button>
           </div>
 
           {/* only visible when expanded */}
@@ -156,6 +166,9 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
               </div>
               <div className="gallery-section">
                 <LocationImageGallery location={location} theme={theme} onImageSelect={setSelectedImage} />
+              </div>
+              <div className="reviews-section">
+              <LocationReviews location={location} theme={theme} />
               </div>
             </>
           )}
