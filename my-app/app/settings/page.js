@@ -99,24 +99,8 @@ export default function Page(){
         }
     };
 
-    const handleToggleView = () => {
-        setAuthView(authView === "user" ? "global" : "user");
-    };
-
     return (
     <div className='main-box'>
-        <nav className='nav-container'>
-        <span className={authView === "global" ? "slider-label" : "slider-label-inactive"}>Global</span>
-            <label className='switch'>
-                <input 
-                    type="checkbox" 
-                    onChange={handleToggleView} 
-                    checked={authView === "user"} 
-                />
-                <span className="slider"></span>
-            </label>
-            <span className={authView === "user" ? "slider-label" : "slider-label-inactive"}>User</span>
-        </nav>
         { authView == 'user' && user && (
             <div className='user-settings'>
 
@@ -193,13 +177,14 @@ export default function Page(){
                 )}
             </div>
         )}
-        { authView == 'global' && user && (
-            <div>
-                <p>Global</p>
+        {(isNotLoggedIn || authView === 'none') &&
+            <div className='error-screen'>
+                <p className='user-error'><br/>Please Login, Then Refresh The Page!</p>
+                <button
+                    onClick={()=>router.push("./")}
+                    className='err-home-btn'
+                >Go To Homepage</button>
             </div>
-        )}
-        {isNotLoggedIn &&
-            <p className='user-error'><br/>Please Login, Then Refresh The Page!</p>
         }
     </div>
     );

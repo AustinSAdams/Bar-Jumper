@@ -34,6 +34,7 @@ const Signup = ({ onClose, onLoginClick }) => {
         const password = await hash(passwordInput.value);
         try{
             const user = await createAccount(email, password, username);
+
             router.push('/');
             onClose();
         }catch(err) {
