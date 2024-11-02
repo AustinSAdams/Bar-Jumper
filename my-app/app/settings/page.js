@@ -19,6 +19,7 @@ export default function Page(){
 
     const [errorMessage, setErrorMessage] = useState('');
     const [userErrorMessage, setUserErrorMessage] = useState('');
+    const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
 
     useEffect(() => {
         if(user == null){
@@ -74,10 +75,10 @@ export default function Page(){
     const handlePasswordUpdate = async (e) => {
         e.preventDefault();
         try{
-            const hashedPassword = hash(newPassword);
+            const hashedPassword = await hash(newPassword);
             await updateUserPassword(hashedPassword);
         }catch(err) {
-            setErrorMessage(err);
+            setPasswordErrorMessage(err.message);
         }
     };
 
@@ -87,6 +88,7 @@ export default function Page(){
     };
 
     const toggleDeletionConfirmation = () => {
+        setErrorMessage('');
         setConfirmAuthDeletion(!confirmAuthDeletion);
     };
 
@@ -95,7 +97,7 @@ export default function Page(){
             await deleteAuthAccount(user.uid);
             window.location.reload();
         }catch(err){
-            setErrorMessage(err);
+            setErrorMessage(err.message);
         }
     };
 
@@ -147,6 +149,9 @@ export default function Page(){
                     </label>
                     <button type="submit" className='upload-button'>Update Password</button>
                 </form>
+                {passwordErrorMessage && (
+                    <p className="error-message">{passwordErrorMessage}</p>
+                )}
 
                 <button 
                     onClick={handleLogoutClick}
@@ -173,7 +178,7 @@ export default function Page(){
                     </div>
                 )}
                 {errorMessage && (
-                    <p>{errorMessage}</p>
+                    <p className='error-message'>{errorMessage}</p>
                 )}
             </div>
         )}
