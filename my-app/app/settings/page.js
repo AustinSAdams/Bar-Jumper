@@ -19,6 +19,7 @@ export default function Page(){
 
     const [errorMessage, setErrorMessage] = useState('');
     const [userErrorMessage, setUserErrorMessage] = useState('');
+    const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
 
     useEffect(() => {
         if(user == null){
@@ -74,10 +75,10 @@ export default function Page(){
     const handlePasswordUpdate = async (e) => {
         e.preventDefault();
         try{
-            const hashedPassword = hash(newPassword);
+            const hashedPassword = await hash(newPassword);
             await updateUserPassword(hashedPassword);
         }catch(err) {
-            setErrorMessage(err);
+            setPasswordErrorMessage(err.message);
         }
     };
 
@@ -87,6 +88,7 @@ export default function Page(){
     };
 
     const toggleDeletionConfirmation = () => {
+        setErrorMessage('');
         setConfirmAuthDeletion(!confirmAuthDeletion);
     };
 
@@ -95,28 +97,12 @@ export default function Page(){
             await deleteAuthAccount(user.uid);
             window.location.reload();
         }catch(err){
-            setErrorMessage(err);
+            setErrorMessage(err.message);
         }
-    };
-
-    const handleToggleView = () => {
-        setAuthView(authView === "user" ? "global" : "user");
     };
 
     return (
     <div className='main-box'>
-        <nav className='nav-container'>
-        <span className={authView === "global" ? "slider-label" : "slider-label-inactive"}>Global</span>
-            <label className='switch'>
-                <input 
-                    type="checkbox" 
-                    onChange={handleToggleView} 
-                    checked={authView === "user"} 
-                />
-                <span className="slider"></span>
-            </label>
-            <span className={authView === "user" ? "slider-label" : "slider-label-inactive"}>User</span>
-        </nav>
         { authView == 'user' && user && (
             <div className='user-settings'>
 
@@ -163,6 +149,9 @@ export default function Page(){
                     </label>
                     <button type="submit" className='upload-button'>Update Password</button>
                 </form>
+                {passwordErrorMessage && (
+                    <p className="error-message">{passwordErrorMessage}</p>
+                )}
 
                 <button 
                     onClick={handleLogoutClick}
@@ -189,17 +178,18 @@ export default function Page(){
                     </div>
                 )}
                 {errorMessage && (
-                    <p>{errorMessage}</p>
+                    <p className='error-message'>{errorMessage}</p>
                 )}
             </div>
         )}
-        { authView == 'global' && user && (
-            <div>
-                <p>Global</p>
+        {(isNotLoggedIn || authView === 'none') &&
+            <div className='error-screen'>
+                <p className='user-error'><br/>Please Login, Then Refresh The Page!</p>
+                <button
+                    onClick={()=>router.push("./")}
+                    className='err-home-btn'
+                >Go To Homepage</button>
             </div>
-        )}
-        {isNotLoggedIn &&
-            <p className='user-error'><br/>Please Login, Then Refresh The Page!</p>
         }
     </div>
     );

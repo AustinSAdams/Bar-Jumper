@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createPortal } from 'react-dom';
-import { createAccount, CustomError } from '../api/firebase/firebase';
+import { createAccount, CustomError } from '../../api/firebase/firebase';
 import { X } from 'lucide-react';
 import './Signup.css';
 
@@ -28,12 +28,18 @@ const Signup = ({ onClose, onLoginClick }) => {
         let usernameInput = document.querySelector('.signup-textbox[placeholder="USERNAME"]');
         let emailInput = document.querySelector('.signup-textbox[placeholder="EMAIL"]');
         let passwordInput = document.querySelector('.signup-textbox[placeholder="PASSWORD"]');
+        let verifyPswd = document.querySelector('.signup-textbox[placeholder="CONFIRM PASSWORD"]');
 
         const username = usernameInput.value;
         const email = emailInput.value;
         const password = await hash(passwordInput.value);
+        const pswdVerification = await hash(verifyPswd.value);
         try{
+            if(password !== pswdVerification){
+                throw new CustomError("Passwords Do Not Match.");
+            }
             const user = await createAccount(email, password, username);
+
             router.push('/');
             onClose();
         }catch(err) {
@@ -59,6 +65,7 @@ const Signup = ({ onClose, onLoginClick }) => {
                 </button>
                 <div className="signup-content">                    
                     <div className="signup-info">
+                        <input type="email" className="signup-textbox" placeholder="EMAIL" />
                         <input type="username" className="signup-textbox" placeholder="USERNAME" />
                         <div className="password-container">
                             <input 
@@ -73,7 +80,11 @@ const Signup = ({ onClose, onLoginClick }) => {
                                 {showPassword ? "Hide" : "Show"}
                             </button>
                         </div>
-                        <input type="email" className="signup-textbox" placeholder="EMAIL" />
+                        <input 
+                            type={showPassword ? "text" : "password"} 
+                            className="signup-textbox" 
+                            placeholder="CONFIRM PASSWORD" 
+                        />
                         {isSignupError && <p className="error-message">{isSignupError}</p>}
                     </div>
                     <button 
