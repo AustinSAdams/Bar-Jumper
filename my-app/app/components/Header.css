@@ -12,6 +12,9 @@
 
 .header-title {
   font-weight: bold;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 38px;
   text-align: center; 
   font-family: "Arial", sans-serif;

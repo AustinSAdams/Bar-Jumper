@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { loginWithCredentials, CustomError } from '../api/firebase/firebase';
+import { loginWithCredentials, CustomError } from '../../api/firebase/firebase';
 import { X, CircleUser } from 'lucide-react';
 import './Login.css';
 

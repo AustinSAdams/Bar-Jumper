@@ -4,10 +4,10 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "../context/UserContext";
-import { logUserOut } from "../api/firebase/firebase"
+import { addFriend, logUserOut, removeFriend } from "../api/firebase/firebase"
 import { CircleUser, UserPlus } from "lucide-react";
-import Login from "./Login";
-import Signup from "./Signup";
+import Login from "./Authentication/Login";
+import Signup from "./Authentication/Signup";
 import './Header.css';
 
 // Define Header component
@@ -26,7 +26,6 @@ const Header = () => {
     { label: "Settings", className: "dropdown-item", onClick: () => {navigateTo("/settings")} },
     { label: "Logout", className: "dropdown-logout", onClick: () => {onLogoutClick()} },
   ];
-
 
   useEffect(()=>{
     if(pathname == "/"){setHeaderLabel("Bar Jumper");}

@@ -1,5 +1,5 @@
 import { db, auth, storage } from "./firebaseConfig";
-import { collection, getDocs } from "firebase/firestore"; 
+import { collection, getDocs, setDoc, doc, deleteDoc, arrayUnion, updateDoc, arrayRemove, query, where } from "firebase/firestore"; 
 import { createUserWithEmailAndPassword, updateProfile, updatePassword, signInWithEmailAndPassword, signOut, deleteUser } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL, deleteObject, listAll } from "firebase/storage";
 
@@ -36,6 +36,14 @@ export async function createAccount(email, password, username) {
     const storageRef = ref(storage, `defaultUserImage.png`);
     const downloadUrl = await getDownloadURL(storageRef);
 
+    const userDocRef = doc(db, 'users', user.uid);
+    await setDoc(userDocRef, {
+      username: username,
+      email: email,
+      photoUrl: downloadUrl,
+      friendsList: []
+    });
+
     await updateProfile(user, {
       displayName: username,
       photoURL: downloadUrl,
@@ -49,7 +57,24 @@ export async function createAccount(email, password, username) {
 
 export async function deleteAuthAccount(uid) {
   const user = auth.currentUser;
+  if (user.uid !== uid) {
+    throw new CustomError("User not authenticated or mismatched UID.");
+  }
+  const userDocRef = doc(db, 'users', uid);
   try{
+    const querySnapshot = await getDocs(
+      query(collection(db, 'users'), where('friendsList', 'array-contains', userDocRef))
+    );
+
+    const removePromises = querySnapshot.docs.map((docSnap) =>
+      updateDoc(doc(db, 'users', docSnap.id), {
+        friendsList: arrayRemove(userDocRef)
+      })
+    );
+    await Promise.all(removePromises);
+
+    await deleteDoc(userDocRef);
+
     await deleteFolderContents(`ProfilePics/${uid}`);
     await deleteUser(user);
   }catch(err) {
@@ -98,6 +123,12 @@ export async function uploadImage(file) {
     await updateProfile(user, {
       photoURL: downloadUrl
     });
+
+    const userDocRef = doc(db, 'users', user.uid);
+    await updateDoc(userDocRef, {
+      photoUrl: downloadUrl
+    });
+
   } catch(err){
     throw new CustomError("Could Not Upload Photo");
   }
@@ -109,6 +140,12 @@ export async function updateUserDisplayName(newDisplayName){
     await updateProfile(user, {
       displayName: newDisplayName
     });
+
+    const userDoc = doc(db, 'users', user.uid);
+    await updateDoc(userDoc, {
+      username: newDisplayName
+    });
+
   }catch(err){
     throw new CustomError("Error updating username.");
   }
@@ -116,9 +153,51 @@ export async function updateUserDisplayName(newDisplayName){
 
 export async function updateUserPassword(newPassword){
   const user = auth.currentUser;
+  if (!user) {
+    throw new CustomError("No User Signed In");
+  }
   try{
     await updatePassword(user, newPassword);
   }catch(err){
     throw new CustomError("Error updating password.");
+  }
+}
+
+export async function addFriend(friendUid) {
+  const userId = auth.currentUser.uid;
+  try{
+    const userDoc = doc(db, 'users', userId);
+    const friendDoc = doc(db, 'users', friendUid);
+    
+    await Promise.all([
+      await updateDoc(userDoc, {
+        friendsList: arrayUnion(friendDoc)
+      }),
+      await updateDoc(friendDoc, {
+        friendsList: arrayUnion(userDoc)
+      })
+    ]);
+
+  }catch(err) {
+    throw new CustomError("Could not add friend.");
+  }
+}
+
+export async function removeFriend(friendUid) {
+  const userId = auth.currentUser.uid;
+  try{
+    const userDoc = doc(db, 'users', userId);
+    const friendDoc = doc(db, 'users', friendUid);
+    
+    Promise.all([
+      updateDoc(userDoc, {
+        friendsList: arrayRemove(friendDoc)
+      }),
+      updateDoc(friendDoc, {
+        friendsList: arrayRemove(userDoc)
+      })
+    ]);
+  }catch(err) {
+    throw new CustomError("Could not remove friend.");
   }
 }
