@@ -33,7 +33,7 @@ const Chat = ({ chatrooms = [], chatroomId }) => {
   const handleSendMessage = async () => { 
     if (newMessage.trim() && user.uid && selectedChatroom) {
       const chatroomDocRef = doc(db, 'chatrooms', selectedChatroom.id);
-
+  
       const newMessageData = {
         text: newMessage.trim(),
         senderId: user.uid,
@@ -41,19 +41,13 @@ const Chat = ({ chatrooms = [], chatroomId }) => {
         timestamp: new Date(), 
         imageUrl: '', // optional if they upload an image
       };
-
+  
       try {
         // add the message without serverTimestamp initially, cuz firestore doesn't allow it server side
         await updateDoc(chatroomDocRef, {
           messages: arrayUnion(newMessageData),
         });
-
-        // update the page to show new messages 
-        setMessages((prevMessages) => [...prevMessages, {
-          ...newMessageData,
-          timestamp: new Date().toISOString(),
-        }]);
-
+  
         setNewMessage(''); // clear the textbox after sending a message
       } catch (error) {
         console.error('Error sending message:', error);
