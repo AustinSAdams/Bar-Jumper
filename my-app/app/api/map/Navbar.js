@@ -10,17 +10,19 @@ const NavBar = ({ theme, activeItem, onItemClick }) => {
     const user = useUser();
 
     const handleProfileClick = () => {
-        onItemClick('profile');
+        // Toggle ProfilePopup only when clicking on Profile
         if (user) {
             setShowProfilePopup(!showProfilePopup);
+            onItemClick('profile');
         } else {
             alert('Please sign in to view profile.');
         }
     };
 
     const handleNavItemClick = (item) => {
+        // Close ProfilePopup whenever any other tab is clicked
+        setShowProfilePopup(false);
         onItemClick(item);
-        setShowProfilePopup(false); // Close profile popup whenever a different tab is clicked
     };
 
     return (
