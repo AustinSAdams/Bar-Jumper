@@ -57,6 +57,7 @@
 .user-info {
     flex: 1;
     color: white;
+    background-color: #29292900;
     display: flex;
     flex-direction: column;
     justify-content: center;
