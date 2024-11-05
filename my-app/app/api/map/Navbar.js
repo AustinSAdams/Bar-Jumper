@@ -10,7 +10,6 @@ const NavBar = ({ theme, activeItem, onItemClick }) => {
     const user = useUser();
 
     const handleProfileClick = () => {
-        // Toggle ProfilePopup only when clicking on Profile
         if (user) {
             setShowProfilePopup(!showProfilePopup);
             onItemClick('profile');
@@ -20,7 +19,6 @@ const NavBar = ({ theme, activeItem, onItemClick }) => {
     };
 
     const handleNavItemClick = (item) => {
-        // Close ProfilePopup whenever any other tab is clicked
         setShowProfilePopup(false);
         onItemClick(item);
     };
