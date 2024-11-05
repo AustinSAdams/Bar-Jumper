@@ -3,7 +3,7 @@ import './settings.css';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '../context/UserContext';
-import { uploadImage, updateUserDisplayName, updateUserPassword, logUserOut, deleteAuthAccount } from '../api/firebase/firebase';
+import { uploadImage, updateUserDisplayName, updateUserPassword, logUserOut, deleteAuthAccount, updateUserBirthday, updateUserPhoneNumber, updateUserGender } from '../api/firebase/firebase';
 
 export default function Page(){
     const user = useUser();
@@ -16,10 +16,16 @@ export default function Page(){
     const [selectedFile, setSelectedFile] = useState(null);
     const [newDisplayName, setNewDisplayName] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [newBirthday, setNewBirthday] = useState('');
+    const [newPhoneNumber, setNewPhoneNumber] = useState('');
+    const [newGender, setNewGender] = useState('');
 
     const [errorMessage, setErrorMessage] = useState('');
     const [userErrorMessage, setUserErrorMessage] = useState('');
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+    const [birthdayErrorMessage, setBirthdayErrorMessage] = useState('');
+    const [phoneNumberErrorMessage, setPhoneNumberErrorMessage] = useState('');
+    const [genderErrorMessage, setGenderErrorMessage] = useState('');
 
     useEffect(() => {
         if(user == null){
@@ -29,6 +35,10 @@ export default function Page(){
         else{
             setIsNotLoggedIn(false);
             setAuthView('user');
+            setNewDisplayName(user.displayName || '');
+            setNewBirthday(user.birthday || '');
+            setNewPhoneNumber(user.phoneNumber || '');
+            setNewGender(user.gender || '');
         }
     }, [user]);
 
@@ -40,7 +50,7 @@ export default function Page(){
           .map((bytes) => bytes.toString(16).padStart(2, '0'))
           .join('');
         return hashHex;
-    };
+    }
 
     const handleFileChange = (e) => {
         setSelectedFile(e.target.files[0]);
@@ -79,6 +89,36 @@ export default function Page(){
             await updateUserPassword(hashedPassword);
         }catch(err) {
             setPasswordErrorMessage(err.message);
+        }
+    };
+
+    const handleBirthdayUpdate = async (e) => {
+        e.preventDefault();
+        try {
+            await updateUserBirthday(newBirthday);
+            window.location.reload();
+        } catch (err) {
+            setBirthdayErrorMessage(err.message);
+        }
+    };
+
+    const handlePhoneNumberUpdate = async (e) => {
+        e.preventDefault();
+        try {
+            await updateUserPhoneNumber(newPhoneNumber);
+            window.location.reload();
+        } catch (err) {
+            setPhoneNumberErrorMessage(err.message);
+        }
+    };
+
+    const handleGenderUpdate = async (e) => {
+        e.preventDefault();
+        try {
+            await updateUserGender(newGender);
+            window.location.reload();
+        } catch (err) {
+            setGenderErrorMessage(err.message);
         }
     };
 
@@ -151,6 +191,65 @@ export default function Page(){
                 </form>
                 {passwordErrorMessage && (
                     <p className="error-message">{passwordErrorMessage}</p>
+                )}
+
+                <p className='user-label'>Birthday:</p>
+                <p className='user-info'>{user.birthday || 'Not Set'}</p>
+                <form onSubmit={handleBirthdayUpdate}>
+                    <label>
+                        New Birthday:
+                        <input
+                            type="date"
+                            value={newBirthday}
+                            onChange={(e) => setNewBirthday(e.target.value)}
+                            className='update-textbox'
+                        />
+                    </label>
+                    <button type="submit" className='upload-button'>Update Birthday</button>
+                </form>
+                {birthdayErrorMessage && (
+                    <p className="error-message">{birthdayErrorMessage}</p>
+                )}
+
+                <p className='user-label'>Phone Number:</p>
+                <p className='user-info'>{user.phoneNumber || 'Not Set'}</p>
+                <form onSubmit={handlePhoneNumberUpdate}>
+                    <label>
+                        New Phone Number:
+                        <input
+                            type="tel"
+                            value={newPhoneNumber}
+                            onChange={(e) => setNewPhoneNumber(e.target.value)}
+                            className='update-textbox'
+                        />
+                    </label>
+                    <button type="submit" className='upload-button'>Update Phone Number</button>
+                </form>
+                {phoneNumberErrorMessage && (
+                    <p className="error-message">{phoneNumberErrorMessage}</p>
+                )}
+
+                <p className='user-label'>Gender:</p>
+                <p className='user-info'>{user.gender || 'Not Set'}</p>
+                <form onSubmit={handleGenderUpdate}>
+                    <label>
+                        New Gender:
+                        <select
+                            value={newGender}
+                            onChange={(e) => setNewGender(e.target.value)}
+                            className='update-textbox'
+                        >
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                            <option value="Prefer not to say">Prefer not to say</option>
+                        </select>
+                    </label>
+                    <button type="submit" className='upload-button'>Update Gender</button>
+                </form>
+                {genderErrorMessage && (
+                    <p className="error-message">{genderErrorMessage}</p>
                 )}
 
                 <button 
