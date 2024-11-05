@@ -8,6 +8,7 @@ import { addFriend, logUserOut, removeFriend } from "../api/firebase/firebase"
 import { CircleUser, UserPlus } from "lucide-react";
 import Login from "./Authentication/Login";
 import Signup from "./Authentication/Signup";
+import FriendingPage from "./Friends/Friends";
 import './Header.css';
 
 // Define Header component
@@ -52,6 +53,15 @@ const Header = () => {
   const showSignupOverlay = () => setAuthView("signup");
   const hideAuthOverlay = () => setAuthView("none");
 
+  const toggleFriendingPage = () => {
+    if(authView === "friendingPage"){
+      setAuthView("none");
+    }
+    else{
+      setAuthView("friendingPage");
+    }
+  };
+
   const toggleDropdown = () => {
     setDropdownIsOpen((prev) => !prev);
   };
@@ -91,7 +101,9 @@ const Header = () => {
       >{headerLabel}</button>
 
       {user && (
-        <UserPlus className="header-add-friend"/>
+        <button onClick={toggleFriendingPage}>
+          <UserPlus className="header-add-friend"/>
+        </button>
       )}
 
       { authView === "login" && (
@@ -99,6 +111,9 @@ const Header = () => {
       )}
       { authView === "signup" && (
         <Signup onClose={hideAuthOverlay} onLoginClick={showLoginOverlay} />
+      )}
+      { authView === "friendingPage" && (
+        <FriendingPage onClose={hideAuthOverlay}/>
       )}
     </header>
   );
