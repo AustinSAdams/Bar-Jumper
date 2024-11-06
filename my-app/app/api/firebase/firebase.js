@@ -29,28 +29,28 @@ export async function getAllDocuments(colName) {
 }
 
 export async function createAccount(email, password, username) {
-  try{
+  try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-   
+
     const storageRef = ref(storage, `defaultUserImage.png`);
     const downloadUrl = await getDownloadURL(storageRef);
-
     const userDocRef = doc(db, 'users', user.uid);
     await setDoc(userDocRef, {
       username: username,
       email: email,
       photoUrl: downloadUrl,
-      friendsList: []
+      friendsList: [],
+      birthday: null, 
+      phoneNumber: null,
+      gender: null
     });
-
     await updateProfile(user, {
       displayName: username,
       photoURL: downloadUrl,
     });
-
     return user;
-  } catch(err) {
+  } catch (err) {
     throw new CustomError("Email Already In Use");
   }
 }
@@ -199,5 +199,50 @@ export async function removeFriend(friendUid) {
     ]);
   }catch(err) {
     throw new CustomError("Could not remove friend.");
+  }
+}
+
+export async function updateUserBirthday(newBirthday) {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new CustomError("No User Signed In");
+  }
+  try {
+    const userDoc = doc(db, 'users', user.uid);
+    await updateDoc(userDoc, {
+      birthday: newBirthday
+    });
+  } catch (err) {
+    throw new CustomError("Error updating birthday.");
+  }
+}
+
+export async function updateUserPhoneNumber(newPhoneNumber) {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new CustomError("No User Signed In");
+  }
+  try {
+    const userDoc = doc(db, 'users', user.uid);
+    await updateDoc(userDoc, {
+      phoneNumber: newPhoneNumber
+    });
+  } catch (err) {
+    throw new CustomError("Error updating phone number.");
+  }
+}
+
+export async function updateUserGender(newGender) {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new CustomError("No User Signed In");
+  }
+  try {
+    const userDoc = doc(db, 'users', user.uid);
+    await updateDoc(userDoc, {
+      gender: newGender
+    });
+  } catch (err) {
+    throw new CustomError("Error updating gender.");
   }
 }

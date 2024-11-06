@@ -1,29 +1,35 @@
 "use client";
-/* This page is for the "/chats" extension on the website. It should have:
-    1. Default Theme Colors.
-    2. Easy to navigate menu.
-    3. User sign in/up option.
-    3. Buttons containing links to chatrooms with access restricted to registered users.
-
-    To access this page locally, after running "npm run dev", go into your web browser
-    and type in "http://localhost:3000/chats".
-*/
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { db } from '@/app/api/firebase/firebaseConfig';
+import { collection, getDocs } from 'firebase/firestore';
 import Chat from './Chat';
 
-const chatrooms = [
-    { id: 1, name: 'Dawg House' },
-    { id: 2, name: 'The Revelry' },
-    { id: 3, name: 'Sundown Tavern' },
-    { id: 4, name: 'Ponchatoulas'},
-    { id: 5, name: 'Bayou Axe Ruston'},
-    { id: 6, name: 'Utility Brewing Co'}
-];
+export default function Page() {
+  const [chatrooms, setChatrooms] = useState([]);
 
-export default function Page(){
-    return (
+  // get chatrooms from chatrooms collection
+  useEffect(() => {
+    const fetchChatrooms = async () => {
+      try {
+        const chatroomsCollection = collection(db, 'chatrooms');
+        const chatroomsSnapshot = await getDocs(chatroomsCollection);
+        const chatroomsList = chatroomsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        setChatrooms(chatroomsList);
+      } catch (error) {
+        console.error('Error fetching chatrooms:', error);
+      }
+    };
+
+    fetchChatrooms();
+  }, []);
+
+  return (
     <div>
-        <Chat chatrooms={chatrooms} />
+      <Chat chatrooms={chatrooms} />
     </div>
-    );
+  );
 }

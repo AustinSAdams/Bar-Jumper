@@ -1,8 +1,9 @@
 "use client";
 
-import { createContext, useState, useEffect, useCallback, useContext } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import { onAuthStateChanged, setPersistence, browserLocalPersistence } from 'firebase/auth';
-import { auth } from '../api/firebase/firebaseConfig';
+import { auth, db } from '../api/firebase/firebaseConfig';
+import { getDoc, doc } from 'firebase/firestore';
 
 export const UserContext = createContext();
 
@@ -19,20 +20,30 @@ export function UserProvider({ children }) {
     };
     setUserPersistence();
 
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        const userDocRef = doc(db, 'users', currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          setUser({ ...currentUser, ...userDoc.data() });
+        } else {
+          console.error("User data not found in Firestore.");
+        }
+      } else {
+        setUser(null);
+      }
     });
 
     return () => unsubscribe();
-  }, [auth]);
+  }, []);
 
   return (
     <UserContext.Provider value={user}>
       {children}
     </UserContext.Provider>
   );
-};
+}
 
 export const useUser = () => {
   return useContext(UserContext);
-}
+};
