@@ -21,6 +21,8 @@
     flex-direction: column;
     color: white;
     position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .profile-popup-close {
@@ -83,4 +85,51 @@
     font-weight: bold;
     color: #fff;
     margin-left: 10px;
+}
+
+.friends-list {
+    margin-top: 20px;
+}
+
+.friend-card {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.friend-card img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.friend-card .friend-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.friend-card .friend-info h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #fff;
+}
+
+.friend-card .friend-info p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #ccc;
+}
+
+.show-more-button {
+    background: none;
+    border: none;
+    color: #49d7fa;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.show-more-button:hover {
+    color: #73ddf8;
 }
