@@ -41,9 +41,9 @@ export async function createAccount(email, password, username) {
       email: email,
       photoUrl: downloadUrl,
       friendsList: [],
-      birthday: null, // New field
-      phoneNumber: null, // New field
-      gender: null // New field
+      birthday: null, 
+      phoneNumber: null,
+      gender: null
     });
     await updateProfile(user, {
       displayName: username,
