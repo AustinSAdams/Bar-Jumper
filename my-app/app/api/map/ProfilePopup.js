@@ -30,11 +30,13 @@ const ProfilePopup = ({ onClose }) => {
                 <div className="profile-header">
                     <img src={user.photoURL || '/default-profile.png'} alt="Profile" className="profile-picture" />
                     <div className="profile-details">
-                        <h2 className="profile-name">{user.displayName || 'Anonymous'}</h2>
-                        <p className="profile-info">Email: {user.email}</p>
+                        <div className="profile-name-age">
+                            <h2 className="profile-name">{user.displayName || 'Anonymous'}</h2>
+                            <span className="profile-age"> {age}</span>
+                        </div>
                         <p className="profile-info">Gender: {user.gender || 'Not Set'}</p>
+                        <p className="profile-info">Email: {user.email}</p>
                         <p className="profile-info">Phone: {user.phoneNumber || 'Not Set'}</p>
-                        <p className="profile-info">Age: {age}</p>
                     </div>
                 </div>
             </div>

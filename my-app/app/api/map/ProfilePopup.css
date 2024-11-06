@@ -64,11 +64,23 @@
     font-weight: bold;
     color: #fff;
     margin: 0;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .profile-info {
     font-size: 0.9rem;
     color: #ccc;
-    margin: 4px 0;
+    margin: 2px 0;
+}
+
+.profile-name-age {
+    display: flex;
+    align-items: left;
+}
+
+.profile-age {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #fff;
+    margin-left: 10px;
 }
