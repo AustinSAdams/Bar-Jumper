@@ -1,0 +1,87 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    background-color: rgb(41, 41, 41);
+    border: 2px solid black;
+    width: fit-content;
+    height: min-content;
+    max-height: 75vh;
+    border-radius: 5px;
+    right: 0px;
+    padding: 10px 15px;
+    z-index: 1001;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.search-bar-container {
+    position: sticky;
+    background-color: rgb(41, 41, 41);
+    top: 0;
+    z-index: 1002;
+}
+
+.search-bar {
+    width: 100%;
+    border: 1px solid rgb(0, 0, 0);
+    background-color: rgb(213, 213, 213);
+    color: black;
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.user-card {
+    display: flex;
+    align-items: center;
+    background-color: #292929;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border: 1px solid black;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid black;
+    object-fit: cover;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.user-info {
+    flex: 1;
+    color: white;
+    background-color: #29292900;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.user-info h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.user-info p {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #a3a3a3;
+}
+
+.add-friend-button {
+    color: black;
+    background-color: rgb(0, 147, 0);
+    border-radius: 8px;
+}
+
+.add-friend-button:hover {
+    background-color: rgb(0, 99, 0);
+}
