@@ -29,13 +29,13 @@ const ProfilePopup = ({ onClose }) => {
         }
     }, [user]);
 
-    // Unfriend function to remove friend from both users' lists
+
     const handleUnfriend = async (friendId) => {
         try {
             const userDocRef = doc(db, 'users', user.uid);
             const friendDocRef = doc(db, 'users', friendId);
 
-            // Remove friend from the user's friends list and vice versa
+        
             await Promise.all([
                 updateDoc(userDocRef, {
                     friendsList: arrayRemove(friendDocRef)
@@ -45,7 +45,7 @@ const ProfilePopup = ({ onClose }) => {
                 })
             ]);
 
-            // Update the local friends list state
+    
             setFriends((prevFriends) => prevFriends.filter(friend => friend.id !== friendId));
         } catch (error) {
             console.error("Failed to unfriend:", error);
