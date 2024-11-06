@@ -158,7 +158,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
           </button>
           </div>
 
-          {/* only visible when expanded */}
+          {/* only visible expanded */}
           {isExpanded && (
             <>
               <div className="hours-section">
@@ -180,7 +180,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
 
   return createPortal(
     <div className={`location-popup ${isOpen ? 'open' : ''}`} onClick={dismissPopup} ref={popupRef}>
-      {/* Expand/Collapse Arrow */}
+      
       <button className="expand-arrow" onClick={toggleExpand}>
         {isExpanded ? <Tally2 size={24} /> : <Tally2 size={24} />}
       </button>

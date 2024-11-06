@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useUser } from '@/app/context/UserContext';
-import { getDoc, updateDoc, arrayRemove, doc } from 'firebase/firestore';
-import { Trash } from 'lucide-react'; // Importing the trash can icon
+import { getDoc } from 'firebase/firestore';
+import { Trash } from 'lucide-react';
+import { removeFriend } from '@/app/api/firebase/firebase';
 import './ProfilePopup.css';
 import '@/app/components/Friends/Friends.css';
 
 const ProfilePopup = ({ onClose }) => {
     const user = useUser();
     const [friends, setFriends] = useState([]);
-    const db = user.db; // assuming db is available from user context or pass it in props if not
+    const db = user.db;
 
     useEffect(() => {
         if (user && user.friendsList) {
@@ -16,7 +17,7 @@ const ProfilePopup = ({ onClose }) => {
                 try {
                     const friendsData = await Promise.all(
                         user.friendsList.map(async (friendRef) => {
-                            const friendDoc = await getDoc(friendRef); // Assuming friendRef is a DocumentReference
+                            const friendDoc = await getDoc(friendRef);
                             return friendDoc.exists() ? { id: friendDoc.id, ...friendDoc.data() } : null;
                         })
                     );
@@ -29,26 +30,12 @@ const ProfilePopup = ({ onClose }) => {
         }
     }, [user]);
 
-
     const handleUnfriend = async (friendId) => {
         try {
-            const userDocRef = doc(db, 'users', user.uid);
-            const friendDocRef = doc(db, 'users', friendId);
-
-        
-            await Promise.all([
-                updateDoc(userDocRef, {
-                    friendsList: arrayRemove(friendDocRef)
-                }),
-                updateDoc(friendDocRef, {
-                    friendsList: arrayRemove(userDocRef)
-                })
-            ]);
-
-    
-            setFriends((prevFriends) => prevFriends.filter(friend => friend.id !== friendId));
+            await removeFriend(friendId);
+            setFriends(friends.filter(friend => friend.id !== friendId));
         } catch (error) {
-            console.error("Failed to unfriend:", error);
+            console.error("Failed to remove friend:", error);
         }
     };
 
@@ -83,7 +70,7 @@ const ProfilePopup = ({ onClose }) => {
                     </div>
                 </div>
 
-                {/* Friends List Section */}
+                {/* Friends List */}
                 {friends.length > 0 && (
                     <div className="friends-list">
                         <h3>Friends</h3>
