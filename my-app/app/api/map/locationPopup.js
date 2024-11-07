@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import * as turf from '@turf/turf';
-import { Phone, X, ArrowLeft, Footprints, Car, MessageSquare, Tally2, BookOpenText, Clock } from 'lucide-react';
+import { Phone, X, ArrowLeft, Footprints, Car, MessageSquare, Tally2, BookOpenText, Clock, Users } from 'lucide-react';
 import './locationPopup.css';
 import LocationHoursBubble from './locationHoursBubble';
 import LocationList from './locationList';
@@ -11,6 +11,7 @@ import LocationImageGallery from './locationImageGallery';
 import { getOpenStatus } from './locationHoursBubble';
 import { renderStars } from './locationList';
 import LocationReviews from './locationReviews';
+import useLocationUserCount from './useLocationUserCount';
 
 const calculateDistance = (userLocation, locationCoords) => {
   if (!userLocation || !locationCoords.longitude || !locationCoords.latitude) return null;    // null if any cords missing
@@ -52,6 +53,8 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
 
   const openStatus = location && location.hours 
     ? getOpenStatus(location.hours, currentDay, currentTime) : 'Closed';
+
+  const userCount = useLocationUserCount(location?.id); // Use the hook to get the user count
 
   useEffect(() => {
     setPortalRoot(document.body);                     // sets root of the portal to doc for render (allows it to visually appear)
@@ -101,8 +104,8 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
             <button onClick={() => onChangeView('list')} className={`location-popup-arrow ${theme === 'dark' ? 'dark-mode' : ''}`}>
               <ArrowLeft size={24} />
             </button>
-
-            {/* profile image  */}
+    
+            {/* profile image */}
             <div className="profile-image-container">
               {profileImage && (
                 <img
@@ -111,8 +114,12 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
                   className="location-popup-image"
                 />
               )}
+              {/* User count display under image */}
+              <div className="user-count-display">
+                <Users size={16} /> <span>{userCount}</span>
+              </div>
             </div>
-
+    
             {/* location details container */}
             <div className="location-details-container">
               <h2 className={`location-popup-title ${theme === 'dark' ? 'dark-mode' : ''}`}>{name}</h2>
@@ -127,15 +134,15 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
                 <a href={`tel:${phone}`}>{phone || 'N/A'}</a>
               </h4>
               <h5 className='location-review-stars'>
-              {renderStars(location.starCount || 0)}
+                {renderStars(location.starCount || 0)}
               </h5>
             </div>
-
+    
             <button onClick={onClose} className={`location-popup-close ${theme === 'dark' ? 'dark-mode' : ''}`}>
               <X size={24} />
             </button>
           </div>
-
+    
           {/* 'action' buttons */}
           <div className="location-actions">
             <FavoriteButton locationId={location.id} initialFavoritesCount={location.favoritesCount || 0} />
@@ -147,17 +154,17 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
             )}
             <button className={`chat-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}> <MessageSquare size={24} strokeWidth={2} /> </button>
             <button 
-            className={`menu-bubble ${theme === 'dark' ? 'dark-mode' : ''}`} 
-            onClick={() => {
-              if (location.menuLink) {
-                window.open(location.menuLink, '_blank');
-              }
-            }}
-          > 
-            <BookOpenText size={24} strokeWidth={2} /> 
-          </button>
+              className={`menu-bubble ${theme === 'dark' ? 'dark-mode' : ''}`} 
+              onClick={() => {
+                if (location.menuLink) {
+                  window.open(location.menuLink, '_blank');
+                }
+              }}
+            > 
+              <BookOpenText size={24} strokeWidth={2} /> 
+            </button>
           </div>
-
+    
           {/* only visible expanded */}
           {isExpanded && (
             <>
@@ -168,12 +175,12 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
                 <LocationImageGallery location={location} theme={theme} onImageSelect={setSelectedImage} />
               </div>
               <div className="reviews-section">
-              <LocationReviews location={location} theme={theme} />
+                <LocationReviews location={location} theme={theme} />
               </div>
             </>
           )}
         </div>
-      );
+    );
     }
     return null;
   };
