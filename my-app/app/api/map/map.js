@@ -5,6 +5,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import LocationDetails from './locationPopup';
 import NavBar from './Navbar';
+import Geofence from './Geofence';
 
 export const MAPBOX_TOKEN = 'pk.eyJ1IjoidHJleXdiNyIsImEiOiJjbHdhYTVzeDAwY243MnFwcTZpZWtsMTA4In0.eM4pw4c2u-UgM0baq2IjQg';
 
@@ -214,6 +215,8 @@ const BarMap = ({ locations }) => {
           }
         }}
       />
+
+      <Geofence locations={locations} />
     </div>
   );
 };
