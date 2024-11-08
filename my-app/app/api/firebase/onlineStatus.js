@@ -1,7 +1,5 @@
-import { ref, onDisconnect, set, serverTimestamp } from "firebase/database";
-import { auth, rtdb } from "./firebaseConfig";
+import { auth, db, serverTimestamp } from "./firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
-import { db } from "./firebaseConfig";
 
 export function setUserOnlineStatus() {
   const user = auth.currentUser;

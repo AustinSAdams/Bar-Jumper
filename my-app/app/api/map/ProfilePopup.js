@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useUser } from '@/app/context/UserContext';
 import { getDoc, doc, onSnapshot } from 'firebase/firestore';
-import { Trash2, MessageSquareText, Circle } from 'lucide-react';
 import { removeFriend } from '@/app/api/firebase/firebase';
 import { db } from '@/app/api/firebase/firebaseConfig';
 import './ProfilePopup.css';
 import '@/app/components/Friends/Friends.css';
+import FriendCard from './FriendCard';
 
 const ProfilePopup = ({ onClose }) => {
     const user = useUser();
@@ -95,27 +95,12 @@ const ProfilePopup = ({ onClose }) => {
                         <h3>My Friends</h3>
                         <div className="friends-container">
                             {friends.slice(0, isExpanded ? friends.length : 3).map((friend) => (
-                                <div key={friend.id} className="friend-card">
-                                    <div className="green-dot">
-                                        <Circle size={12} color={friendsStatus[friend.id] === 'online' ? 'green' : 'red'} fill={friendsStatus[friend.id] === 'online' ? 'green' : 'red'} />
-                                        <span className="tooltip">{friendsStatus[friend.id] === 'online' ? 'Online Now' : 'Offline'}</span>
-                                    </div>
-                                    <div className="friend-info-row">
-                                        <img src={friend.photoUrl || '/default-profile.png'} alt="Friend" className="friend-picture" />
-                                        <h4 className="friend-name">{friend.username || 'Unknown'}</h4>
-                                    </div>
-                                    <div className="action-container">
-                                        <button className="message-button">
-                                            <MessageSquareText size={16} color="green" />
-                                        </button>
-                                        <button 
-                                            className="unfriend-button" 
-                                            onClick={() => handleUnfriend(friend.id)}
-                                        >
-                                            <Trash2 size={16} color="red" />
-                                        </button>
-                                    </div>
-                                </div>
+                                <FriendCard 
+                                    key={friend.id} 
+                                    friend={friend} 
+                                    friendsStatus={friendsStatus} 
+                                    handleUnfriend={handleUnfriend} 
+                                />
                             ))}
                         </div>
 

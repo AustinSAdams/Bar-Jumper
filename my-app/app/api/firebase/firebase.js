@@ -1,4 +1,4 @@
-import { db, auth, storage } from "./firebaseConfig";
+import { db, auth, storage, serverTimestamp } from "./firebaseConfig";
 import { collection, getDocs, setDoc, doc, deleteDoc, arrayUnion, updateDoc, arrayRemove, query, where } from "firebase/firestore"; 
 import { createUserWithEmailAndPassword, updateProfile, updatePassword, signInWithEmailAndPassword, signOut, deleteUser } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL, deleteObject, listAll } from "firebase/storage";
@@ -104,9 +104,20 @@ export async function loginWithCredentials(email, password) {
 }
 
 export async function logUserOut() {
-  try{
+  const user = auth.currentUser;
+  if (!user) {
+    throw new CustomError("No User Signed In");
+  }
+
+  const userStatusFirestoreRef = doc(db, 'users', user.uid);
+  await updateDoc(userStatusFirestoreRef, {
+    state: 'offline',
+    last_changed: serverTimestamp(),
+  });
+
+  try {
     await signOut(auth);
-  }catch(err){
+  } catch (err) {
     throw new CustomError("Could Not Safely Logout.");
   }
 }
