@@ -1,21 +1,32 @@
 "use client";
+
 import './settings.css';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '../context/UserContext';
-import { uploadImage, updateUserDisplayName, updateUserPassword, logUserOut, deleteAuthAccount, updateUserBirthday, updateUserPhoneNumber, updateUserGender } from '../api/firebase/firebase';
-
+import { Trash2 } from 'lucide-react';
+import { db } from '../api/firebase/firebaseConfig';
+import { doc, getDoc } from 'firebase/firestore';
+import { removeFriend, uploadImage, updateUserDisplayName, updateUserPassword, logUserOut, deleteAuthAccount, updateUserBirthday, updateUserPhoneNumber, updateUserGender } from '../api/firebase/firebase';
 export default function Page(){
     const user = useUser();
     const router = useRouter();
 
-    const [authView, setAuthView] = useState("user");
+    const [authView, setAuthView] = useState("preferences");
     const [isNotLoggedIn, setIsNotLoggedIn] = useState(true);
     const [confirmAuthDeletion, setConfirmAuthDeletion] = useState(false);
+
+    const [togglePicture, setTogglPicture] = useState(false);
+    const [toggleUsername, setToggleUsername] = useState(false);
+    const [togglePassword, setTogglePassword] = useState(false);
+    const [toggleBirthday, setToggleBirthday] = useState(false);
+    const [togglePhoneNumber, setTogglePhoneNumber] = useState(false);
+    const [toggleGender, setToggleGender] = useState(false);
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [newDisplayName, setNewDisplayName] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [newBirthday, setNewBirthday] = useState('');
     const [newPhoneNumber, setNewPhoneNumber] = useState('');
     const [newGender, setNewGender] = useState('');
@@ -34,7 +45,7 @@ export default function Page(){
         }
         else{
             setIsNotLoggedIn(false);
-            setAuthView('user');
+            setAuthView('preferences');
             setNewDisplayName(user.displayName || '');
             setNewBirthday(user.birthday || '');
             setNewPhoneNumber(user.phoneNumber || '');
@@ -50,7 +61,7 @@ export default function Page(){
           .map((bytes) => bytes.toString(16).padStart(2, '0'))
           .join('');
         return hashHex;
-    }
+    };
 
     const handleFileChange = (e) => {
         setSelectedFile(e.target.files[0]);
@@ -84,9 +95,16 @@ export default function Page(){
 
     const handlePasswordUpdate = async (e) => {
         e.preventDefault();
+        if (newPassword !== confirmPassword) {
+            setPasswordErrorMessage("Passwords do not match. Please try again.");
+            return;
+        }
         try{
             const hashedPassword = await hash(newPassword);
             await updateUserPassword(hashedPassword);
+            setPasswordErrorMessage("Password updated successfully.");
+            setNewPassword('');
+            setConfirmPassword('');
         }catch(err) {
             setPasswordErrorMessage(err.message);
         }
@@ -143,31 +161,54 @@ export default function Page(){
 
     return (
     <div className='main-box'>
+        {user && (
+            <div className="settings">
+                <button 
+                    className={(authView === 'user') ? 'settings-button-active' : 'settings-button'}
+                    onClick={() => {setAuthView("user")}}
+                >Account</button>
+                <button 
+                    className={(authView === 'preferences') ? 'settings-button-active' : 'settings-button'}
+                    onClick={() => {setAuthView("preferences")}}
+                >Preferences</button>
+            </div>
+        )}
         { authView == 'user' && user && (
             <div className='user-settings'>
 
+                <p className='user-label'>Profile Picture:</p>
                 <img src={user.photoURL} className='user-picture'></img>
-
-                <form onSubmit={handleSubmit} encType="multipart/form-data">
-                    <label htmlFor="imageUpload">Upload an image:</label>
-                    <input type="file" id="imageUpload" name="image" accept="image/*" onChange={handleFileChange} />
-                    <button type="submit" className="upload-button">Upload</button>
-                </form>
+                <button
+                    className='toggle-update-button'
+                    onClick={() => {setTogglPicture(!togglePicture)}}
+                >Update Profile Picture</button>
+                {togglePicture && (
+                    <form onSubmit={handleSubmit} encType="multipart/form-data">
+                        <input type="file" id="imageUpload" name="image" accept="image/*" onChange={handleFileChange} />
+                        <button type="submit" className="upload-button">Update</button>
+                    </form>
+                )}
 
                 <p className='user-label'>Username:</p>
                 <p className='user-info'>{user.displayName}</p>
-                <form onSubmit={handleUsernameUpdate}>
-                    <label>
-                        New Username:
-                        <input
-                            type="text"
-                            value={newDisplayName}
-                            onChange={(e) => setNewDisplayName(e.target.value)}
-                            className='update-textbox'
-                        />
-                    </label>
-                    <button type="submit" className='upload-button'>Update Username</button>
-                </form>
+                <button
+                    className='toggle-update-button'
+                    onClick={() => {setToggleUsername(!toggleUsername)}}
+                >Update Username</button>
+                {toggleUsername && (
+                    <form onSubmit={handleUsernameUpdate}>
+                        <label>
+                            New Username:
+                            <input
+                                type="text"
+                                value={newDisplayName}
+                                onChange={(e) => setNewDisplayName(e.target.value)}
+                                className='update-textbox'
+                            />
+                        </label>
+                        <button type="submit" className='upload-button'>Update</button>
+                    </form>
+                )}
                 {userErrorMessage && (
                     <p className="error-message">{userErrorMessage}</p>
                 )}
@@ -177,93 +218,142 @@ export default function Page(){
 
                 <p className='user-label'>Password:</p>
                 <p className='user-info'>********</p>
-                <form onSubmit={handlePasswordUpdate}>
-                    <label>
-                        New Password:
-                        <input
-                            type="password"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            className='update-textbox'
-                        />
-                    </label>
-                    <button type="submit" className='upload-button'>Update Password</button>
-                </form>
+                <button
+                    className='toggle-update-button'
+                    onClick={() => {setTogglePassword(!togglePassword)}}
+                >Update Password</button>
+                {togglePassword && (
+                    <form onSubmit={handlePasswordUpdate}>
+                        <label>
+                            New Password:
+                            <input
+                                type="password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                className='update-textbox'
+                            />
+                        </label>
+                        <label>
+                            Confirm Password:
+                            <input
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                className='update-textbox'
+                            />
+                        </label>
+                        <button type="submit" className='upload-button'>Update</button>
+                    </form>
+                )}
                 {passwordErrorMessage && (
                     <p className="error-message">{passwordErrorMessage}</p>
                 )}
-
+            </div>
+        )}
+        { authView === "preferences" && user && (
+            <div className="preference-settings">
                 <p className='user-label'>Birthday:</p>
                 <p className='user-info'>{user.birthday || 'Not Set'}</p>
-                <form onSubmit={handleBirthdayUpdate}>
-                    <label>
-                        New Birthday:
-                        <input
-                            type="date"
-                            value={newBirthday}
-                            onChange={(e) => setNewBirthday(e.target.value)}
-                            className='update-textbox'
-                        />
-                    </label>
-                    <button type="submit" className='upload-button'>Update Birthday</button>
-                </form>
+                <button
+                    className='toggle-update-button'
+                    onClick={() => {setToggleBirthday(!toggleBirthday)}}
+                >Update Birthday</button>
+                {toggleBirthday && (
+                    <form onSubmit={handleBirthdayUpdate}>
+                        <label>
+                            New Birthday:
+                            <input
+                                type="date"
+                                value={newBirthday}
+                                onChange={(e) => setNewBirthday(e.target.value)}
+                                className='update-textbox'
+                            />
+                        </label>
+                        <button type="submit" className='upload-button'>Update</button>
+                    </form>
+                )}
+                
                 {birthdayErrorMessage && (
                     <p className="error-message">{birthdayErrorMessage}</p>
                 )}
 
                 <p className='user-label'>Phone Number:</p>
                 <p className='user-info'>{user.phoneNumber || 'Not Set'}</p>
-                <form onSubmit={handlePhoneNumberUpdate}>
-                    <label>
-                        New Phone Number:
-                        <input
-                            type="tel"
-                            value={newPhoneNumber}
-                            onChange={(e) => setNewPhoneNumber(e.target.value)}
-                            className='update-textbox'
-                        />
-                    </label>
-                    <button type="submit" className='upload-button'>Update Phone Number</button>
-                </form>
+                <button
+                    className='toggle-update-button'
+                    onClick={() => {setTogglePhoneNumber(!togglePhoneNumber)}}
+                >Update Phone Number</button>
+                {togglePhoneNumber && (
+                    <form onSubmit={handlePhoneNumberUpdate}>
+                        <label>
+                            New Phone Number:
+                            <input
+                                type="tel"
+                                value={newPhoneNumber}
+                                onChange={(e) => setNewPhoneNumber(e.target.value)}
+                                className='update-textbox'
+                            />
+                        </label>
+                        <button type="submit" className='upload-button'>Update Phone Number</button>
+                    </form>
+                )}
                 {phoneNumberErrorMessage && (
                     <p className="error-message">{phoneNumberErrorMessage}</p>
                 )}
 
                 <p className='user-label'>Gender:</p>
                 <p className='user-info'>{user.gender || 'Not Set'}</p>
-                <form onSubmit={handleGenderUpdate}>
-                    <label>
-                        New Gender:
-                        <select
-                            value={newGender}
-                            onChange={(e) => setNewGender(e.target.value)}
-                            className='update-textbox'
-                        >
-                            <option value="">Select Gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                            <option value="Prefer not to say">Prefer not to say</option>
-                        </select>
-                    </label>
-                    <button type="submit" className='upload-button'>Update Gender</button>
-                </form>
+                <button
+                    className='toggle-update-button'
+                    onClick={() => {setToggleGender(!toggleGender)}}
+                >Update Gender</button>
+                {toggleGender && (
+                    <form onSubmit={handleGenderUpdate}>
+                        <label>
+                            New Gender:
+                            <select
+                                value={newGender}
+                                onChange={(e) => setNewGender(e.target.value)}
+                                className='update-textbox'
+                            >
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                                <option value="Prefer not to say">Prefer not to say</option>
+                            </select>
+                        </label>
+                        <button type="submit" className='upload-button'>Update Gender</button>
+                    </form>
+                )}
                 {genderErrorMessage && (
                     <p className="error-message">{genderErrorMessage}</p>
                 )}
-
+            </div>
+        )}
+        {(isNotLoggedIn || authView === 'none') &&
+            <div className='error-screen-container'>
+                <p className='user-error'><br/>Please Login, Then Refresh The Page!</p>
+                <button
+                    onClick={()=>router.push("./")}
+                    className='err-home-btn'
+                >Go To Homepage</button>
+            </div>
+        }
+        {user && (
+            <div className="settings-functions">
                 <button 
                     onClick={handleLogoutClick}
                     className='logout-button'
                 >Logout</button>
-    
+
                 <button
                     onClick={toggleDeletionConfirmation}
                     className='logout-button'
                 >Delete Account</button>
                 {confirmAuthDeletion && (
                     <div>
-                        <p>Are you sure you want to delete your account?</p>
+                        <p style={{textAlign: 'center', marginTop: '8px', marginBottom: '5px'}}>Are you sure?</p>
                         <div className="account-deletion-container">
                             <button
                                 className='deletion-button'
@@ -281,15 +371,7 @@ export default function Page(){
                 )}
             </div>
         )}
-        {(isNotLoggedIn || authView === 'none') &&
-            <div className='error-screen'>
-                <p className='user-error'><br/>Please Login, Then Refresh The Page!</p>
-                <button
-                    onClick={()=>router.push("./")}
-                    className='err-home-btn'
-                >Go To Homepage</button>
-            </div>
-        }
+        
     </div>
     );
 }

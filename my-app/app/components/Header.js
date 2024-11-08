@@ -21,6 +21,8 @@ const Header = () => {
   const [headerLabel, setHeaderLabel] = useState("Bar Jumper");
   const [authView, setAuthView] = useState("none");
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
+  const [addFriendsPage, setAddFriendsPage] = useState(false);
+  const [closingFriendsPage, setClosingFriendsPage] = useState(false);
 
   const dropDownOptions = [
     { label: "Home", className: "dropdown-item", onClick: () => {navigateTo("/")} },
@@ -54,11 +56,10 @@ const Header = () => {
   const hideAuthOverlay = () => setAuthView("none");
 
   const toggleFriendingPage = () => {
-    if(authView === "friendingPage"){
-      setAuthView("none");
-    }
-    else{
-      setAuthView("friendingPage");
+    if(!closingFriendsPage) {
+      setClosingFriendsPage(true);
+      setAddFriendsPage((prev) => !prev);
+      setTimeout(() => setClosingFriendsPage(false), 300);
     }
   };
 
@@ -79,7 +80,6 @@ const Header = () => {
             className="header-user-image"
             src={user.photoURL}
           />
-          <p className="header-username">{user.displayName}</p>
           {dropdownIsOpen && (
             <div className="dropdown-menu">
               {dropDownOptions.map((option, index) => (
@@ -91,7 +91,7 @@ const Header = () => {
           )}
         </span>
       ) : (
-        <button onClick={showLoginOverlay}>
+        <button className="unknown-user-image" onClick={showLoginOverlay}>
           <CircleUser className="header-login-image"/>
         </button>
       )}
@@ -112,8 +112,10 @@ const Header = () => {
       { authView === "signup" && (
         <Signup onClose={hideAuthOverlay} onLoginClick={showLoginOverlay} />
       )}
-      { authView === "friendingPage" && (
-        <FriendingPage onClose={hideAuthOverlay}/>
+      { addFriendsPage && (
+        <div>
+          <FriendingPage onClose={toggleFriendingPage} />
+        </div>
       )}
     </header>
   );
