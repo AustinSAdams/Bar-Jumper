@@ -1,18 +1,70 @@
 .main-box {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin: 10px;
+    width: 96vw;
+    height: 88vh;
+}
+
+.settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    background-color: rgb(62, 62, 62);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 10px 0px 0px 10px;
+}
+
+.settings-button {
+    background-color: rgb(40, 40, 40);
+    padding: 10px 15px;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+
+.settings-button-active {
+    background-color: rgb(87, 87, 87);
+    padding: 10px 15px;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+
+.settings-button:hover {
+    background-color: rgb(87, 87, 87);
+}
+
+.settings-functions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 0;
+    margin-top: auto;
+}
+
+.preference-settings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(62, 62, 62);
+    border-radius: 15px;
+    margin: 10px 0px 0px 10px;
+    padding: 15px;
+    flex-grow: 1;
+    width: auto;
 }
 
 .user-settings {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px;
+    margin: 10px 0px 0px 10px;
     background-color: rgb(62, 62, 62);
     padding: 15px;
     border-radius: 10px;
+    flex-grow: 1;
     width: auto;
 }
 
@@ -48,12 +100,12 @@ form {
     border: 2px solid black;
     margin: 5px 0;
     padding: 5px 10px;
-    width: 100%;
-    min-width: max-content;
-    max-width: 50%;
-    max-width: auto;
     text-align: center;
     border-radius: 5px;
+    width: 100%;
+    max-width: 50%;
+    min-width: fit-content;
+    flex-grow: 0;
 }
 
 .user-label {
@@ -79,7 +131,8 @@ form {
     font-size: 20px;
     font-weight: bold;
     padding: 5px 10px;
-    margin-top: 50px;
+    margin-top: 20px;
+    width: fit-content;
 }
 
 .logout-button:hover {
@@ -89,6 +142,7 @@ form {
 
 .account-deletion-container {
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -117,17 +171,18 @@ form {
     font-size: 24px;
 }
 
-.error-screen {
+.error-screen-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 20px;
+    height: 50vh;
+    width: 98vw;
+    position: fixed;
 }
 
 .error-message {
-    text-align: center;
-    justify-content: center;
     color: red;
     font-size: 20px;
 }
@@ -146,4 +201,12 @@ form {
 .err-home-btn:hover {
     background-color: rgb(139, 0, 0);
     color: rgb(46, 249, 0);
+}
+
+.toggle-update-button {
+    color: rgb(0, 162, 255);
+}
+
+.toggle-update-button:hover {
+    text-decoration: underline;
 }
