@@ -1,13 +1,9 @@
 "use client";
-
 import './settings.css';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '../context/UserContext';
-import { Trash2 } from 'lucide-react';
-import { db } from '../api/firebase/firebaseConfig';
-import { doc, getDoc } from 'firebase/firestore';
-import { removeFriend, uploadImage, updateUserDisplayName, updateUserPassword, logUserOut, deleteAuthAccount, updateUserBirthday, updateUserPhoneNumber, updateUserGender } from '../api/firebase/firebase';
+import { uploadImage, updateUserDisplayName, updateUserPassword, logUserOut, deleteAuthAccount, updateUserBirthday, updateUserPhoneNumber, updateUserGender, updateUserVisibility } from '../api/firebase/firebase';
 export default function Page(){
     const user = useUser();
     const router = useRouter();
@@ -22,6 +18,7 @@ export default function Page(){
     const [toggleBirthday, setToggleBirthday] = useState(false);
     const [togglePhoneNumber, setTogglePhoneNumber] = useState(false);
     const [toggleGender, setToggleGender] = useState(false);
+    const [toggleVisibility, setToggleVisibility] = useState(false);
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [newDisplayName, setNewDisplayName] = useState('');
@@ -30,6 +27,7 @@ export default function Page(){
     const [newBirthday, setNewBirthday] = useState('');
     const [newPhoneNumber, setNewPhoneNumber] = useState('');
     const [newGender, setNewGender] = useState('');
+    const [visibilityStatus, setVisibilityStatus] = useState('');
 
     const [errorMessage, setErrorMessage] = useState('');
     const [userErrorMessage, setUserErrorMessage] = useState('');
@@ -37,6 +35,7 @@ export default function Page(){
     const [birthdayErrorMessage, setBirthdayErrorMessage] = useState('');
     const [phoneNumberErrorMessage, setPhoneNumberErrorMessage] = useState('');
     const [genderErrorMessage, setGenderErrorMessage] = useState('');
+    const [visibilityErrorMessage, setVisibilityErrorMessage] = useState('');
 
     useEffect(() => {
         if(user == null){
@@ -137,6 +136,16 @@ export default function Page(){
             window.location.reload();
         } catch (err) {
             setGenderErrorMessage(err.message);
+        }
+    };
+
+    const handleVisibilityUpdate = async (e) => {
+        e.preventDefault();
+        try {
+            await updateUserVisibility(visibilityStatus);
+            window.location.reload();
+        }catch (err) {
+            setVisibilityErrorMessage(err.message);
         }
     };
 
@@ -328,6 +337,33 @@ export default function Page(){
                 )}
                 {genderErrorMessage && (
                     <p className="error-message">{genderErrorMessage}</p>
+                )}
+
+                <p className='user-label'>Visibility:</p>
+                <p className='user-info'>{user.visibility || 'Not Set'}</p>
+                <button
+                    className='toggle-update-button'
+                    onClick={() => {setToggleVisibility(!toggleVisibility)}}
+                >Update Visibility</button>
+                {toggleVisibility && (
+                    <form onSubmit={handleVisibilityUpdate}>
+                    <label>
+                        New Visibility:
+                        <select
+                            value={visibilityStatus}
+                            onChange={(e) => setVisibilityStatus(e.target.value)}
+                            className='update-textbox'
+                        >
+                            <option value="">Select Status</option>
+                            <option value="visible">Visible</option>
+                            <option value="hidden">Hidden</option>
+                        </select>
+                    </label>
+                    <button type="submit" className='upload-button'>Update</button>
+                </form>
+                )}
+                {visibilityErrorMessage && (
+                    <p className='error-message'>{visibilityErrorMessage}</p>
                 )}
             </div>
         )}
