@@ -87,6 +87,7 @@ const ProfilePopup = ({ onClose }) => {
                         <p className="profile-info">Phone: {user.phoneNumber || 'Not Set'}</p>
                     </div>
                 </div>
+                <div className="profile-divider"></div>
 
                 {/* Friends List */}
                 {friends.length > 0 && (
