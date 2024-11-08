@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useUser } from '@/app/context/UserContext';
 import { getDoc } from 'firebase/firestore';
-import { Trash } from 'lucide-react';
+import { Trash2, MessageSquareText  } from 'lucide-react';
 import { removeFriend } from '@/app/api/firebase/firebase';
 import './ProfilePopup.css';
 import '@/app/components/Friends/Friends.css';
@@ -9,6 +9,7 @@ import '@/app/components/Friends/Friends.css';
 const ProfilePopup = ({ onClose }) => {
     const user = useUser();
     const [friends, setFriends] = useState([]);
+    const [isExpanded, setIsExpanded] = useState(false);
     const db = user.db;
 
     useEffect(() => {
@@ -71,26 +72,39 @@ const ProfilePopup = ({ onClose }) => {
                 </div>
 
                 {/* Friends List */}
-                {friends.length > 0 && (
-                    <div className="friends-list">
-                        <h3>Friends</h3>
-                        <div className="friends-container">
-                            {friends.map((friend) => (
-                                <div key={friend.id} className="user-card">
-                                    <img src={friend.photoUrl || '/default-profile.png'} alt="Friend" className="profile-pic" />
-                                    <div className="user-info">
-                                        <h3>{friend.username || 'Unknown'}</h3>
-                                        <p>{friend.email}</p>
-                                    </div>
-                                    <button 
-                                        className="unfriend-button" 
-                                        onClick={() => handleUnfriend(friend.id)}
-                                    >
-                                        <Trash size={20} color="red" />
-                                    </button>
-                                </div>
-                            ))}
+        {friends.length > 0 && (
+            <div className="friends-list">
+                <h3>My Friends</h3>
+                <div className="friends-container">
+                    {friends.slice(0, isExpanded ? friends.length : 3).map((friend) => (
+                        <div key={friend.id} className="friend-card">
+                            
+                            <div className="friend-info-row">
+                                <img src={friend.photoUrl || '/default-profile.png'} alt="Friend" className="friend-picture" />
+                                <h4 className="friend-name">{friend.username || 'Unknown'}</h4>
+                            </div>
+
+                            <div className="action-container">
+                                <button className="message-button">
+                                    <MessageSquareText size={16} color="green" />
+                                </button>
+                                <button 
+                                    className="unfriend-button" 
+                                    onClick={() => handleUnfriend(friend.id)}
+                                >
+                                    <Trash2 size={16} color="red" />
+                                </button>
+                            </div>
                         </div>
+                    ))}
+                        </div>
+
+                        <button 
+                            className="friends-tab-button" 
+                            onClick={() => setIsExpanded(!isExpanded)}
+                        >
+                            {isExpanded ? "Close Friends View" : "View All Friends"}
+                        </button>
                     </div>
                 )}
             </div>
