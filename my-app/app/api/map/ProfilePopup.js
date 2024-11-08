@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useUser } from '@/app/context/UserContext';
-import { getDoc } from 'firebase/firestore';
-import { Trash } from 'lucide-react';
+import { getDoc, doc, onSnapshot } from 'firebase/firestore';
 import { removeFriend } from '@/app/api/firebase/firebase';
+import { db } from '@/app/api/firebase/firebaseConfig';
 import './ProfilePopup.css';
 import '@/app/components/Friends/Friends.css';
+import FriendCard from './FriendCard';
 
 const ProfilePopup = ({ onClose }) => {
     const user = useUser();
     const [friends, setFriends] = useState([]);
-    const db = user.db;
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [friendsStatus, setFriendsStatus] = useState({});
 
     useEffect(() => {
         if (user && user.friendsList) {
@@ -29,6 +31,22 @@ const ProfilePopup = ({ onClose }) => {
             fetchFriends();
         }
     }, [user]);
+
+    useEffect(() => {
+        const unsubscribeList = friends.map(friend => {
+            const friendStatusRef = doc(db, 'users', friend.id);
+            return onSnapshot(friendStatusRef, (doc) => {
+                setFriendsStatus(prevStatus => ({
+                    ...prevStatus,
+                    [friend.id]: doc.data()?.state || 'offline'
+                }));
+            });
+        });
+
+        return () => {
+            unsubscribeList.forEach(unsubscribe => unsubscribe());
+        };
+    }, [friends]);
 
     const handleUnfriend = async (friendId) => {
         try {
@@ -69,28 +87,29 @@ const ProfilePopup = ({ onClose }) => {
                         <p className="profile-info">Phone: {user.phoneNumber || 'Not Set'}</p>
                     </div>
                 </div>
+                <div className="profile-divider"></div>
 
                 {/* Friends List */}
                 {friends.length > 0 && (
                     <div className="friends-list">
-                        <h3>Friends</h3>
+                        <h3>My Friends</h3>
                         <div className="friends-container">
-                            {friends.map((friend) => (
-                                <div key={friend.id} className="user-card">
-                                    <img src={friend.photoUrl || '/default-profile.png'} alt="Friend" className="profile-pic" />
-                                    <div className="user-info">
-                                        <h3>{friend.username || 'Unknown'}</h3>
-                                        <p>{friend.email}</p>
-                                    </div>
-                                    <button 
-                                        className="unfriend-button" 
-                                        onClick={() => handleUnfriend(friend.id)}
-                                    >
-                                        <Trash size={20} color="red" />
-                                    </button>
-                                </div>
+                            {friends.slice(0, isExpanded ? friends.length : 3).map((friend) => (
+                                <FriendCard 
+                                    key={friend.id} 
+                                    friend={friend} 
+                                    friendsStatus={friendsStatus} 
+                                    handleUnfriend={handleUnfriend} 
+                                />
                             ))}
                         </div>
+
+                        <button 
+                            className="friends-tab-button" 
+                            onClick={() => setIsExpanded(!isExpanded)}
+                        >
+                            {isExpanded ? "Close Friends View" : "View All Friends"}
+                        </button>
                     </div>
                 )}
             </div>

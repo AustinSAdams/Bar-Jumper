@@ -315,6 +315,35 @@
   box-shadow: 0 0 3px rgba(255, 255, 255, 0.589);
 }
 
+.profile-image-container {
+  position: relative;
+  text-align: center;
+}
+
+.user-count-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 5px;
+  gap: 4px;
+}
+
+.user-count-display svg {
+  color: #555;
+  vertical-align: middle;
+}
+
+.dark-mode .user-count-display {
+  color: #e0e0e0;
+}
+
+.dark-mode .user-count-display svg {
+  color: #e0e0e0;
+}
+
+
 
 @media (min-width: 768px) {
   .location-popup {
