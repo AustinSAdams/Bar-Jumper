@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useUser } from '@/app/context/UserContext';
-import { getDoc } from 'firebase/firestore';
-import { Trash2, MessageSquareText, Circle  } from 'lucide-react';
+import { getDoc, doc, onSnapshot } from 'firebase/firestore';
+import { Trash2, MessageSquareText, Circle } from 'lucide-react';
 import { removeFriend } from '@/app/api/firebase/firebase';
+import { db } from '@/app/api/firebase/firebaseConfig';
 import './ProfilePopup.css';
 import '@/app/components/Friends/Friends.css';
 
@@ -10,7 +11,7 @@ const ProfilePopup = ({ onClose }) => {
     const user = useUser();
     const [friends, setFriends] = useState([]);
     const [isExpanded, setIsExpanded] = useState(false);
-    const db = user.db;
+    const [friendsStatus, setFriendsStatus] = useState({});
 
     useEffect(() => {
         if (user && user.friendsList) {
@@ -30,6 +31,22 @@ const ProfilePopup = ({ onClose }) => {
             fetchFriends();
         }
     }, [user]);
+
+    useEffect(() => {
+        const unsubscribeList = friends.map(friend => {
+            const friendStatusRef = doc(db, 'users', friend.id);
+            return onSnapshot(friendStatusRef, (doc) => {
+                setFriendsStatus(prevStatus => ({
+                    ...prevStatus,
+                    [friend.id]: doc.data()?.state || 'offline'
+                }));
+            });
+        });
+
+        return () => {
+            unsubscribeList.forEach(unsubscribe => unsubscribe());
+        };
+    }, [friends]);
 
     const handleUnfriend = async (friendId) => {
         try {
@@ -79,7 +96,8 @@ const ProfilePopup = ({ onClose }) => {
                             {friends.slice(0, isExpanded ? friends.length : 3).map((friend) => (
                                 <div key={friend.id} className="friend-card">
                                     <div className="green-dot">
-                                        <Circle size={12} color="green" fill="green" />
+                                        <Circle size={12} color={friendsStatus[friend.id] === 'online' ? 'green' : 'red'} fill={friendsStatus[friend.id] === 'online' ? 'green' : 'red'} />
+                                        <span className="tooltip">{friendsStatus[friend.id] === 'online' ? 'Online Now' : 'Offline'}</span>
                                     </div>
                                     <div className="friend-info-row">
                                         <img src={friend.photoUrl || '/default-profile.png'} alt="Friend" className="friend-picture" />

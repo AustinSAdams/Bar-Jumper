@@ -4,6 +4,7 @@ import { createContext, useState, useEffect, useContext } from 'react';
 import { onAuthStateChanged, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { auth, db } from '../api/firebase/firebaseConfig';
 import { getDoc, doc } from 'firebase/firestore';
+import { setUserOnlineStatus, setUserOfflineStatus } from '../api/firebase/onlineStatus';
 
 export const UserContext = createContext();
 
@@ -26,11 +27,13 @@ export function UserProvider({ children }) {
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
           setUser({ ...currentUser, ...userDoc.data() });
+          setUserOnlineStatus();
         } else {
           console.error("User data not found in Firestore.");
         }
       } else {
         setUser(null);
+        setUserOfflineStatus();
       }
     });
 
