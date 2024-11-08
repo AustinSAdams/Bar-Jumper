@@ -303,7 +303,7 @@ export default function Page(){
                                 className='update-textbox'
                             />
                         </label>
-                        <button type="submit" className='upload-button'>Update Phone Number</button>
+                        <button type="submit" className='upload-button'>Update</button>
                     </form>
                 )}
                 {phoneNumberErrorMessage && (
@@ -332,7 +332,7 @@ export default function Page(){
                                 <option value="Prefer not to say">Prefer not to say</option>
                             </select>
                         </label>
-                        <button type="submit" className='upload-button'>Update Gender</button>
+                        <button type="submit" className='upload-button'>Update</button>
                     </form>
                 )}
                 {genderErrorMessage && (
