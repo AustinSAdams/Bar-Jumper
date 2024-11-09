@@ -1,4 +1,3 @@
-
 .current-users-list {
     padding: 15px;
     background-color: #333;
@@ -8,6 +7,8 @@
 }
 
 .current-users-title {
+    display: flex;
+    align-items: center;
     font-size: 1rem;
     font-weight: bold;
     color: #fff;
@@ -16,12 +17,34 @@
     padding-bottom: 5px;
 }
 
+.gender-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 15px;
+}
+
+.male-icon {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+    fill: #859cff;
+    margin-right: 5px;
+}
+
+.female-icon {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+    fill: #f879f8;
+    margin-right: 5px;
+}
+
 .current-users-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
 }
-
 
 .user-card {
     background-color: #3a3a3a;
@@ -31,7 +54,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%; 
+    width: 100%;
 }
 
 .user-card:hover {
