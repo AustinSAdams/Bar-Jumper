@@ -32,7 +32,7 @@
     padding: 2px;
 }
 
-.user-card {
+.sidebar-user-card {
     display: flex;
     align-items: center;
     background-color: #292929;
@@ -44,7 +44,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.profile-pic {
+.sidebar-profile-pic {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -54,7 +54,7 @@
     flex-shrink: 0;
 }
 
-.user-card-info {
+.sidebar-user-card-info {
     flex: 1;
     color: white;
     background-color: #292929;
@@ -64,24 +64,24 @@
     margin-right: 12px;
 }
 
-.user-card-info h3 {
+.sidebar-user-card-info h3 {
     margin: 0;
     font-size: 16px;
     font-weight: bold;
 }
 
-.user-card-info p {
+.sidebar-user-card-info p {
     margin: 4px 0 0;
     font-size: 14px;
     color: #a3a3a3;
 }
 
-.add-friend-button {
+.sidebar-add-friend-button {
     color: rgb(0, 210, 32);
     border: 1px solid black;
     border-radius: 8px;
 }
 
-.add-friend-button:hover {
+.sidebar-add-friend-button:hover {
     color: rgb(0, 145, 22)
 }

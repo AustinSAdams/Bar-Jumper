@@ -6,6 +6,7 @@ import { db } from '@/app/api/firebase/firebaseConfig';
 import './ProfilePopup.css';
 import '@/app/components/Friends/Friends.css';
 import UserCard from './userCard';
+import UserParties from './userParties';
 
 const ProfilePopup = ({ onClose }) => {
     const user = useUser();
@@ -89,7 +90,7 @@ const ProfilePopup = ({ onClose }) => {
                 </div>
                 <div className="profile-divider"></div>
 
-                {/* Friends List */}
+
                 {friends.length > 0 && (
                     <div className="friends-list">
                         <h3>My Friends</h3>
@@ -112,6 +113,10 @@ const ProfilePopup = ({ onClose }) => {
                         </button>
                     </div>
                 )}
+
+
+                <div className="profile-divider"></div>
+                <UserParties />
             </div>
         </div>
     );
