@@ -5,7 +5,7 @@ import { removeFriend } from '@/app/api/firebase/firebase';
 import { db } from '@/app/api/firebase/firebaseConfig';
 import './ProfilePopup.css';
 import '@/app/components/Friends/Friends.css';
-import FriendCard from './FriendCard';
+import UserCard from './userCard';
 
 const ProfilePopup = ({ onClose }) => {
     const user = useUser();
@@ -95,7 +95,7 @@ const ProfilePopup = ({ onClose }) => {
                         <h3>My Friends</h3>
                         <div className="friends-container">
                             {friends.slice(0, isExpanded ? friends.length : 3).map((friend) => (
-                                <FriendCard 
+                                <UserCard 
                                     key={friend.id} 
                                     friend={friend} 
                                     friendsStatus={friendsStatus} 
