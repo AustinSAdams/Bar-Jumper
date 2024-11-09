@@ -43,7 +43,8 @@ export async function createAccount(email, password, username) {
       friendsList: [],
       birthday: null, 
       phoneNumber: null,
-      gender: null
+      gender: null,
+      visibility: 'visible'
     });
     await updateProfile(user, {
       displayName: username,
@@ -255,5 +256,17 @@ export async function updateUserGender(newGender) {
     });
   } catch (err) {
     throw new CustomError("Error updating gender.");
+  }
+}
+
+export async function updateUserVisibility(status) {
+  const user = auth.currentUser;
+  try {
+    const userDoc = doc(db, 'users', user.uid);
+    await updateDoc(userDoc, {
+      visibility: status
+    });
+  }catch (err) {
+    throw new CustomError("Error updating visibility!");
   }
 }

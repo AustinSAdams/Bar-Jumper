@@ -40,7 +40,7 @@
     padding: 12px;
     border-radius: 8px;
     margin-bottom: 12px;
-    border: 1px solid black;
+    border: 2px solid black;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -54,35 +54,34 @@
     flex-shrink: 0;
 }
 
-.user-info {
+.user-card-info {
     flex: 1;
     color: white;
-    background-color: #29292900;
+    background-color: #292929;
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin-right: 12px;
 }
 
-.user-info h3 {
+.user-card-info h3 {
     margin: 0;
     font-size: 16px;
     font-weight: bold;
 }
 
-.user-info p {
+.user-card-info p {
     margin: 4px 0 0;
     font-size: 14px;
     color: #a3a3a3;
 }
 
 .add-friend-button {
-    color: black;
-    background-color: rgb(0, 147, 0);
+    color: rgb(0, 210, 32);
+    border: 1px solid black;
     border-radius: 8px;
 }
 
 .add-friend-button:hover {
-    background-color: rgb(0, 99, 0);
+    color: rgb(0, 145, 22)
 }
-

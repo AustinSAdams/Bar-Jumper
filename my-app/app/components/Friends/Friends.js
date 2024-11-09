@@ -13,6 +13,16 @@ export default function friendingPage({ onClose }){
     const [friendsList, setFriendsList] = useState([]);
 
     useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (pageRef.current && !pageRef.current.contains(event.target)) {
+          onClose();
+        }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [onClose]);
+
+    useEffect(() => {
       async function fetchDocuments() {
         try{
           const documents = await getAllDocuments("users");
@@ -34,8 +44,13 @@ export default function friendingPage({ onClose }){
       setSearchTerm(e.target.value.toLowerCase());
     };
 
+    const handleAddFriend = async (uid) => {
+      await addFriend(uid);
+      setFriendsList(prevList => [...prevList, uid]);
+    }
+
     return(
-        <div className="sidebar">
+        <div className="sidebar" ref={pageRef}>
           <div className="search-bar-container">
             <input
               className="search-bar"
@@ -58,11 +73,11 @@ export default function friendingPage({ onClose }){
                 alt={`${doc.username}'s profile`}
                 className="profile-pic"
               />
-              <div className="user-info">
+              <div className="user-card-info">
                 <h3>{doc.username}</h3>
                 <p>{doc.email}</p>
               </div>
-              <button onClick={()=>{addFriend(doc.id)}}>
+              <button onClick={()=>{handleAddFriend(doc.id)}}>
                 <Plus className="add-friend-button"/>
               </button>
             </div>
