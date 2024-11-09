@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useUser } from '@/app/context/UserContext';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs, getDoc, addDoc } from 'firebase/firestore';
 import { db } from '@/app/api/firebase/firebaseConfig';
 import PartyCard from './PartyCard';
 import './userParties.css';
@@ -31,6 +31,21 @@ const UserParties = () => {
     }, []);
 
     useEffect(() => {
+        if (user && user.friendsList) {
+            const loadFriends = async () => {
+                const friendData = await Promise.all(
+                    user.friendsList.map(async (friendRef) => {
+                        const friendDoc = await getDoc(friendRef);
+                        return friendDoc.exists() ? { id: friendDoc.id, ...friendDoc.data() } : null;
+                    })
+                );
+                setFriends(friendData.filter(friend => friend !== null));
+            };
+            loadFriends();
+        }
+    }, [user]);
+
+    useEffect(() => {
         const fetchParties = async () => {
             const partiesSnapshot = await getDocs(collection(db, 'parties'));
             const userParties = partiesSnapshot.docs
@@ -41,10 +56,10 @@ const UserParties = () => {
                 );
             setParties(userParties);
         };
-    
+
         fetchParties();
     }, [user]);
-    
+
     const handleCreateParty = () => setShowOverlay(true);
     const handleCancel = () => setShowOverlay(false);
 
@@ -101,8 +116,71 @@ const UserParties = () => {
             {showOverlay && (
                 <div className="userParties-overlay">
                     <h3>Create New Party</h3>
-                    <button type="button" className="userParties-cancelButton" onClick={handleCancel}>Cancel</button>
-                    <button type="button" className="userParties-confirmButton" onClick={handleConfirmParty}>Confirm Party</button>
+                    <form className="userParties-form">
+                        <label>
+                            Party Name:
+                            <input
+                                type="text"
+                                value={partyName}
+                                onChange={(e) => setPartyName(e.target.value)}
+                            />
+                        </label>
+                        <label>
+                            Location:
+                            <select
+                                value={locationId}
+                                onChange={(e) => setLocationId(e.target.value)}
+                            >
+                                <option value="">Select Location</option>
+                                {locations.map(location => (
+                                    <option key={location.id} value={location.id}>
+                                        {location.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                        <label>
+                            Invite Friends:
+                            <div className="userParties-friendsList">
+                                {friends.map(friend => (
+                                    <div key={friend.id} className="userParties-friendCheckbox">
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedFriends.includes(friend.id)}
+                                                onChange={() => toggleFriendSelection(friend.id)}
+                                            />
+                                            {friend.username || 'Unnamed'}
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        </label>
+                        <label>
+                            Arrival Date:
+                            <input
+                                type="date"
+                                value={arrivalDate}
+                                onChange={(e) => setArrivalDate(e.target.value)}
+                            />
+                        </label>
+                        <label>
+                            Arrival Time:
+                            <input
+                                type="time"
+                                value={arrivalTime}
+                                onChange={(e) => setArrivalTime(e.target.value)}
+                            />
+                        </label>
+                        <div className="userParties-overlayButtons">
+                            <button type="button" className="userParties-cancelButton" onClick={handleCancel}>
+                                Cancel
+                            </button>
+                            <button type="button" className="userParties-confirmButton" onClick={handleConfirmParty}>
+                                Confirm Party
+                            </button>
+                        </div>
+                    </form>
                 </div>
             )}
         </div>
