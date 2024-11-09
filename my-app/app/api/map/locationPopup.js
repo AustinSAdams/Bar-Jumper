@@ -13,6 +13,7 @@ import { renderStars } from './locationList';
 import LocationReviews from './locationReviews';
 import useLocationUserCount from './useLocationUserCount';
 import CurrentUsersList from './CurrentUsersList';
+import LocationParties from './LocationParties';
 
 const calculateDistance = (userLocation, locationCoords) => {
   if (!userLocation || !locationCoords.longitude || !locationCoords.latitude) return null;    // null if any cords missing
@@ -173,6 +174,7 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
                 <LocationHoursBubble location={location} theme={theme} />
               </div>
               <CurrentUsersList locationId={location.id} />
+              <LocationParties locationId={location.id} />
               <div className="gallery-section">
                 <LocationImageGallery location={location} theme={theme} onImageSelect={setSelectedImage} />
               </div>
