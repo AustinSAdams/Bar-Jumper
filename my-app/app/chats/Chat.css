@@ -4,32 +4,29 @@
     height: 90vh;
   }
   
-  .chatroom-list {
-    width: 25%;
+  .chatroom-list, .private-chatroom-list, .friends-list {
+    width: 20%;
     border-right: 1px solid #ccc;
     padding: 10px;
+    overflow-y: auto;
   }
 
-  .chatroom-list-header {
-    display: center;
+  .chatroom-list-header, .private-chatroom-list-header, .friends-list-header {
+    display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
     text-align: center;
     text-size-adjust: 20px;
-    font-size: 40px;
+    font-size: 20px;
   }
   
-  .chatroom-list ul {
+  .chatroom-list ul, .private-chatroom-list ul, .friends-list ul {
     list-style-type: none;
     padding: 0;
   }
 
-  .chat-window li {
-    margin-bottom: 10px;
-  }
-
-  .chatroom-list li button {
+  .chatroom-list li button, .private-chatroom-list li button, .friends-list li button {
     width: 100%;
     padding: 10px;
     background-color: #000305;
@@ -40,16 +37,20 @@
     text-align: center;
     margin-top: 10px;
     margin-bottom: 10px;
-}
+  }
 
-.chatroom-list li button:hover {
+  .chatroom-list li button:hover, .private-chatroom-list li button:hover, .friends-list li button:hover { 
     background-color: #2c3e50;
-}
+  }
+
   .chat-window {
-    width: 75%;
+    flex: 1;
     padding: 10px;
     display: flex;
     flex-direction: column;
+  }
+  .chat-window li {
+    margin-bottom: 10px;
   }
   
   .messages {
@@ -59,7 +60,7 @@
   }
   
   .message {
-    margin: 5px 0;
+    margin-bottom: 10px;
     display: flex;
   }
   
@@ -93,6 +94,8 @@
 
   .message-input {
     display: flex;
+    border-top: 1px solid #ccc;
+    padding: 10px;
   }
   
   .message-input input {
@@ -110,4 +113,17 @@
     color: white;
     border-radius: 4px;
     cursor: pointer;
+  }
+
+  .message-input button:hover {
+    background-color: #0056b3;
+  }
+
+  .chatroom-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 20px;
   }
