@@ -67,18 +67,18 @@ export default function friendingPage({ onClose }){
                 ( searchTerm === "" || doc.username.toLowerCase().includes(searchTerm))
             )
             .map(doc => (
-            <div key={doc.id} className="user-card">
+            <div key={doc.id} className="sidebar-user-card">
               <img
                 src={doc.photoUrl}
                 alt={`${doc.username}'s profile`}
-                className="profile-pic"
+                className="sidebar-profile-pic"
               />
-              <div className="user-card-info">
+              <div className="sidebar-user-card-info">
                 <h3>{doc.username}</h3>
                 <p>{doc.email}</p>
               </div>
               <button onClick={()=>{handleAddFriend(doc.id)}}>
-                <Plus className="add-friend-button"/>
+                <Plus className="sidebar-add-friend-button"/>
               </button>
             </div>
           ))}

@@ -1,0 +1,155 @@
+
+.userParties-container {
+    padding: 15px;
+    background-color: #333;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
+}
+
+.userParties-title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #555;
+    padding-bottom: 5px;
+}
+
+.userParties-partiesList {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.userParties-partiesList p {
+    font-size: 0.9rem;
+    color: #aaa;
+    text-align: center;
+}
+
+.userParties-createButton {
+    background-color: #49d7fa;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.userParties-createButton:hover {
+    background-color: #3bb6d1;
+}
+
+.userParties-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 10;
+}
+
+.userParties-overlay h3 {
+    font-size: 1.2rem;
+    color: #49d7fa;
+    margin-bottom: 15px;
+}
+
+.userParties-form {
+    background-color: #444;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.userParties-form label {
+    display: block;
+    font-weight: bold;
+    color: #ddd;
+    margin-bottom: 5px;
+}
+
+.userParties-form input[type="text"],
+.userParties-form input[type="date"],
+.userParties-form input[type="time"],
+.userParties-form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #555;
+    color: #fff;
+}
+
+.userParties-friendsList {
+    max-height: 150px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: #555;
+    border-radius: 5px;
+}
+
+.userParties-friendCheckbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.userParties-friendCheckbox label {
+    font-weight: normal;
+    color: #fff;
+}
+
+.userParties-overlayButtons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.userParties-cancelButton,
+.userParties-confirmButton {
+    width: 48%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.userParties-cancelButton {
+    background-color: #ff4d4d;
+    color: #fff;
+}
+
+.userParties-confirmButton {
+    background-color: #5cb85c;
+    color: #fff;
+}
+
+.userParties-cancelButton:hover {
+    background-color: #e44a4a;
+}
+
+.userParties-confirmButton:hover {
+    background-color: #4cae4c;
+}
