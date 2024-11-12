@@ -6,10 +6,16 @@ import './Chat.css';
 
 const Chat = ({ chatrooms = [], chatroomId }) => {
   const [selectedChatroom, setSelectedChatroom] = useState(null);
+  const [activeChats, setActiveChats] = useState('none')
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const user = useUser();
 
+
+  const chatroomSets = {
+    none: [],
+    all: chatrooms
+  }
   // Select a chatroom and set up a listener
   const handleChatroomSelect = async (chatroom) => {
     setSelectedChatroom(chatroom);
@@ -59,10 +65,10 @@ const Chat = ({ chatrooms = [], chatroomId }) => {
     <div className="chat-container">
       <div className="chatroom-list">
         <div className="chatroom-list-header">
-          <h2>Chatrooms</h2>
+          <h2>Chats</h2>
         </div>
         <ul>
-          {chatrooms.map((chatroom) => (
+          {chatroomSets[activeChats].map((chatroom) => (
             <li key={chatroom.id}>
               <button onClick={() => handleChatroomSelect(chatroom)}>
                 {chatroom.name}
@@ -70,6 +76,10 @@ const Chat = ({ chatrooms = [], chatroomId }) => {
             </li>
           ))}
         </ul>
+        <div className = "chatroom-set-buttons">
+            <button onClick={() => setActiveChats('all')}>Global Chats</button>
+
+          </div>
       </div>
       <div className="chat-window">
         {selectedChatroom ? (

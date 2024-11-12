@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '@/app/api/firebase/firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
 import Chat from './Chat';
+import LocationDetails from '../api/map/locationPopup';
 
 export default function Page() {
   const [chatrooms, setChatrooms] = useState([]);
@@ -17,7 +18,6 @@ export default function Page() {
           id: doc.id,
           ...doc.data()
         }));
-
         setChatrooms(chatroomsList);
       } catch (error) {
         console.error('Error fetching chatrooms:', error);
@@ -29,7 +29,7 @@ export default function Page() {
 
   return (
     <div>
-      <Chat chatrooms={chatrooms} />
+      <Chat chatrooms={chatrooms} /> 
     </div>
   );
 }
