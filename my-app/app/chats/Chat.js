@@ -50,7 +50,8 @@ const Chat = ({ chatrooms }) => {
 
   const chatroomSets = {
     none: [],
-    all: chatrooms
+    global: chatrooms,
+    private: privateChatrooms
   }
   // Select a chatroom and set up a listener
   const handleChatroomSelect = async (chatroom) => {
@@ -179,8 +180,8 @@ const Chat = ({ chatrooms }) => {
           ))}
         </ul>
         <div className = "chatroom-set-buttons">
-            <button onClick={() => setActiveChats('all')}>Global Chats</button>
-
+            <button onClick={() => setActiveChats('global')}>Global Chats</button>  
+            <button onClick={() => setActiveChats('private')}>Private Chats</button>
           </div>
       </div>
       <div className="private-chatroom-list">

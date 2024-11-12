@@ -32,6 +32,8 @@
   }
 
   .chatroom-set-buttons {
+    justify-content: space-between;
+    padding: 10px;
     width: 33%;
     padding: 10px;
     background-color: #000305;
@@ -42,6 +44,7 @@
     text-align: center;
     margin-top: 10px;
     margin-bottom: 10px;
+    gap: 10px;
 }
 
 .chatroom-set-buttons:hover {

@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { db } from '@/app/api/firebase/firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
 import Chat from './Chat';
-import LocationDetails from '../api/map/locationPopup';
 
 export default function Page() {
   const [chatrooms, setChatrooms] = useState([]);
