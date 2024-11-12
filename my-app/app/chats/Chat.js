@@ -6,6 +6,8 @@ import './Chat.css';
 
 const Chat = ({ chatrooms }) => {
   const [selectedChatroom, setSelectedChatroom] = useState(null);
+  const [activeChats, setActiveChats] = useState('none')
+  const [friendFlag, setFriendFlag] = useState('False')
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [privateChatrooms, setPrivateChatrooms] = useState([]);
@@ -45,6 +47,15 @@ const Chat = ({ chatrooms }) => {
       return () => unsubscribe();
     }
   }, [user]);
+
+
+  const chatroomSets = {
+    none: [],
+    global: chatrooms,
+    private: privateChatrooms
+  }
+
+const filteredFriends = friendFlag === 'True' ? friends : [];
 
   // Select a chatroom and set up a listener
   const handleChatroomSelect = async (chatroom) => {
@@ -161,10 +172,10 @@ const Chat = ({ chatrooms }) => {
     <div className="chat-container">
       <div className="chatroom-list">
         <div className="chatroom-list-header">
-          <h2>Chatrooms</h2>
+          <h2>Chats</h2>
         </div>
         <ul>
-          {chatrooms.map((chatroom) => (
+          {activeChats === 'global' && chatrooms.map((chatroom) => (
             <li key={chatroom.id}>
               <button onClick={() => handleChatroomSelect({ ...chatroom, type: 'public' })}>
                 {chatroom.name}
@@ -172,13 +183,9 @@ const Chat = ({ chatrooms }) => {
             </li>
           ))}
         </ul>
-      </div>
-      <div className="private-chatroom-list">
-        <div className="private-chatroom-list-header">
-          <h2>Private Chatrooms</h2>
-        </div>
+
         <ul>
-          {privateChatrooms.map((privateChatroom) => (
+          {activeChats === 'private' && privateChatrooms.map((privateChatroom) => (
             <li key={privateChatroom.id}>
               <button onClick={() => handleChatroomSelect({ ...privateChatroom, type: 'private' })}>
                 {privateChatroomUsernames[privateChatroom.id]
@@ -187,7 +194,7 @@ const Chat = ({ chatrooms }) => {
               </button>
             </li>
           ))}
-          {friends.map((friend) => (
+          {filteredFriends.map((friend) => (
             <li key={friend.id}>
               <button onClick={() => handleCreateorSelectPrivateChatroom(friend.id)}>
                 {friend.username}
@@ -195,9 +202,12 @@ const Chat = ({ chatrooms }) => {
             </li>
           ))}
         </ul>
-        <button onClick={() => handleCreateGroupChatroom(friends.map(friend => friend.id))}>
-          Create Group Chat
-        </button>
+
+        <div className = "chatroom-set-buttons"tabindex = "-1">
+            <button onClick={() => {setActiveChats('global'); setFriendFlag('False')}}>Global Chats</button>  
+            <button onClick={() => {setActiveChats('private'); setFriendFlag('True')}}>Private Chats</button>
+            <button onClick={() => handleCreateGroupChatroom(friends.map(friend => friend.id))}>Create Group Chat</button>
+          </div>
       </div>
       <div className="chat-window">
         {selectedChatroom ? (

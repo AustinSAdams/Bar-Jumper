@@ -1,3 +1,7 @@
+*{
+  outline: none;
+}
+
 .chat-container {
     background: linear-gradient(135deg, #fafafa, #34495e);
     display: flex;
@@ -20,6 +24,41 @@
     text-size-adjust: 20px;
     font-size: 20px;
   }
+
+  .chatroom-type-header {
+    display: center;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    text-align: center;
+    text-size-adjust: 10px;
+    font-size: 20px;
+  }
+
+  .chatroom-set-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .chatroom-set-buttons button{
+    flex-grow: 1;
+    padding: 10px;
+    background-color: #000305;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+.chatroom-set-buttons button:hover {
+  background-color: #2c3e50;
+  cursor: pointer;
+}
   
   .chatroom-list ul, .private-chatroom-list ul, .friends-list ul {
     list-style-type: none;

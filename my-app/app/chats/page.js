@@ -17,7 +17,6 @@ export default function Page() {
           id: doc.id,
           ...doc.data()
         }));
-
         setChatrooms(chatroomsList);
       } catch (error) {
         console.error('Error fetching chatrooms:', error);
@@ -29,7 +28,7 @@ export default function Page() {
 
   return (
     <div>
-      <Chat chatrooms={chatrooms} />
+      <Chat chatrooms={chatrooms} /> 
     </div>
   );
 }
