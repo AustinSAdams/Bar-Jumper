@@ -14,6 +14,7 @@ import LocationReviews from './locationReviews';
 import useLocationUserCount from './useLocationUserCount';
 import CurrentUsersList from './CurrentUsersList';
 import LocationParties from './LocationParties';
+import Link from 'next/link';
 
 const calculateDistance = (userLocation, locationCoords) => {
   if (!userLocation || !locationCoords.longitude || !locationCoords.latitude) return null;    // null if any cords missing
@@ -154,7 +155,8 @@ const LocationDetails = ({ locations, location, onClose, userLocation, theme, on
                 <span>{travelTime} min</span>
               </button>
             )}
-            <button className={`chat-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}> <MessageSquare size={24} strokeWidth={2} /> </button>
+            <button className={`chat-bubble ${theme === 'dark' ? 'dark-mode' : ''}`}>
+              <Link href="/chats" passHref><MessageSquare size={24} strokeWidth={2} /></Link></button>
             <button 
               className={`menu-bubble ${theme === 'dark' ? 'dark-mode' : ''}`} 
               onClick={() => {
