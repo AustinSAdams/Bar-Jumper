@@ -97,13 +97,17 @@ const UserParties = () => {
         );
     };
 
+    const handleDeleteParty = (partyId) => {
+        setParties(parties.filter(party => party.id !== partyId));
+    };
+
     return (
         <div className="userParties-container">
             <h3 className="userParties-title">My Parties</h3>
             <div className="userParties-partiesList">
                 {parties.length > 0 ? (
                     parties.map(party => (
-                        <PartyCard key={party.id} party={party} />
+                        <PartyCard key={party.id} party={party} onDelete={handleDeleteParty} />
                     ))
                 ) : (
                     <p>No current Parties</p>
@@ -177,7 +181,7 @@ const UserParties = () => {
                                 Cancel
                             </button>
                             <button type="button" className="userParties-confirmButton" onClick={handleConfirmParty}>
-                                Confirm Party
+                                Confirm
                             </button>
                         </div>
                     </form>

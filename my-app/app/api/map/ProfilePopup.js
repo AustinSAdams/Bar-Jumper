@@ -92,7 +92,7 @@ const ProfilePopup = ({ onClose }) => {
 
 
                 {friends.length > 0 && (
-                    <div className="friends-list">
+                    <div className="prof-friends-list">
                         <h3>My Friends</h3>
                         <div className="friends-container">
                             {friends.slice(0, isExpanded ? friends.length : 3).map((friend) => (

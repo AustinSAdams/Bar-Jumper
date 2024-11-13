@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/app/api/firebase/firebaseConfig';
 import './PartyCard.css';
+import { Trash2 } from 'lucide-react';
 
-const PartyCard = ({ party }) => {
+const PartyCard = ({ party, onDelete }) => {
     const [locationImage, setLocationImage] = useState('');
     const [locationName, setLocationName] = useState('');
     const [usernames, setUsernames] = useState([]);
@@ -34,6 +35,15 @@ const PartyCard = ({ party }) => {
         fetchUsernames();
     }, [party]);
 
+    const handleDelete = async () => {
+        try {
+            await deleteDoc(doc(db, 'parties', party.id));
+            onDelete(party.id);
+        } catch (error) {
+            console.error('Party Delete Error:', error);
+        }
+    };
+
     return (
         <div className="party-card">
             <img src={locationImage} alt="Location" className="party-card-image" />
@@ -41,6 +51,12 @@ const PartyCard = ({ party }) => {
                 <h4 className="party-card-title">{party.partyName}</h4>
                 <p className="party-card-info">
                     {locationName} • {party.arrivalDate} at {party.arrivalTime}
+                    <button 
+                        className="party-card-delete-party" 
+                        onClick={handleDelete}
+                    >
+                        <Trash2 size={16} color="red" />
+                    </button>
                 </p>
                 <div className="party-card-users">
                     {usernames.map((username, index) => (
