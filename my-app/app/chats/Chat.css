@@ -276,3 +276,37 @@ body {
 .delete-chatroom-button:hover {
   color: #e44a4a;
 }
+
+.chat-window-header {
+  color: whitesmoke;
+  text-align: center;
+  font-size: 16px;
+  margin: 5px;
+  background-color: #007bff;
+  border: none;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-window-header.public  {
+  color: whitesmoke;
+  text-align: center;
+  font-size: 24px;
+  margin: 10px;
+  background-color: #5c5c5c;
+  border: none;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.chat-window-header.private {
+  color: whitesmoke;
+  text-align: center;
+  font-size: 16px;
+  margin: 5px;
+  background-color: #5c5c5c;
+  border: none;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

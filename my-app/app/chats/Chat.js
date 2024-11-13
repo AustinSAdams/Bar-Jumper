@@ -73,8 +73,9 @@ const Chat = ({ chatrooms }) => {
             }));
             setSelectedChatroom({ ...chatroom, name: userNames.join(', ') });
           })();
-        } else {
+        } else if(chatroom.type === 'public'){
           (async () => {
+            const publicChatName = chatData.name || chatroom.id;
             const userNames = await Promise.all((chatData.users || []).map(async (uid) => {
               if (uid !== user.uid) {
                 const userDoc = await getDoc(doc(db, 'users', uid));  // getDoc on users collection for each user that is not in the chatroom
@@ -82,7 +83,7 @@ const Chat = ({ chatrooms }) => {
               }
               return null;
             }));
-            setSelectedChatroom({ ...chatroom, name: userNames.join(', ') });
+            setSelectedChatroom({ ...chatroom, name: publicChatName });
           })();
         }
       }
@@ -185,6 +186,13 @@ const Chat = ({ chatrooms }) => {
       console.error('Error deleting chatroom:', error);
     }
   };
+   
+  //user can perss enter to send message
+  const onEnter = (event) => {
+    if (event.key === 'Enter') {
+      handleSendMessage();
+    }
+  };
 
   return (
     <div className="chat-container">
@@ -261,7 +269,9 @@ const Chat = ({ chatrooms }) => {
       <div className="chat-window">
         {selectedChatroom ? (
           <>
-            <h2>{selectedChatroom.name || selectedChatroom.id}</h2>
+          <h2 className={`chat-window-header ${selectedChatroom.type === 'public' ? 'public' : selectedChatroom.type === 'private' ? 'private' : 'global'}`}>
+            {selectedChatroom.name || selectedChatroom.id}
+          </h2>
             <div className="messages">
               {messages.map((message, index) => (
                 <div key={index} className={`message ${message.senderId === user.uid ? 'sent' : 'received'}`}>
@@ -276,6 +286,7 @@ const Chat = ({ chatrooms }) => {
                 type="text"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
+                onKeyDown={onEnter}
                 placeholder="Type a message..."
               />
               <button onClick={handleSendMessage}>Send</button>
