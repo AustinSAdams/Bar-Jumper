@@ -1,13 +1,14 @@
 import { db } from '@/app/api/firebase/firebaseConfig';
-import { doc, getDoc, setDoc, collection, updateDoc, addDoc, query, onSnapshot, serverTimestamp, arrayUnion, where } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, updateDoc, addDoc, query, onSnapshot, serverTimestamp, arrayUnion, where, deleteDoc } from 'firebase/firestore';
 import React, { useState, useEffect } from 'react';
 import { useUser } from '@/app/context/UserContext';
 import './Chat.css';
+import { X } from 'lucide-react';
 
 const Chat = ({ chatrooms }) => {
   const [selectedChatroom, setSelectedChatroom] = useState(null);
-  const [activeChats, setActiveChats] = useState('none')
-  const [friendFlag, setFriendFlag] = useState('False')
+  const [activeChats, setActiveChats] = useState('none');
+  const [friendFlag, setFriendFlag] = useState('False');
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [privateChatrooms, setPrivateChatrooms] = useState([]);
@@ -16,7 +17,6 @@ const Chat = ({ chatrooms }) => {
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [isFriendListVisible, setIsFriendListVisible] = useState(false);
   const user = useUser();
-
 
   useEffect(() => {
     if (user) {
@@ -27,12 +27,9 @@ const Chat = ({ chatrooms }) => {
           const friendsList = userDoc.data().friendsList || [];
           const friendsData = await Promise.all(friendsList.map(async (friendRef) => {
             const friendDoc = await getDoc(friendRef);
-            return { id: friendDoc.id, ...friendDoc.data() };  //if they have a friend on list, return that
+            return { id: friendDoc.id, ...friendDoc.data() };   //if they have a friend on list, return that
           }));
-          console.log('Fetched friends list: ', friendsData);  
           setFriends(friendsData);
-        } else {
-          console.log('No friends list found for user:', user.uid);
         }
       };
       fetchFriends();
@@ -50,16 +47,14 @@ const Chat = ({ chatrooms }) => {
     }
   }, [user]);
 
-
   const chatroomSets = {
     none: [],
     global: chatrooms,
     private: privateChatrooms
-  }
+  };
 
-const filteredFriends = friendFlag === 'True' ? friends : [];
+  const filteredFriends = friendFlag === 'True' ? friends : [];
 
-  // Select a chatroom and set up a listener
   const handleChatroomSelect = async (chatroom) => {
     setSelectedChatroom(chatroom);
     setMessages([]);
@@ -71,20 +66,16 @@ const filteredFriends = friendFlag === 'True' ? friends : [];
         setMessages(chatData.messages || []);   //takes a snapshot of the messages and adds them to chatData.messages or an empty array to be created
 
         if (chatroom.type === 'private') {
-          (async () => {   //need this to avoid non-async function error
-            const userNames = await Promise.all(chatData.users.map(async (uid) => {
+          (async () => {
+            const userNames = await Promise.all((chatData.users || []).map(async (uid) => {
               const userDoc = await getDoc(doc(db, 'users', uid));
               return userDoc.exists() ? userDoc.data().username : 'Unknown User';
             }));
             setSelectedChatroom({ ...chatroom, name: userNames.join(', ') });
-            /*const friendId = chatData.users.find(uid => uid !== user.uid);
-            const friendDoc = await getDoc(doc(db, 'users', friendId));   //used to get usernames to be more easily passed into div so it won't display id
-            const friendName = friendDoc.exists() ? friendDoc.data().username : 'Unknown User';
-            setSelectedChatroom({ ...chatroom, name: usernames.join(', ') });*/
           })();
         } else {
           (async () => {
-            const userNames = await Promise.all(chatData.users.map(async (uid) => {
+            const userNames = await Promise.all((chatData.users || []).map(async (uid) => {
               if (uid !== user.uid) {
                 const userDoc = await getDoc(doc(db, 'users', uid));  // getDoc on users collection for each user that is not in the chatroom
                 return userDoc.exists() ? userDoc.data().username : 'Unknown User';
@@ -99,46 +90,41 @@ const filteredFriends = friendFlag === 'True' ? friends : [];
     return () => unsubscribe();
   };
 
-  /*useEffect(() => {
-    if (selectedChatroom) handleChatroomSelect(selectedChatroom);
-  }, [selectedChatroom]); */
-
-  
-  const handleSendMessage = async () => { 
-    if (newMessage.trim() === '' || !user.uid || !selectedChatroom) return; 
+  const handleSendMessage = async () => {
+    if (newMessage.trim() === '' || !user.uid || !selectedChatroom) return;
     const chatroomDocRef = doc(db, selectedChatroom.type === 'private' ? 'privateChatrooms' : 'chatrooms', selectedChatroom.id);
-  
+
     const newMessageData = {
       text: newMessage.trim(),
       senderId: user.uid,
       senderName: user.displayName,
-      timestamp: new Date(), 
-      imageUrl: '', // optional if they upload an image
+      timestamp: new Date(),
+      imageUrl: '',
     };
-  
+
     try {
-      // add the message without serverTimestamp initially, cuz firestore doesn't allow it server side
       await updateDoc(chatroomDocRef, {
         messages: arrayUnion(newMessageData),
       });
-  
-      setNewMessage(''); // clear the textbox after sending a message
+      setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
     }
   };
-    //new function to remove chance of duplicate chatrooms with same person from onClick
+
   const handleCreateorSelectPrivateChatroom = async (friendId) => {
-    const existingChatroom = privateChatrooms.find(chatroom => 
-      chatroom.users.includes(friendId) && chatroom.users.includes(user.uid)
+    const existingChatroom = privateChatrooms.find(chatroom =>
+      chatroom.users.includes(friendId) && chatroom.users.includes(user.uid) && !chatroom.isGroupChat
     );
+
     if (existingChatroom) {
       handleChatroomSelect({ ...existingChatroom, type: 'private' });
     } else {
       const newChatroom = {
-        users: [user.uid, friendId],  //if there is no existing chatroom with 2 users, creates one.
+        users: [user.uid, friendId],
         messages: [],
-        type: 'private'
+        type: 'private',
+        isGroupChat: false
       };
       const chatroomDocRef = await addDoc(collection(db, 'privateChatrooms'), newChatroom);
       setPrivateChatrooms([...privateChatrooms, { id: chatroomDocRef.id, ...newChatroom }]);
@@ -150,17 +136,17 @@ const filteredFriends = friendFlag === 'True' ? friends : [];
     const chatroomDocRef = await addDoc(collection(db, 'privateChatrooms'), {
       users: [user.uid, ...friendIds],
       messages: [],
+      isGroupChat: true
     });
-    handleChatroomSelect({ id: chatroomDocRef.id, type: 'private'})
+    handleChatroomSelect({ id: chatroomDocRef.id, type: 'private' });
   };
 
-    //fetches usernames from firestore, again for div display
   const fetchUsernames = async (userIds) => {
     const usernames = await Promise.all(userIds.map(async (uid) => {
       const userDoc = await getDoc(doc(db, 'users', uid));
       return userDoc.exists() ? userDoc.data().username : 'Unknown User';
-  }));
-  return usernames;
+    }));
+    return usernames;
   };
 
   useEffect(() => {
@@ -175,7 +161,6 @@ const filteredFriends = friendFlag === 'True' ? friends : [];
     fetchAndSetUsernames();
   }, [privateChatrooms, user]);
 
-  //New function that allows a user to select which friends to be added to a group chat instead of all of them
   const handleFriendSelection = (friendId) => {
     setSelectedFriends((prevSelected) =>
       prevSelected.includes(friendId)
@@ -190,6 +175,16 @@ const filteredFriends = friendFlag === 'True' ? friends : [];
     setSelectedFriends([]);
   };
 
+  const handleDeleteChatroom = async (chatroomId, type) => {
+    try {
+      const chatroomDocRef = doc(db, type === 'private' ? 'privateChatrooms' : 'chatrooms', chatroomId);
+      await deleteDoc(chatroomDocRef);
+      setChatrooms(chatrooms.filter(chatroom => chatroom.id !== chatroomId));
+      setPrivateChatrooms(privateChatrooms.filter(chatroom => chatroom.id !== chatroomId));
+    } catch (error) {
+      console.error('Error deleting chatroom:', error);
+    }
+  };
 
   return (
     <div className="chat-container">
@@ -199,51 +194,50 @@ const filteredFriends = friendFlag === 'True' ? friends : [];
         </div>
         <ul>
           {activeChats === 'global' && chatrooms.map((chatroom) => (
-            <li key={chatroom.id}>
+            <li key={chatroom.id} className="chatroom-item">
               <button onClick={() => handleChatroomSelect({ ...chatroom, type: 'public' })}>
                 {chatroom.name}
               </button>
+              <X size={16} onClick={() => handleDeleteChatroom(chatroom.id, 'public')} className="delete-chatroom-button" />
             </li>
           ))}
         </ul>
-          {activeChats === 'private' && (
-            <div>
-              <div className="private-chatrooms-list-header">
-                <h3>Private Chats</h3>
-              </div>
-              <ul>
-                {privateChatrooms.map((privateChatroom) => (
-                  <li key={privateChatroom.id}>
-                    <button onClick={() => handleChatroomSelect({ ...privateChatroom, type: 'private' })}>
-                      {privateChatroomUsernames[privateChatroom.id]
+        {activeChats === 'private' && (
+          <div>
+            <div className="private-chatrooms-list-header">
+              <h3>Private Chats</h3>
+            </div>
+            <ul>
+              {privateChatrooms.map((privateChatroom) => (
+                <li key={privateChatroom.id} className="chatroom-item">
+                  <button onClick={() => handleChatroomSelect({ ...privateChatroom, type: 'private' })}>
+                    {privateChatroomUsernames[privateChatroom.id]
                       ? privateChatroomUsernames[privateChatroom.id].join(', ')
                       : 'Loading...'}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              <div className="private-chat-friends-list-header">
-                <h3>Friends</h3>
-              </div>
-              <ul>
+                  </button>
+                  <X size={16} onClick={() => handleDeleteChatroom(privateChatroom.id, 'private')} className="delete-chatroom-button" />
+                </li>
+              ))}
+            </ul>
+            <div className="private-chat-friends-list-header">
+              <h3>Friends</h3>
+            </div>
+            <ul>
               {filteredFriends.map((friend) => (
                 <li key={friend.id}>
-                 <button onClick={() => handleCreateorSelectPrivateChatroom(friend.id)}>
-                   {friend.username}
-                </button>
-               </li>
+                  <button onClick={() => handleCreateorSelectPrivateChatroom(friend.id)}>
+                    {friend.username}
+                  </button>
+                </li>
               ))}
-           </ul>
-        </div>
-      )}
-
-
-        <div className = "chatroom-set-buttons"tabindex = "-1">
-            <button onClick={() => {setActiveChats('global'); setFriendFlag('False')}}>Global Chats</button>  
-            <button onClick={() => {setActiveChats('private'); setFriendFlag('True')}}>Private Chats</button>
-            <button onClick={() => setIsFriendListVisible(!isFriendListVisible)}>Create Group Chat</button> 
+            </ul>
           </div>
-
+        )}
+        <div className="chatroom-set-buttons" tabindex="-1">
+          <button onClick={() => { setActiveChats('global'); setFriendFlag('False') }}>Global Chats</button>
+          <button onClick={() => { setActiveChats('private'); setFriendFlag('True') }}>Private Chats</button>
+          <button onClick={() => setIsFriendListVisible(!isFriendListVisible)}>Create Group Chat</button>
+        </div>
         {isFriendListVisible && (
           <div className="friend-selection-list">
             <div className="friend-selection-list-header">
@@ -264,7 +258,6 @@ const filteredFriends = friendFlag === 'True' ? friends : [];
           </div>
         )}
       </div>
-
       <div className="chat-window">
         {selectedChatroom ? (
           <>

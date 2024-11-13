@@ -1,231 +1,277 @@
-*{
+* {
   outline: none;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
 }
 
 .chat-container {
-    background: linear-gradient(135deg, #fafafa, #34495e);
-    display: flex;
-    height: 90vh;
-  }
-  
-  .chatroom-list, .private-chatroom-list, .friends-list {
-    width: 20%;
-    border-right: 1px solid #ccc;
-    padding: 10px;
-    overflow-y: auto;
-  }
+  background: #ffffff;
+  display: flex;
+  height: 90vh;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
 
-  .chatroom-list-header, .private-chatroom-list-header, .friends-list-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    text-align: center;
-    text-size-adjust: 20px;
-    font-size: 20px;
-  }
+.chatroom-list, .private-chatroom-list, .friends-list {
+  width: 20%;
+  border-right: 1px solid #e0e0e0;
+  padding: 10px;
+  overflow-y: auto;
+  background-color: #fafafa;
+}
 
-  .chatroom-type-header {
-    display: center;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    text-align: center;
-    text-size-adjust: 10px;
-    font-size: 20px;
-  }
+.chatroom-list-header, .private-chatroom-list-header, .friends-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
 
-  .chatroom-set-buttons {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  
-  .chatroom-set-buttons button{
-    flex-grow: 1;
-    padding: 10px;
-    background-color: #000305;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    outline: none;
+.chatroom-type-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.chatroom-set-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.chatroom-set-buttons button {
+  flex-grow: 1;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .chatroom-set-buttons button:hover {
-  background-color: #2c3e50;
+  background-color: #0056b3;
+}
+
+.chatroom-list ul, .private-chatroom-list ul, .friends-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.chatroom-list li button, .private-chatroom-list li button, .friends-list li button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.chatroom-list li button:hover, .private-chatroom-list li button:hover, .friends-list li button:hover {
+  background-color: #0056b3;
+}
+
+.chat-window {
+  flex: 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.chat-window li {
+  margin-bottom: 10px;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.message {
+  margin-bottom: 10px;
+  display: flex;
+}
+
+.message.sent {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.message.received {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.message-bubble {
+  max-width: 60%;
+  padding: 10px;
+  border-radius: 15px;
+  background-color: #f1f1f1;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.message.sent .message-bubble {
+  background-color: #007bff;
+  color: white;
+}
+
+.message.received .message-bubble {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.message-input {
+  display: flex;
+  border-top: 1px solid #e0e0e0;
+  padding: 10px;
+  background-color: #fafafa;
+}
+
+.message-input input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.message-input button {
+  padding: 10px;
+  margin-left: 10px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.message-input button:hover {
+  background-color: #0056b3;
+}
+
+.chatroom-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.friend-selection-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+  text-align: center;
+  font-size: 20px;
+  background-color: #ffffff;
+  border: 2px solid #e0e0e0;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.friend-selection-list-header {
+  color: #333;
+}
+
+.friend-selection-list ul {
+  list-style-type: none;
+  padding: 0;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.friend-selection-list li {
+  margin: 5px 0;
+  color: #333;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  border: 2px solid #e0e0e0;
+  outline: none;
+  padding: 10px;
+}
+
+.friend-selection-list label {
+  display: flex;
+  align-items: center;
   cursor: pointer;
 }
-  
-  .chatroom-list ul, .private-chatroom-list ul, .friends-list ul {
-    list-style-type: none;
-    padding: 0;
-  }
 
-  .chatroom-list li button, .private-chatroom-list li button, .friends-list li button {
-    width: 100%;
-    padding: 10px;
-    background-color: #000305;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
+.friend-selection-list button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
 
-  .chatroom-list li button:hover, .private-chatroom-list li button:hover, .friends-list li button:hover { 
-    background-color: #2c3e50;
-  }
+.friend-selection-list button:hover {
+  background-color: #0056b3;
+}
 
-  .chat-window {
-    flex: 1;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-  }
-  .chat-window li {
-    margin-bottom: 10px;
-  }
-  
-  .messages {
-    flex: 1;
-    overflow-y: auto;
-    margin-bottom: 10px;
-  }
-  
-  .message {
-    margin-bottom: 10px;
-    display: flex;
-  }
-  
-  .message.sent {
-    justify-content: flex-end;
-    text-align: right;
-  }
-  
-  .message.received {
-    justify-content: flex-start;
-    text-align: left;
-  }
-  
-  .message-bubble {
-    max-width: 60%;
-    padding: 10px;
-    border-radius: 15px;
-    background-color:#fafafa;
-    color: #333;
-  }
+.private-chatrooms-list-header {
+  text-align: center;
+  font-weight: bold;
+  color: #333;
+}
 
-  .message.sent .message-bubble {
-    background-color: #007bff;
-    color: white;
-  }
+.private-chat-friends-list-header {
+  text-align: center;
+  font-weight: bold;
+  color: #333;
+}
 
-  .message.received .message-bubble {
-    background-color: #0b5d0b;
-    color: white;
-  }
+.chatroom-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  .message-input {
-    display: flex;
-    border-top: 1px solid #ccc;
-    padding: 10px;
-  }
-  
-  .message-input input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .message-input button {
-    padding: 10px;
-    margin-left: 10px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+.delete-chatroom-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ff4d4d;
+  margin-left: 10px;
+}
 
-  .message-input button:hover {
-    background-color: #0056b3;
-  }
-
-  .chatroom-main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-    text-align: center;
-    font-size: 20px;
-  }
-
-  .friend-selection-list {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 5px;
-    text-align: center;
-    font-size: 20px;
-    background-color: #292929;
-    border: 2px solid rgb(0, 0, 0);
-    border-radius: 5px;
-  }
-
-  .friend-selection-list-header {
-    color: white;
-  }
-
-  .friend-selection-list ul {
-    list-style-type: none;
-    padding: 0;
-    background-color: #292929;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .friend-selection-list li {
-    margin: 5px 0;
-    color: white;
-    background-color: black;
-    border-radius: 5px;
-    border: 2px solid rgb(0, 0, 0);
-    outline: white;
-  }
-
-  .friend-selection-list label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  .friend-selection-list button {
-    background-color: #000000;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-  }
-
-  .friend-selection-list button:hover {
-    background-color: #0056b3;
-  }
-
-  .private-chatrooms-list-header {
-    text-align: center;
-  }
-
-  .private-chat-friends-list-header {
-    text-align: center;
-  }
+.delete-chatroom-button:hover {
+  color: #e44a4a;
+}
