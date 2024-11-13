@@ -13,6 +13,8 @@ const Chat = ({ chatrooms }) => {
   const [privateChatrooms, setPrivateChatrooms] = useState([]);
   const [friends, setFriends] = useState([]);
   const [privateChatroomUsernames, setPrivateChatroomUsernames] = useState({});
+  const [selectedFriends, setSelectedFriends] = useState([]);
+  const [isFriendListVisible, setIsFriendListVisible] = useState(false);
   const user = useUser();
 
 
@@ -70,10 +72,15 @@ const filteredFriends = friendFlag === 'True' ? friends : [];
 
         if (chatroom.type === 'private') {
           (async () => {   //need this to avoid non-async function error
-            const friendId = chatData.users.find(uid => uid !== user.uid);
+            const userNames = await Promise.all(chatData.users.map(async (uid) => {
+              const userDoc = await getDoc(doc(db, 'users', uid));
+              return userDoc.exists() ? userDoc.data().username : 'Unknown User';
+            }));
+            setSelectedChatroom({ ...chatroom, name: userNames.join(', ') });
+            /*const friendId = chatData.users.find(uid => uid !== user.uid);
             const friendDoc = await getDoc(doc(db, 'users', friendId));   //used to get usernames to be more easily passed into div so it won't display id
             const friendName = friendDoc.exists() ? friendDoc.data().username : 'Unknown User';
-            setSelectedChatroom({ ...chatroom, name: friendName });
+            setSelectedChatroom({ ...chatroom, name: usernames.join(', ') });*/
           })();
         } else {
           (async () => {
@@ -84,7 +91,7 @@ const filteredFriends = friendFlag === 'True' ? friends : [];
               }
               return null;
             }));
-            setSelectedChatroom({ ...chatroom, name: userNames.filter(name => name !== null).join(', ') });
+            setSelectedChatroom({ ...chatroom, name: userNames.join(', ') });
           })();
         }
       }
@@ -168,6 +175,22 @@ const filteredFriends = friendFlag === 'True' ? friends : [];
     fetchAndSetUsernames();
   }, [privateChatrooms, user]);
 
+  //New function that allows a user to select which friends to be added to a group chat instead of all of them
+  const handleFriendSelection = (friendId) => {
+    setSelectedFriends((prevSelected) =>
+      prevSelected.includes(friendId)
+        ? prevSelected.filter((id) => id !== friendId)
+        : [...prevSelected, friendId]
+    );
+  };
+
+  const handleCreateGroupChat = () => {
+    handleCreateGroupChatroom(selectedFriends);
+    setIsFriendListVisible(false);
+    setSelectedFriends([]);
+  };
+
+
   return (
     <div className="chat-container">
       <div className="chatroom-list">
@@ -183,32 +206,65 @@ const filteredFriends = friendFlag === 'True' ? friends : [];
             </li>
           ))}
         </ul>
+          {activeChats === 'private' && (
+            <div>
+              <div className="private-chatrooms-list-header">
+                <h3>Private Chats</h3>
+              </div>
+              <ul>
+                {privateChatrooms.map((privateChatroom) => (
+                  <li key={privateChatroom.id}>
+                    <button onClick={() => handleChatroomSelect({ ...privateChatroom, type: 'private' })}>
+                      {privateChatroomUsernames[privateChatroom.id]
+                      ? privateChatroomUsernames[privateChatroom.id].join(', ')
+                      : 'Loading...'}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <div className="private-chat-friends-list-header">
+                <h3>Friends</h3>
+              </div>
+              <ul>
+              {filteredFriends.map((friend) => (
+                <li key={friend.id}>
+                 <button onClick={() => handleCreateorSelectPrivateChatroom(friend.id)}>
+                   {friend.username}
+                </button>
+               </li>
+              ))}
+           </ul>
+        </div>
+      )}
 
-        <ul>
-          {activeChats === 'private' && privateChatrooms.map((privateChatroom) => (
-            <li key={privateChatroom.id}>
-              <button onClick={() => handleChatroomSelect({ ...privateChatroom, type: 'private' })}>
-                {privateChatroomUsernames[privateChatroom.id]
-                ? privateChatroomUsernames[privateChatroom.id].join(', ')
-                : 'Loading...'}
-              </button>
-            </li>
-          ))}
-          {filteredFriends.map((friend) => (
-            <li key={friend.id}>
-              <button onClick={() => handleCreateorSelectPrivateChatroom(friend.id)}>
-                {friend.username}
-              </button>
-            </li>
-          ))}
-        </ul>
 
         <div className = "chatroom-set-buttons"tabindex = "-1">
             <button onClick={() => {setActiveChats('global'); setFriendFlag('False')}}>Global Chats</button>  
             <button onClick={() => {setActiveChats('private'); setFriendFlag('True')}}>Private Chats</button>
-            <button onClick={() => handleCreateGroupChatroom(friends.map(friend => friend.id))}>Create Group Chat</button>
+            <button onClick={() => setIsFriendListVisible(!isFriendListVisible)}>Create Group Chat</button> 
           </div>
+
+        {isFriendListVisible && (
+          <div className="friend-selection-list">
+            <div className="friend-selection-list-header">
+              <h2>Select Friends</h2>
+            </div>
+            <ul>
+              {friends.map((friend) => (
+                <li key={friend.id}>
+                  <label>
+                    <input type="checkbox" checked={selectedFriends.includes(friend.id)} onChange={() => handleFriendSelection(friend.id)} />
+                    {friend.username}
+                  </label>
+                </li>
+              ))}
+            </ul>
+            <button onClick={handleCreateGroupChat}>Create Group Chat</button>
+            <button onClick={() => setIsFriendListVisible(false)}>Cancel</button>
+          </div>
+        )}
       </div>
+
       <div className="chat-window">
         {selectedChatroom ? (
           <>
@@ -234,7 +290,7 @@ const filteredFriends = friendFlag === 'True' ? friends : [];
           </>
         ) : (
           <div className="chatroom-main">
-            <h2>Welcome to the Chatroom Lobby!</h2>
+            <h2>Select a chatroom to start chatting!</h2>
           </div>
         )}
       </div>
