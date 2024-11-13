@@ -1,5 +1,6 @@
 import React from 'react';
 import { Circle, MessageSquareText, Trash2 } from 'lucide-react';
+import Link from 'next/link';
 
 const userCard = ({ friend, friendsStatus, handleUnfriend, isFriend = true }) => {
     return (
@@ -19,9 +20,7 @@ const userCard = ({ friend, friendsStatus, handleUnfriend, isFriend = true }) =>
                 <h4 className="friend-name">{friend.username || 'Unknown'}</h4>
             </div>
             <div className="action-container">
-                <button className="message-button">
-                    <MessageSquareText size={16} color="green" />
-                </button>
+                <Link href="/chats" passHref><button className="message-button"><MessageSquareText size={16} color="green" /></button></Link>
                 {isFriend && (
                     <button 
                         className="unfriend-button" 
