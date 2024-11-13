@@ -1,8 +1,9 @@
 import { db } from '@/app/api/firebase/firebaseConfig';
-import { doc, getDoc, setDoc, collection, updateDoc, addDoc, query, onSnapshot, serverTimestamp, arrayUnion, where } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, updateDoc, addDoc, query, onSnapshot, serverTimestamp, arrayUnion, where, deleteDoc } from 'firebase/firestore';
 import React, { useState, useEffect } from 'react';
 import { useUser } from '@/app/context/UserContext';
 import './Chat.css';
+import { X } from 'lucide-react';
 
 const Chat = ({ chatrooms }) => {
   const [selectedChatroom, setSelectedChatroom] = useState(null);
@@ -174,6 +175,17 @@ const Chat = ({ chatrooms }) => {
     setSelectedFriends([]);
   };
 
+  const handleDeleteChatroom = async (chatroomId, type) => {
+    try {
+      const chatroomDocRef = doc(db, type === 'private' ? 'privateChatrooms' : 'chatrooms', chatroomId);
+      await deleteDoc(chatroomDocRef);
+      setChatrooms(chatrooms.filter(chatroom => chatroom.id !== chatroomId));
+      setPrivateChatrooms(privateChatrooms.filter(chatroom => chatroom.id !== chatroomId));
+    } catch (error) {
+      console.error('Error deleting chatroom:', error);
+    }
+  };
+
   return (
     <div className="chat-container">
       <div className="chatroom-list">
@@ -182,10 +194,11 @@ const Chat = ({ chatrooms }) => {
         </div>
         <ul>
           {activeChats === 'global' && chatrooms.map((chatroom) => (
-            <li key={chatroom.id}>
+            <li key={chatroom.id} className="chatroom-item">
               <button onClick={() => handleChatroomSelect({ ...chatroom, type: 'public' })}>
                 {chatroom.name}
               </button>
+              <X size={16} onClick={() => handleDeleteChatroom(chatroom.id, 'public')} className="delete-chatroom-button" />
             </li>
           ))}
         </ul>
@@ -196,12 +209,13 @@ const Chat = ({ chatrooms }) => {
             </div>
             <ul>
               {privateChatrooms.map((privateChatroom) => (
-                <li key={privateChatroom.id}>
+                <li key={privateChatroom.id} className="chatroom-item">
                   <button onClick={() => handleChatroomSelect({ ...privateChatroom, type: 'private' })}>
                     {privateChatroomUsernames[privateChatroom.id]
                       ? privateChatroomUsernames[privateChatroom.id].join(', ')
                       : 'Loading...'}
                   </button>
+                  <X size={16} onClick={() => handleDeleteChatroom(privateChatroom.id, 'private')} className="delete-chatroom-button" />
                 </li>
               ))}
             </ul>
