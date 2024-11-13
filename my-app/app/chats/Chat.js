@@ -67,7 +67,7 @@ const Chat = ({ chatrooms }) => {
 
         if (chatroom.type === 'private') {
           (async () => {
-            const userNames = await Promise.all(chatData.users.map(async (uid) => {
+            const userNames = await Promise.all((chatData.users || []).map(async (uid) => {
               const userDoc = await getDoc(doc(db, 'users', uid));
               return userDoc.exists() ? userDoc.data().username : 'Unknown User';
             }));
@@ -75,7 +75,7 @@ const Chat = ({ chatrooms }) => {
           })();
         } else {
           (async () => {
-            const userNames = await Promise.all(chatData.users.map(async (uid) => {
+            const userNames = await Promise.all((chatData.users || []).map(async (uid) => {
               if (uid !== user.uid) {
                 const userDoc = await getDoc(doc(db, 'users', uid));  // getDoc on users collection for each user that is not in the chatroom
                 return userDoc.exists() ? userDoc.data().username : 'Unknown User';
